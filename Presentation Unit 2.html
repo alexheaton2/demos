@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Derivatives Definition & Rules</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul { list-style-position: inside; }
+        .slide ul li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Unit 2: Derivatives</h1>
+            <h3 class="mt-4 text-gray-300">Definition & Basic Rules</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Core Question -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>The Core Question</h2>
+            <p class="text-3xl mt-6">How fast is a function <strong>changing</strong> at a <strong>single instant</strong>?</p>
+        </div>
+    </div>
+
+    <!-- Slide 3: The Core Idea -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Core Idea: What is a Derivative?</h2>
+            <p class="revealable mt-4"><strong>Intuition:</strong> The derivative is the <strong>instantaneous rate of change</strong>, or the <strong>slope of the tangent line</strong> at a single point.</p>
+            <p class="revealable mt-4">Imagine your car's speedometer. It shows your speed at this very moment, not your average speed for the whole trip. That's what a derivative does for a function.</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: From Average to Instantaneous -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>From Average Rate to Instantaneous Rate</h2>
+            <p class="revealable">The <strong>average rate of change</strong> is the slope of the secant line between two points. You know this from algebra:</p>
+            <p class="revealable text-center text-xl my-4">$\text{Average Rate of Change} = \frac{f(b) - f(a)}{b - a}$</p>
+            <p class="revealable">To get the <strong>instantaneous rate</strong>, we use limits to move the second point infinitely close to the first. The secant line becomes the tangent line.</p>
+        </div>
+    </div>
+
+    <!-- Slide 5: The Formal Definition -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Formal Definition of the Derivative</h2>
+            <p>You must know these two forms by heart. They are the foundation.</p>
+            <ol class="list-decimal list-inside mt-4">
+                <li class="revealable"><strong>Limit Definition at a Point $c$:</strong>
+                $$f'(c) = \lim_{x \to c} \frac{f(x) - f(c)}{x - c}$$
+                </li>
+                <li class="revealable"><strong>Limit Definition as a Function:</strong>
+                $$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+                </li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 6: Understanding the Definition -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Deconstructing the Definition</h2>
+            <p>Notice the structure is just Rise over Run:</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>Numerator ($f(x+h) - f(x)$):</strong> This is the change in the output (the "Rise").</li>
+                <li class="revealable"><strong>Denominator ($h$):</strong> This is the change in the input (the "Run").</li>
+            </ul>
+            <p class="revealable mt-4 text-center text-2xl">
+            $f'(x) = \lim_{h \to 0} \frac{\text{Rise}}{\text{Run}} = \lim \frac{\text{change in output}}{\text{change in input}}$
+            </p>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Differentiability and Continuity -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Differentiability and Continuity</h2>
+            <p class="text-2xl mt-6 p-4 bg-blue-100 border border-blue-300 rounded-lg">If a function is <strong>differentiable</strong> at a point, it <strong>MUST</strong> be <strong>continuous</strong> at that point.</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Continuity Misconception -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Differentiability: A Common Misconception</h2>
+            <p><strong>The Misconception:</strong> If a function is continuous, it must be differentiable.</p>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>The Truth:</strong> This is NOT true! A function can be continuous but fail to be differentiable where the graph has a:</p>
+                <ul class="list-disc list-inside mt-2">
+                    <li class="revealable"><strong>Sharp corner</strong> (like $f(x) = |x|$ at $x=0$)</li>
+                    <li class="revealable"><strong>Cusp</strong> (like $f(x) = x^{2/3}$ at $x=0$)</li>
+                    <li class="revealable"><strong>Vertical tangent line</strong> (like $f(x) = \sqrt[3]{x}$ at $x=0$)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: The Powerhouse Rules -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Powerhouse Rules (The Shortcuts)</h2>
+            <ul class="mt-4">
+                <li class="revealable"><strong>Power Rule:</strong> If $f(x) = x^n$, then $f'(x) = n x^{n-1}$.<br><em class="text-gray-500">Example: If $f(x) = x^4$, then $f'(x) = 4x^3$.</em></li>
+                <li class="revealable"><strong>Constant Rule:</strong> If $f(x) = c$, then $f'(x) = 0$.</li>
+                <li class="revealable"><strong>Constant Multiple Rule:</strong> If $f(x) = c \cdot g(x)$, then $f'(x) = c \cdot g'(x)$.<br><em class="text-gray-500">Example: If $f(x) = 5x^3$, then $f'(x) = 15x^2$.</em></li>
+                <li class="revealable"><strong>Sum/Difference Rule:</strong> The derivative of each part separately.<br><em class="text-gray-500">Example: If $h(x) = x^2 + 3x$, then $h'(x) = 2x + 3$.</em></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 10: Derivatives of Common Functions -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Derivatives of Common Functions (Memorize These!)</h2>
+            <ul class="mt-4 text-2xl text-left">
+                <li class="revealable">$\frac{d}{dx}(e^x) = e^x$</li>
+                <li class="revealable">$\frac{d}{dx}(\ln(x)) = \frac{1}{x}$</li>
+                <li class="revealable">$\frac{d}{dx}(\sin(x)) = \cos(x)$</li>
+                <li class="revealable">$\frac{d}{dx}(\cos(x)) = -\sin(x)$ &nbsp; (Don't forget the negative!)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Product Rule -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Product Rule</h2>
+            <p>For finding the derivative of a product $f(x) \cdot g(x)$:</p>
+            <p class="text-center text-2xl my-4">$(f \cdot g)' = f'g + fg'$</p>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Misconception:</strong> The derivative of a product is the product of the derivatives.</p>
+                <p><strong>The Mistake:</strong> $(f \cdot g)' \neq f' \cdot g'$. This is a very common error!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 12: Quotient Rule -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Quotient Rule</h2>
+            <p>For finding the derivative of a quotient $\frac{f(x)}{g(x)}$:</p>
+            <p class="text-center text-2xl my-4">$\left(\frac{f}{g}\right)' = \frac{f'g - fg'}{g^2}$</p>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Misconception:</strong> Mixing up the order of the terms in the numerator.</p>
+                <p><strong>The Mistake:</strong> It must be $f'g - fg'$. Getting this backward will give you the wrong sign.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 13: Other Trig Derivatives -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Derivatives of Other Trig Functions</h2>
+            <ul class="mt-4 text-2xl text-left grid grid-cols-2 gap-x-8 gap-y-4">
+                <li class="revealable">$\frac{d}{dx}(\tan(x)) = \sec^2(x)$</li>
+                <li class="revealable">$\frac{d}{dx}(\cot(x)) = -\csc^2(x)$</li>
+                <li class="revealable">$\frac{d}{dx}(\sec(x)) = \sec(x)\tan(x)$</li>
+                <li class="revealable">$\frac{d}{dx}(\csc(x)) = -\csc(x)\cot(x)$</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 14: Higher-Order Derivatives -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Higher-Order Derivatives</h2>
+            <p>You can take the derivative of a derivative.</p>
+            <ul class="mt-2">
+                <li class="revealable">The <strong>second derivative</strong>, $f''(x)$, is the derivative of $f'(x)$.</li>
+                <li class="revealable">The <strong>third derivative</strong> is $f'''(x)$, and beyond we use $f^{(n)}(x)$.</li>
+            </ul>
+            <p class="mt-4">Example: If $f(x) = x^4$, then:</p>
+            <ul class="list-disc list-inside text-gray-700">
+                <li class="revealable">$f'(x) = 4x^3$</li>
+                <li class="revealable">$f''(x) = 12x^2$</li>
+                <li class="revealable">$f'''(x) = 24x$</li>
+                <li class="revealable">$f^{(4)}(x) = 24$</li>
+                <li class="revealable">$f^{(5)}(x) = 0$</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 15: Conclusion -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Conclusion</h2>
+            <p class="mt-4 text-xl">This unit provides the mechanical tools for differentiation. Master them, as they are the building blocks for all the applications of derivatives you'll see in later units.</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>

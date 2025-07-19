@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Differential Equations</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul, .slide ol { list-style-position: inside; }
+        .slide ul li, .slide ol li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Unit 7: Differential Equations</h1>
+            <h3 class="mt-4 text-gray-300">Solving for an Unknown Function</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Core Idea -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>What is a Differential Equation?</h2>
+            <p class="revealable mt-4"><strong>Intuition:</strong> An equation that contains a derivative. It describes the relationship between a quantity and its rate of change.</p>
+            <p class="revealable mt-4">Think of it as a clue about how something grows or changes. The goal is to find the function that follows the clue.</p>
+            <div class="revealable mt-4 p-4 border border-blue-300 bg-blue-50 rounded-lg">
+                <p><strong>Example:</strong> The equation $\frac{dy}{dx} = y$.</p>
+                <p class="mt-2"><strong>The Clue:</strong> The slope of the function at any point $(x,y)$ is equal to its y-coordinate.</p>
+                <p class="mt-2"><strong>The Solution (Function):</strong> $y = Ce^x$.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Slope Fields -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Slope Fields</h2>
+            <p class="revealable"><strong>Intuition:</strong> A graphical "cheat sheet" for what the solutions to a differential equation look like.</p>
+            <p class="revealable mt-2">At each point $(x, y)$ on a grid, we draw a tiny line segment with the slope given by the differential equation.</p>
+            <p class="revealable mt-2">To sketch a solution, you pick a starting point (an initial condition) and then "follow the flow" of the slope segments.</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Slope Fields Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Slope Fields: Example</h2>
+            <p>For the differential equation $\frac{dy}{dx} = x$:</p>
+            <ul class="mt-2">
+                <li class="revealable">At any point on the line $x=1$ (like $(1,3)$), the slope is 1.</li>
+                <li class="revealable">At any point on the line $x=-2$ (like $(-2,0)$), the slope is -2.</li>
+                <li class="revealable">Along the y-axis (where $x=0$), the slope is always 0 (horizontal).</li>
+            </ul>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> In the equation $\frac{dy}{dx} = x$, the slope only depends on the x-coordinate. All segments in a vertical column will be parallel.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Separation of Variables -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Separation of Variables</h2>
+            <p class="revealable"><strong>Intuition:</strong> The main algebraic technique for solving simple differential equations.</p>
+            <p class="revealable mt-4">It's a "get all the y's on one side, all the x's on the other" game.</p>
+            <p class="revealable mt-4"><strong>The Procedure:</strong></p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Separate:</strong> Move all terms involving $y$ (including $dy$) to one side, and all terms involving $x$ (including $dx$) to the other.</li>
+                <li class="revealable"><strong>Integrate:</strong> Integrate both sides of the equation independently.</li>
+                <li class="revealable"><strong>Solve for y:</strong> Do the algebra to get $y$ by itself.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 6: Separation of Variables Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Separation of Variables: Example</h2>
+            <p>Solve the differential equation $\frac{dy}{dx} = 2xy$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Separate:</strong> $\frac{1}{y} dy = 2x \,dx$.</li>
+                <li class="revealable"><strong>Integrate:</strong> $\int \frac{1}{y} dy = \int 2x \,dx \implies \ln|y| = x^2 + C$.</li>
+                <li class="revealable"><strong>Solve for y:</strong> Exponentiate both sides: $|y| = e^{x^2 + C} = e^{x^2}e^C$.</li>
+                <li class="revealable"><strong>Simplify Constant:</strong> Notice $e^C$ is always positive, but we have $|y|$. We can remove the absolute value if we replace $e^C$ with another constant $A$ which is allowed to be positive or negative.</li>
+                <li class="revealable">This gives the general solution $y = Ae^{x^2}$.</li>
+            </ol>
+        </div>
+    </div>
+    
+    <!-- Slide 7: General vs. Particular Solutions -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>General vs. Particular Solutions</h2>
+            <ul class="mt-2">
+                <li class="revealable"><strong>General Solution:</strong> The result after integrating, which includes a constant ($+C$ or $A$). It represents a whole family of functions.
+                    <p class="text-gray-600 italic">Example: $y = Ae^{x^2}$</p>
+                </li>
+                <li class="revealable mt-4"><strong>Particular Solution:</strong> If we are given an <strong>initial condition</strong> (a point, like $y(0)=3$), we can find a specific value for the constant.
+                    <p class="text-gray-600 italic">Using $y(0)=3$: &nbsp; $3 = Ae^{0^2} \implies A=3$. The particular solution is $y = 3e^{x^2}$.</p>
+                </li>
+            </ul>
+             <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Solving for C too late. You should find C as soon as you have finished integrating, especially when logarithms are involved.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 8: The dy/dt = ky Model -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The $dy/dt = ky$ Model</h2>
+            <p class="revealable">This is the most important differential equation for modeling. It says that <strong>the rate of change of a quantity is directly proportional to the size of the quantity itself.</strong></p>
+            <div class="revealable mt-4 p-4 bg-blue-100 rounded-lg">
+                <p><strong>The Equation:</strong> $\frac{dy}{dt} = ky$</p>
+                <p class="mt-2"><strong>The General Solution:</strong> $y = Ce^{kt}$</p>
+            </div>
+            <p class="revealable mt-4">You should recognize this pattern immediately. $C$ is the initial value (at $t=0$) and $k$ is the proportionality constant.</p>
+        </div>
+    </div>
+
+    <!-- Slide 9: dy/dt = ky Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>$dy/dt = ky$ Example</h2>
+            <p>The rate of growth of a bacterial colony is proportional to its population. The population is 100 initially and 400 after 2 hours. Find a model for the population, $P(t)$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Model:</strong> We know the solution is $P(t) = Ce^{kt}$.</li>
+                <li class="revealable"><strong>Initial Condition:</strong> $P(0)=100$, so $C=100$. The model is $P(t) = 100e^{kt}$.</li>
+                <li class="revealable"><strong>Find k:</strong> Use the second data point, $P(2)=400$:
+                $$ 400 = 100e^{k(2)} \implies 4 = e^{2k} \implies \ln(4) = 2k \implies k = \frac{\ln(4)}{2} $$
+                </li>
+                <li class="revealable"><strong>Final Model:</strong> $P(t) = 100e^{(\frac{\ln 4}{2})t}$.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 10: Conclusion -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Conclusion</h2>
+            <p class="mt-4 text-xl">You can now solve equations where the unknown is a function, allowing you to model real-world phenomena like population growth, radioactive decay, and more.</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>

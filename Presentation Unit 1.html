@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Limits & Continuity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul { list-style-position: inside; }
+        .slide ul li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Understanding Limits & Continuity</h1>
+            <h3 class="mt-4 text-gray-300">A Quick Refresher</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: Warm-Up -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Warm-Up Questions</h2>
+            <ul>
+                <li class="revealable">Can you sketch the graph of a function where $\lim_{x \to 2} f(x) = 5$, but the actual value of the function at that point is $f(2) = 1$?</li>
+                <li class="revealable">Can you sketch the graph of a function that is defined for all real numbers but is not continuous everywhere?</li>
+                <li class="revealable">Can you write a formula for a single function that is defined for all real numbers but is not continuous everywhere?</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Misconception 1 Title -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2 class="text-2xl">Misconception 1</h2>
+            <p class="text-3xl mt-6">The Limit is Just the Function's Value</p>
+            <p class="text-3xl font-bold text-red-500">(…this is WRONG!)</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Core Idea -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Core Idea: The Journey, Not the Destination</h2>
+            <ul>
+                <li class="revealable">A limit describes what a function's value <strong>approaches</strong> as you get infinitely close to a point.</li>
+                <li class="revealable">It does <strong>not</strong> depend on the value <strong>at</strong> the exact point.</li>
+                <li class="revealable">Think of it as "zooming in" on the graph—what y-value is the path leading to?</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 5: Misconception 1 Example -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Example:</h2>
+            <p class="text-2xl my-6">What is $\lim_{x \to 2} \frac{x^2 - 4}{x - 2}$?</p>
+            <div class="revealable text-left p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>The Misconception:</strong> If you plug in $x = 2$, you get $\frac{0}{0}$. A common incorrect conclusion is that the limit does not exist.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Misconception 1 Correct Approach -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Correct Approach:</h2>
+            <ul>
+                <li class="revealable">Remember, the limit doesn't care about what happens *at* $x=2$, only what happens *near* $x=2$.</li>
+                <li class="revealable">Let's analyze the function by simplifying it: $$f(x) = \frac{(x-2)(x+2)}{x-2}$$</li>
+                <li class="revealable">For any value of $x$ that is not exactly 2, the function behaves exactly like $g(x) = x+2$.</li>
+                <li class="revealable">As $x$ gets closer to 2, the value of $f(x)$ gets closer to $2+2=4$.</li>
+                <li class="revealable font-bold text-lg text-center mt-3">Therefore, the limit is 4.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Misconception 1 Takeaway -->
+    <div class="slide slide-container bg-blue-50">
+         <div class="slide-content">
+            <h2 class="text-blue-800">Key Takeaway</h2>
+            <p class="text-2xl mt-4">The limit describes the <strong>intended height</strong> of the function, which might not be the <strong>actual height</strong> at that specific point.</p>
+        </div>
+    </div>
+
+    <!-- Slide 8: Misconception 2 Title -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2 class="text-2xl">Misconception 2</h2>
+            <p class="text-3xl mt-6">If There's a "Break" in the Graph, There's No Limit</p>
+            <p class="text-3xl font-bold text-red-500">(…this is WRONG!)</p>
+        </div>
+    </div>
+
+    <!-- Slide 9: Misconception 2 Example -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Example:</h2>
+            <p class="text-lg my-4">Consider this piecewise function:
+            $$g(x) = \begin{cases} x^2 & \text{if } x \neq 1 \\ 5 & \text{if } x = 1 \end{cases}$$
+            What is $\lim_{x \to 1} g(x)$?</p>
+            <div class="revealable text-left p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>The Misconception:</strong> The graph has a "break" at $x=1$, so one might incorrectly conclude the limit does not exist there.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Misconception 2 Correct Approach -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Correct Approach:</h2>
+            <ul>
+                <li class="revealable">A limit can exist even if the function is not continuous.</li>
+                <li class="revealable">Again, we "zoom in" and ask: what y-value is the function's path approaching as $x$ gets infinitely close to 1?</li>
+                <li class="revealable">As $x$ approaches 1 from both sides, the function follows the $y=x^2$ rule. The path is clearly heading towards $1^2 = 1$.</li>
+                <li class="revealable">The fact that $g(1)=5$ is irrelevant to the limit's value. The limit is the *trend*.</li>
+                <li class="revealable font-bold text-lg text-center mt-3">Therefore, $\lim_{x \to 1} g(x) = 1$.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Limit vs Continuity -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Limit vs. Continuity</h2>
+            <p>For a function to be <strong>continuous</strong> at a point, three things must be true:</p>
+            <ol class="list-decimal list-inside mt-4">
+                <li class="revealable">The limit must exist at that point. <span class="text-green-600 font-bold">(Our example: $\lim_{x \to 1} g(x) = 1$ ✓)</span></li>
+                <li class="revealable">The function must be defined at that point. <span class="text-green-600 font-bold">(Our example: $g(1) = 5$ ✓)</span></li>
+                <li class="revealable">The limit and the function's value must be equal. <span class="text-red-600 font-bold">(Our example: $1 \neq 5$ ✗)</span></li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 12: Prior Knowledge -->
+    <div class="slide slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Essential Prior Knowledge 🧠</h1>
+        </div>
+    </div>
+
+    <!-- Slide 13: Algebraic Manipulation -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>1. Algebraic Manipulation</h2>
+            <p>You will constantly need to rewrite functions, especially when you encounter the indeterminate form $\frac{0}{0}$.</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>Factoring Polynomials:</strong> Essential for simplifying rational functions.
+                    <p class="pl-6 text-gray-600 italic">Example: Factor $x^2 - 9$ into $(x-3)(x+3)$.</p></li>
+                <li class="revealable"><strong>Rationalizing with Conjugates:</strong> Crucial for limits involving square roots.
+                    <p class="pl-6 text-gray-600 italic">Example: The conjugate of $\sqrt{x} - 5$ is $\sqrt{x} + 5$.</p></li>
+                <li class="revealable"><strong>Simplifying Complex Fractions:</strong> Necessary for the definition of the derivative.
+                    <p class="pl-6 text-gray-600 italic">Example: Simplify $\frac{\frac{1}{x} - \frac{1}{2}}{x-2}$.</p></li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 14: Function Understanding -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>2. Understanding Functions</h2>
+            <p>A deep understanding of function behavior is critical.</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>Piecewise Functions:</strong> Perfect for testing the core concepts of one-sided limits and continuity.</li>
+                <li class="revealable"><strong>Domain and Asymptotes:</strong> Fundamentally definitions about limit behavior.
+                    <ul class="list-disc list-inside mt-2 pl-6 text-gray-600 italic">
+                        <li>Example (Restricted Domain): The function $f(x) = \sqrt{x-3}$ is only defined for $x \ge 3$.</li>
+                        <li>Example (Vertical Asymptote): The function $f(x) = \frac{1}{x-4}$ has a vertical asymptote at $x=4$.</li>
+                        <li>Example (Horizontal Asymptote): The function $f(x) = \frac{3x^2+5}{x^2-1}$ has a horizontal asymptote at $y=3$.</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 15: Questions -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h1>Questions?</h1>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>

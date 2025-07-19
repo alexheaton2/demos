@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Advanced Differentiation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul, .slide ol { list-style-position: inside; }
+        .slide ul li, .slide ol li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Unit 3: Advanced Differentiation</h1>
+            <h3 class="mt-4 text-gray-300">Handling Complex Functions</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Core Idea: Chain Rule -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Core Idea: The Chain Rule</h2>
+            <p class="revealable mt-4"><strong>Intuition:</strong> The Chain Rule is for differentiating a "function inside of a function," like Russian nesting dolls.</p>
+            <p class="revealable mt-4">You take the derivative of the "outer" function (leaving the inside alone), and then you <strong>multiply</strong> it by the derivative of the "inner" function.</p>
+        </div>
+    </div>
+
+    <!-- Slide 3: Chain Rule Formula -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Chain Rule Formula</h2>
+            <p>If you have a composite function $h(x) = f(g(x))$, its derivative is:</p>
+            <p class="text-center text-2xl my-4"> $h'(x) = f'(g(x)) \cdot g'(x)$ </p>
+            <p class="text-center text-gray-600">(Derivative of the outside) $\times$ (Derivative of the inside)</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Chain Rule Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Chain Rule Example</h2>
+            <p>Find the derivative of $h(x) = (x^2 + 1)^3$.</p>
+            <ul class="mt-2">
+                <li class="revealable"><strong>Outer function:</strong> $(\text{something})^3$</li>
+                <li class="revealable"><strong>Inner function:</strong> $x^2 + 1$</li>
+            </ul>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Derivative of outer:</strong> $3(\text{something})^2 \implies 3(x^2+1)^2$</li>
+                <li class="revealable"><strong>Derivative of inner:</strong> $2x$</li>
+                <li class="revealable"><strong>Multiply them:</strong> $h'(x) = 3(x^2+1)^2 \cdot (2x) = 6x(x^2+1)^2$</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 5: Chain Rule Misconception -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Chain Rule: Common Misconception</h2>
+            <div class="mt-4 p-4 border border-red-300 bg-red-50 rounded-lg text-left">
+                <p><strong>The Misconception:</strong> Forgetting to multiply by the derivative of the inside function.</p>
+                <p class="mt-2"><strong>The Mistake:</strong> A student might incorrectly get $3(x^2+1)^2$. This misses the crucial $g'(x)$ part.</p>
+                <p class="mt-2"><strong>Always ask:</strong> "What's the inside function, and what is its derivative?"</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Implicit Differentiation -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Implicit Differentiation</h2>
+            <p class="revealable"><strong>Intuition:</strong> Use this when you can't easily solve an equation for $y$ in terms of $x$.</p>
+            <p class="revealable mt-2">Sometimes $x$ and $y$ are mixed together, like in the equation of a circle: $x^2 + y^2 = 25$.</p>
+            <p class="revealable mt-2">The key is to treat $y$ as a function of $x$ and apply the chain rule whenever you differentiate a term with $y$.</p>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Implicit Differentiation Procedure -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Implicit Differentiation: The Procedure</h2>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable">Differentiate both sides of the equation with respect to $x$.</li>
+                <li class="revealable">When you differentiate a term with $y$, multiply by $\frac{dy}{dx}$ (this is the chain rule!).</li>
+                <li class="revealable">Solve the resulting equation for $\frac{dy}{dx}$.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 8: Implicit Differentiation Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Implicit Differentiation: Example</h2>
+            <p>Find $\frac{dy}{dx}$ for $x^2 + y^2 = 25$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable">Differentiate: $\frac{d}{dx}(x^2) + \frac{d}{dx}(y^2) = \frac{d}{dx}(25)$</li>
+                <li class="revealable">Apply rules: $2x + 2y \cdot \frac{dy}{dx} = 0$</li>
+                <li class="revealable">Solve for $\frac{dy}{dx}$:
+                 $$ 2y \frac{dy}{dx} = -2x \implies \frac{dy}{dx} = -\frac{x}{y} $$
+                </li>
+            </ol>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Forgetting to attach $\frac{dy}{dx}$ after differentiating a $y$ term (e.g., writing $2x + 2y = 0$).</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Differentiating Inverse Functions -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Differentiating Inverse Functions</h2>
+            <p class="revealable"><strong>Intuition:</strong> The slope of an inverse function is the <strong>reciprocal</strong> of the slope of the original function at the corresponding point.</p>
+            <p class="revealable mt-2">If $f(x)$ has a point $(a, b)$ and a slope of $m$, its inverse $f^{-1}(x)$ will have a point $(b, a)$ and a slope of $1/m$.</p>
+            <p class="revealable mt-4"><strong>The Formula:</strong> If $g(x) = f^{-1}(x)$, then:</p>
+            <p class="text-center text-2xl my-2"> $g'(b) = \frac{1}{f'(g(b))}$ </p>
+        </div>
+    </div>
+
+    <!-- Slide 10: Inverse Function Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Inverse Function Example</h2>
+            <p>Let $f(x) = x^3 + 2x + 1$. Find $(f^{-1})'(4)$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable">We want $(f^{-1})'(4)$, so $b=4$. We need to find $f^{-1}(4)$. By inspection, $f(1) = 1+2+1=4$. So, $f^{-1}(4) = 1$.</li>
+                <li class="revealable">Find $f'(x)$. Here, $f'(x) = 3x^2 + 2$.</li>
+                <li class="revealable">Evaluate $f'$ at the point we found: $f'(1) = 3(1)^2 + 2 = 5$.</li>
+                <li class="revealable">Plug into the formula: $(f^{-1})'(4) = \frac{1}{f'(f^{-1}(4))} = \frac{1}{f'(1)} = \frac{1}{5}$.</li>
+            </ol>
+            <div class="revealable mt-2 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Calculating $\frac{1}{f'(4)}$ instead of $\frac{1}{f'(1)}$.</p>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Inverse Trig Derivatives -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Derivatives of Inverse Trig Functions</h2>
+            <p>These are specific rules to memorize.</p>
+            <ul class="mt-4 text-xl text-left">
+                <li class="revealable">$\frac{d}{dx}(\arcsin(x)) = \frac{1}{\sqrt{1-x^2}}$</li>
+                <li class="revealable">$\frac{d}{dx}(\arccos(x)) = -\frac{1}{\sqrt{1-x^2}}$</li>
+                <li class="revealable">$\frac{d}{dx}(\arctan(x)) = \frac{1}{1+x^2}$</li>
+            </ul>
+             <p class="revealable mt-4 text-left"><strong>Remember:</strong> Use the chain rule when the inside is not just $x$.</p>
+        </div>
+    </div>
+
+    <!-- Slide 12: Selecting the Right Procedure -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Selecting the Right Procedure</h2>
+            <p>The main challenge is knowing which rule to apply. Ask yourself:</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>What is the main structure?</strong> Is it a product, a quotient, a composition (chain rule)?</li>
+                <li class="revealable"><strong>Are there nested functions?</strong> If you see a function inside another (e.g., $\sin(x^2)$ or $e^{3x}$), you will need the Chain Rule.</li>
+                <li class="revealable"><strong>Do I need to combine rules?</strong> Many problems require multiple rules. For example, $x^2 \sin(x^3)$ requires the Product Rule first, then the Chain Rule.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 13: Conclusion -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Conclusion</h2>
+            <p class="mt-4 text-xl">Mastering this unit means you can find the derivative of almost any function you'll encounter in Calculus.</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>

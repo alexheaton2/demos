@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Integration and Accumulation of Change</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul, .slide ol { list-style-position: inside; }
+        .slide ul li, .slide ol li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Unit 6: Integration and Accumulation of Change</h1>
+            <h3 class="mt-4 text-gray-300">Finding the Area Under a Curve</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Core Idea -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Two Meanings of an Integral</h2>
+            <p class="revealable mt-4"><strong>1. The Geometric Meaning:</strong> An integral is a precise way of calculating the <strong>area of a shape with a curved edge</strong>.</p>
+            <p class="revealable mt-4"><strong>2. The Physical Meaning:</strong> The integral of a rate gives the <strong>total net change</strong> of a quantity.</p>
+        </div>
+    </div>
+
+    <!-- Slide 3: Connecting the Ideas -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>How Are These Ideas Related?</h2>
+            <p class="revealable">Let's use a car's velocity, $v(t)$, which is a rate (meters/second).</p>
+            <p class="revealable mt-2">The area under the velocity graph is found by summing up tiny rectangles. The area of each rectangle is:</p>
+            <p class="revealable text-center text-xl my-2">Area = height $\times$ width = (meters/second) $\times$ (seconds) = meters</p>
+            <p class="revealable mt-2">Each rectangle is a small distance traveled. The integral sums them all up!</p>
+            <p class="revealable mt-4 text-center p-4 bg-blue-100 rounded-lg">The geometric concept of <strong>area under the curve</strong> is the tool we use to calculate the physical concept of <strong>total accumulated change</strong>.</p>
+        </div>
+    </div>
+
+    <!-- Slide 4: Riemann Sums -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Approximating Area with Riemann Sums</h2>
+            <p class="revealable">Before we find the exact area, we approximate it with rectangles. A <strong>Riemann Sum</strong> is the sum of the areas of these rectangles.</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>Left Riemann Sum (LRAM):</strong> Uses the left endpoint for rectangle height.</li>
+                <li class="revealable"><strong>Right Riemann Sum (RRAM):</strong> Uses the right endpoint for height.</li>
+                <li class="revealable"><strong>Midpoint Riemann Sum (MRAM):</strong> Uses the midpoint for height.</li>
+                <li class="revealable"><strong>Trapezoidal Sum:</strong> Uses trapezoids for a better approximation.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 5: Riemann Sum Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Riemann Sum Example</h2>
+            <p>Approximate the area under $f(x)=x^2$ from $x=0$ to $x=4$ using 4 right-hand rectangles (RRAM).</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Interval Width:</strong> Total width is 4, 4 rectangles $\implies \Delta x = 1$.</li>
+                <li class="revealable"><strong>Rectangle Heights:</strong> For RRAM, use right endpoints $x=1, 2, 3, 4$. Heights are $f(1)=1, f(2)=4, f(3)=9, f(4)=16$.</li>
+                <li class="revealable"><strong>Sum the Areas:</strong> Area $\approx 1(1) + 1(4) + 1(9) + 1(16) = 30$.</li>
+            </ol>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Using the wrong x-values. For LRAM on $[0,4]$, you'd use $x=0,1,2,3$.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: The Definite Integral -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>The Definite Integral</h2>
+            <p class="revealable mt-4">A Riemann sum is an approximation. The <strong>definite integral</strong> gives the <strong>exact</strong> area by taking the limit as the number of rectangles goes to infinity.</p>
+            <p class="revealable text-4xl my-6">$\int_a^b f(x) \,dx$</p>
+            <p class="revealable">This represents the exact area under the curve of $f(x)$ from $x=a$ to $x=b$.</p>
+        </div>
+    </div>
+    
+    <!-- Slide 7: The Fundamental Theorem of Calculus -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Fundamental Theorem of Calculus (FTC)</h2>
+            <p>This is the most important theorem in calculus. It provides the incredible link between differentiation and integration.</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>FTC Part 1 (Evaluation):</strong> A shortcut to calculate definite integrals. If $F' = f$, then:
+                    <p class="text-center text-xl my-2">$\int_a^b f(x) \,dx = F(b) - F(a)$</p>
+                </li>
+                <li class="revealable mt-4"><strong>FTC Part 2 (Derivative of Integral):</strong> Differentiation and integration are inverse operations.
+                    <p class="text-center text-xl my-2">$\frac{d}{dx} \int_a^x f(t) \,dt = f(x)$</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 8: FTC Part 2 Misconception -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>FTC Part 2: Common Misconception</h2>
+            <div class="mt-4 p-4 border border-red-300 bg-red-50 rounded-lg text-left">
+                <p><strong>The Misconception:</strong> Forgetting the chain rule when the upper bound is a function of x.</p>
+                <p class="mt-2"><strong>The Mistake:</strong> Forgetting the $u'(x)$ in the formula below.</p>
+                <p class="text-center text-xl my-2">$\frac{d}{dx} \int_a^{u(x)} f(t) \,dt = f(u(x)) \cdot u'(x)$</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Antiderivatives -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Antiderivatives and Indefinite Integrals</h2>
+            <p class="revealable">An <strong>antiderivative</strong> is the reverse of a derivative. The <strong>indefinite integral</strong> is the set of all possible antiderivatives.</p>
+            <p class="revealable mt-4"><strong>Notation:</strong> $\int f(x) \,dx = F(x) + C$</p>
+            <p class="revealable mt-2">The "+ C" represents the entire family of functions, since the derivative of any constant is zero.</p>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Forgetting the "+ C" on indefinite integrals. This is one of the most common errors in calculus!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Basic Integration Rules -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Basic Integration Rules</h2>
+            <ul class="mt-4 text-xl text-left">
+                <li class="revealable">$\int x^n \,dx = \frac{x^{n+1}}{n+1} + C$ &nbsp; (for $n \neq -1$)</li>
+                <li class="revealable">$\int e^x \,dx = e^x + C$</li>
+                <li class="revealable">$\int \frac{1}{x} \,dx = \ln|x| + C$</li>
+                <li class="revealable">$\int \cos(x) \,dx = \sin(x) + C$</li>
+                <li class="revealable">$\int \sin(x) \,dx = -\cos(x) + C$ &nbsp; (Careful with the sign!)</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 11: U-Substitution -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Integration by u-Substitution</h2>
+            <p class="revealable"><strong>Intuition:</strong> The reverse of the chain rule.</p>
+            <p class="revealable mt-2">Use u-substitution when you see a function and its derivative (or a multiple of it) inside the integral.</p>
+            <p class="revealable mt-4"><strong>The Procedure:</strong></p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Choose 'u':</strong> Pick 'u' to be the "inside function."</li>
+                <li class="revealable"><strong>Find 'du':</strong> Differentiate 'u' to find $du = u' dx$.</li>
+                <li class="revealable"><strong>Substitute:</strong> Replace all terms with 'u' and 'du'.</li>
+                <li class="revealable"><strong>Integrate:</strong> Find the antiderivative with respect to 'u'.</li>
+                <li class="revealable"><strong>Back-substitute:</strong> Replace 'u' with the original function of 'x'.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 12: U-Substitution Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>U-Substitution Example</h2>
+            <p>Find $\int 2x \cos(x^2) \,dx$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Choose u:</strong> Let $u = x^2$.</li>
+                <li class="revealable"><strong>Find du:</strong> $du = 2x \,dx$.</li>
+                <li class="revealable"><strong>Substitute:</strong> The integral becomes $\int \cos(u) \,du$.</li>
+                <li class="revealable"><strong>Integrate:</strong> $\sin(u) + C$.</li>
+                <li class="revealable"><strong>Back-substitute:</strong> $\sin(x^2) + C$.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 13: Conclusion -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Conclusion</h2>
+            <p class="mt-4 text-xl">You can now reverse the process of differentiation to find a total accumulation from a rate. This is a foundational skill for future topics like volumes, differential equations, and more.</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>

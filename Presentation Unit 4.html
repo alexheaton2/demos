@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Contextual Applications of Differentiation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul, .slide ol { list-style-position: inside; }
+        .slide ul li, .slide ol li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Unit 4: Contextual Applications of Differentiation</h1>
+            <h3 class="mt-4 text-gray-300">The "Why" and "Where" of Derivatives</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Core Idea -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Core Idea: What Does the Derivative Mean?</h2>
+            <p class="revealable mt-4"><strong>Intuition:</strong> The derivative is a <strong>rate of change</strong>. Its units tell the story.</p>
+            <p class="revealable mt-4">The derivative $f'(a)$ tells us how fast the output $f(x)$ is changing at the exact moment the input $x$ equals $a$.</p>
+            <p class="revealable mt-4 text-center text-xl p-4 bg-blue-100 rounded-lg">Units of $f'(x)$ = $\frac{\text{Units of Output}}{\text{Units of Input}}$</p>
+        </div>
+    </div>
+
+    <!-- Slide 3: Interpreting a Derivative -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Example: Interpreting a Derivative</h2>
+            <p>Let $W(t)$ be the amount of water in a tank (liters) at time $t$ (minutes).</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>What does $W(5) = 200$ mean?</strong><br><span class="text-gray-600">At 5 minutes, there are 200 liters in the tank. (A value)</span></li>
+                <li class="revealable"><strong>What does $W'(5) = -30$ mean?</strong><br><span class="text-gray-600">At 5 minutes, the water is <strong>decreasing</strong> at a rate of <strong>30 liters per minute</strong>. (A rate)</span></li>
+            </ul>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Confusing the value of the function with the value of the derivative. The derivative isn't an amount; it's a rate.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Straight-Line Motion -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Straight-Line Motion</h2>
+            <p>For a particle with position $s(t)$:</p>
+            <ul class="mt-4">
+                <li class="revealable"><strong>Velocity $v(t)$</strong> is the derivative of position. It tells you speed and direction.
+                    <p class="text-center text-xl my-2">$v(t) = s'(t)$</p>
+                </li>
+                <li class="revealable"><strong>Acceleration $a(t)$</strong> is the derivative of velocity. It tells you how velocity is changing.
+                    <p class="text-center text-xl my-2">$a(t) = v'(t) = s''(t)$</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 5: Motion Concepts -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Important Ideas in Motion</h2>
+            <ul class="mt-2">
+                <li class="revealable"><strong>Velocity vs. Speed:</strong> Velocity has direction (+ or -). Speed is the absolute value of velocity and is always non-negative. `Speed = |v(t)|`.</li>
+                <li class="revealable mt-4"><strong>Speeding up or slowing down?</strong> It depends on the signs of BOTH velocity and acceleration.
+                    <ul class="list-disc list-inside mt-2">
+                        <li><strong>Speeding up:</strong> $v(t)$ and $a(t)$ have the <strong>same sign</strong>.</li>
+                        <li><strong>Slowing down:</strong> $v(t)$ and $a(t)$ have <strong>opposite signs</strong>.</li>
+                    </ul>
+                </li>
+            </ul>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Thinking negative acceleration always means slowing down. If velocity is also negative, the particle is speeding up!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 6: Related Rates Intro -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Related Rates</h2>
+            <p class="revealable"><strong>Intuition:</strong> Use this when multiple related quantities are all changing over time.</p>
+            <p class="revealable mt-4">Imagine a ladder sliding down a wall. As the top slides down, the bottom slides out. The rates are <strong>related</strong>.</p>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Related Rates Procedure -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Related Rates: The Procedure (Memorize This!)</h2>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Diagram and Variables:</strong> Draw a picture. Label changing quantities as variables. Note known rates and the rate you want to find.</li>
+                <li class="revealable"><strong>Static Equation:</strong> Write an equation relating your variables (e.g., Pythagorean theorem, volume formula). No rates yet!</li>
+                <li class="revealable"><strong>Differentiate with Respect to Time:</strong> Differentiate the entire equation with respect to $t$, using the chain rule.</li>
+                <li class="revealable"><strong>Substitute and Solve:</strong> Plug in the instantaneous values for variables and known rates. Solve for the unknown rate.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 8: Related Rates Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Related Rates: Example Setup</h2>
+            <p>A 10-ft ladder leans against a wall. The bottom is pulled away at 2 ft/s. How fast is the top sliding down when the bottom is 6 ft from the wall?</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Diagram/Variables:</strong> Right triangle. $x$ = distance from wall, $y$ = height on wall. Given: $\frac{dx}{dt} = 2$. Find: $\frac{dy}{dt}$ when $x=6$.</li>
+                <li class="revealable"><strong>Equation:</strong> $x^2 + y^2 = 10^2$.</li>
+                <li class="revealable"><strong>Differentiate:</strong> $2x\frac{dx}{dt} + 2y\frac{dy}{dt} = 0$.</li>
+            </ol>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>CRITICAL:</strong> Do NOT plug in numbers before you differentiate! If you plug in $x=6$ first, its derivative becomes 0, which is wrong because $x$ is changing.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Related Rates Solution -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Related Rates: Example Solution</h2>
+            <p>Our differentiated equation is $2x\frac{dx}{dt} + 2y\frac{dy}{dt} = 0$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Find missing value:</strong> When $x=6$, use the static equation: $6^2 + y^2 = 10^2 \implies 36 + y^2 = 100 \implies y=8$.</li>
+                <li class="revealable"><strong>Substitute knowns:</strong> Plug everything into the differentiated equation: $2(6)(2) + 2(8)\frac{dy}{dt} = 0$.</li>
+                <li class="revealable"><strong>Simplify:</strong> $24 + 16\frac{dy}{dt} = 0$.</li>
+                <li class="revealable"><strong>Solve:</strong> $16\frac{dy}{dt} = -24 \implies \frac{dy}{dt} = -\frac{24}{16} = -1.5$ ft/s.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 10: Local Linearity -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Local Linearity and Linearization</h2>
+            <p class="revealable"><strong>Intuition:</strong> If you zoom in far enough on a smooth curve, it looks like a straight line (the tangent line).</p>
+            <p class="revealable mt-2">We can use the equation of this tangent line to approximate function values near the point of tangency.</p>
+            <p class="revealable mt-4"><strong>The Formula:</strong> The linear approximation $L(x)$ to $f(x)$ at $x=a$ is:</p>
+            <p class="text-center text-2xl my-2"> $L(x) = f(a) + f'(a)(x-a)$ </p>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Linearization Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Linearization Example</h2>
+            <p>Use a linear approximation to estimate $\sqrt{4.1}$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Function & Point:</strong> Use $f(x) = \sqrt{x}$ at the "nice" point $a=4$.</li>
+                <li class="revealable"><strong>Pieces:</strong> $f(4) = 2$. Derivative is $f'(x) = \frac{1}{2\sqrt{x}}$, so $f'(4) = \frac{1}{4}$.</li>
+                <li class="revealable"><strong>Build the Line:</strong> $L(x) = 2 + \frac{1}{4}(x-4)$.</li>
+                <li class="revealable"><strong>Approximate:</strong> $\sqrt{4.1} \approx L(4.1) = 2 + \frac{1}{4}(4.1 - 4) = 2 + \frac{1}{4}(0.1) = 2.025$.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 12: L'Hôpital's Rule -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>L'Hôpital's Rule</h2>
+            <p class="revealable"><strong>Intuition:</strong> A powerful shortcut for limits that result in the indeterminate forms $\frac{0}{0}$ or $\frac{\infty}{\infty}$.</p>
+            <p class="revealable mt-2">If a limit is indeterminate, you can take the derivative of the numerator and denominator <strong>separately</strong> and try the limit again.</p>
+            <p class="revealable mt-4"><strong>The Rule:</strong> If $\lim_{x \to c} \frac{f(x)}{g(x)}$ is indeterminate, then:</p>
+            <p class="text-center text-2xl my-2">$\lim_{x \to c} \frac{f(x)}{g(x)} = \lim_{x \to c} \frac{f'(x)}{g'(x)}$</p>
+        </div>
+    </div>
+
+    <!-- Slide 13: L'Hôpital's Rule Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>L'Hôpital's Rule: Example</h2>
+            <p>Find the limit $\lim_{x \to 0} \frac{e^{2x} - 1}{x}$.</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Check Form:</strong> Plugging in $x=0$ gives $\frac{e^0-1}{0} = \frac{0}{0}$. It's indeterminate.</li>
+                <li class="revealable"><strong>Apply Rule:</strong> Differentiate top and bottom separately:
+                $$ \lim_{x \to 0} \frac{\frac{d}{dx}(e^{2x} - 1)}{\frac{d}{dx}(x)} = \lim_{x \to 0} \frac{2e^{2x}}{1} $$
+                </li>
+                <li class="revealable"><strong>Evaluate New Limit:</strong> Plug in $x=0$ to get $\frac{2e^0}{1} = 2$.</li>
+            </ol>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Using the Quotient Rule. L'Hôpital's Rule is NOT the Quotient Rule!</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 14: Conclusion -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Where Do We Go From Here?</h2>
+            <p>With these contextual tools, you can now:</p>
+            <ul class="list-disc list-inside mt-4">
+                <li class="revealable">Model and interpret real-world rates of change, from physics to economics.</li>
+                <li class="revealable">Solve complex problems where multiple quantities change over time.</li>
+                <li class="revealable">Use the derivative to make accurate approximations of complex functions.</li>
+                <li class="revealable">You are now ready to use the derivative to analyze function graphs, finding maximums, minimums, and concavity in the next unit!</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>

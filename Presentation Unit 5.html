@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Analytical Applications of Differentiation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1rem; /* Final reduced font size */
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul, .slide ol { list-style-position: inside; }
+        .slide ul li, .slide ol li { margin-bottom: 0.6rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Unit 5: Analytical Applications of Differentiation</h1>
+            <h3 class="mt-4 text-gray-300">Analyzing the Shape of a Graph</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: The Core Idea -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>What Do Derivatives Tell Us About a Graph?</h2>
+            <p class="revealable mt-4"><strong>Intuition:</strong> The <strong>first derivative</strong> tells you the <strong>direction</strong> (uphill/downhill). The <strong>second derivative</strong> tells you the <strong>curvature</strong> (bending up/down).</p>
+            <ul class="mt-4">
+                <li class="revealable">If you are walking <strong>uphill</strong>, the function is <strong>increasing</strong>, and $f'(x)$ is <strong>positive</strong>.</li>
+                <li class="revealable">If you are walking <strong>downhill</strong>, the function is <strong>decreasing</strong>, and $f'(x)$ is <strong>negative</strong>.</li>
+                <li class="revealable">If the path curves like a <strong>bowl</strong>, it is <strong>concave up</strong>, and $f''(x)$ is <strong>positive</strong>.</li>
+                <li class="revealable">If the path curves like a <strong>dome</strong>, it is <strong>concave down</strong>, and $f''(x)$ is <strong>negative</strong>.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: MVT and EVT -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Important Theoretical Tools: EVT & MVT</h2>
+            <ul class="mt-2">
+                <li class="revealable"><strong>Extreme Value Theorem (EVT):</strong> If a function is <strong>continuous</strong> on a <strong>closed interval</strong> $[a, b]$, it's guaranteed to have an absolute max and min on that interval.
+                    <p class="text-gray-600 italic">Intuition: A continuous curve on a fixed interval must have a highest and lowest point.</p>
+                </li>
+                <li class="revealable mt-4"><strong>Mean Value Theorem (MVT):</strong> If a function is continuous on $[a, b]$ and differentiable on $(a, b)$, then at some point $c$, the instantaneous rate of change equals the average rate of change.
+                    <p class="text-gray-600 italic">Intuition: If your average speed on a trip was 60 mph, your speedometer must have read exactly 60 mph at some point.</p>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 4: Finding Extrema -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Finding Maximums and Minimums (Extrema)</h2>
+            <p class="revealable"><strong>Critical Points:</strong> These are the candidates for where local max/mins can occur. A point $x=c$ is a critical point if:</p>
+            <p class="revealable text-center text-xl my-2">$f'(c) = 0$ &nbsp; or &nbsp; $f'(c)$ is undefined</p>
+            <div class="revealable mt-4 p-4 border border-red-300 bg-red-50 rounded-lg">
+                <p><strong>Common Mistake:</strong> Thinking every critical point must be a max or min. The function $f(x) = x^3$ has a critical point at $x=0$, but it's neither a max nor a min.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: First Derivative Test -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The First Derivative Test</h2>
+            <p>This test uses the sign of $f'$ around a critical point $c$ to classify it:</p>
+            <ul class="mt-4">
+                <li class="revealable">If $f'$ changes from <strong>positive to negative</strong> at $c$, then $f$ has a <strong>local maximum</strong> at $c$. (Uphill to downhill).</li>
+                <li class="revealable">If $f'$ changes from <strong>negative to positive</strong> at $c$, then $f$ has a <strong>local minimum</strong> at $c$. (Downhill to uphill).</li>
+                <li class="revealable">If $f'$ <strong>does not change sign</strong>, it's neither a max nor a min.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 6: Second Derivative Test -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Second Derivative Test</h2>
+            <p>A quick alternative for critical points where $f'(c)=0$:</p>
+             <ul class="mt-4">
+                <li class="revealable">If $f''(c) > 0$ (concave up), then $f$ has a <strong>local minimum</strong> at $c$.</li>
+                <li class="revealable">If $f''(c) < 0$ (concave down), then $f$ has a <strong>local maximum</strong> at $c$.</li>
+                <li class="revealable">If $f''(c) = 0$, the test is <strong>inconclusive</strong>. You must use the First Derivative Test.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 7: Concavity -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Concavity and Points of Inflection</h2>
+            <ul class="mt-2">
+                <li class="revealable"><strong>Concavity</strong> is determined by the sign of the second derivative, $f''$.
+                    <ul class="list-disc list-inside mt-2">
+                        <li>$f$ is <strong>concave up</strong> when $f''(x) > 0$.</li>
+                        <li>$f$ is <strong>concave down</strong> when $f''(x) < 0$.</li>
+                    </ul>
+                </li>
+                <li class="revealable mt-4">A <strong>Point of Inflection</strong> is a point on the graph where the <strong>concavity changes</strong>. This can occur where $f''(x) = 0$ or is undefined (and you must confirm the sign of $f''$ changes).</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 8: Optimization -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Optimization</h2>
+            <p class="revealable"><strong>Intuition:</strong> Finding the "best" possible value (e.g., maximum area, minimum cost) given a constraint.</p>
+            <p class="revealable mt-4"><strong>The Procedure:</strong></p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Primary & Constraint Equations:</strong> Identify what you want to maximize/minimize (primary) and the equation that relates the variables (constraint).</li>
+                <li class="revealable"><strong>Single Variable:</strong> Use the constraint to rewrite the primary equation in terms of a single variable.</li>
+                <li class="revealable"><strong>Find Critical Points:</strong> Take the derivative and set it to zero.</li>
+                <li class="revealable"><strong>Justify Your Answer:</strong> Use the First or Second Derivative Test to confirm it's a max or min. Check endpoints if necessary.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 9: Optimization Example -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Optimization Example</h2>
+            <p>You have 100 ft of fence for a rectangular garden. What is the maximum area?</p>
+            <ol class="list-decimal list-inside mt-2">
+                <li class="revealable"><strong>Primary:</strong> $A = xy$. &nbsp; <strong>Constraint:</strong> $2x+2y=100$.</li>
+                <li class="revealable"><strong>Single Variable:</strong> From constraint, $y = 50-x$. So, $A(x) = x(50-x) = 50x - x^2$.</li>
+                <li class="revealable"><strong>Critical Points:</strong> $A'(x) = 50 - 2x$. Set to zero: $50 - 2x = 0 \implies x=25$.</li>
+                <li class="revealable"><strong>Justify:</strong> $A''(x) = -2$, which is negative. By the Second Derivative Test, $x=25$ gives a maximum. The dimensions are 25 ft by 25 ft.</li>
+            </ol>
+        </div>
+    </div>
+
+    <!-- Slide 10: Connecting f, f', and f'' -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Connecting f, f', and f''</h2>
+            <ul class="list-disc list-inside mt-2">
+                <li class="revealable">When $f(x)$ has a local max/min, $f'(x)=0$ or is undefined.</li>
+                <li class="revealable">When $f(x)$ is increasing, $f'(x)>0$.</li>
+                <li class="revealable">When $f(x)$ is decreasing, $f'(x)<0$.</li>
+                <li class="revealable">When $f(x)$ has an inflection point, $f''(x)=0$ or is undefined (and changes sign).</li>
+                <li class="revealable">When $f(x)$ is concave up, $f''(x)>0$, which means $f'(x)$ is increasing.</li>
+                <li class="revealable">When $f(x)$ is concave down, $f''(x)<0$, which means $f'(x)$ is decreasing.</li>
+            </ul>
+        </div>
+    </div>
+    
+    <!-- Slide 11: Conclusion -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h2>Conclusion</h2>
+            <p class="mt-4 text-xl">This unit provides the analytical tools for understanding function behavior. Master them, as they are the building blocks for all applications of derivatives you'll see from here on out.</p>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>
