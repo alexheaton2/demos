@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1D Heat Equation Visualization</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js for 1D plotting -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Three.js for 3D plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <style>
+        /* Custom font and minor style adjustments */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .chart-container {
+            position: relative;
+            height: 45vh;
+            min-height: 400px;
+            width: 100%;
+        }
+        #plot-3d {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+        #plot-3d:active {
+            cursor: grabbing;
+        }
+        /* Loading overlay */
+        #loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            transition: opacity 0.3s;
+        }
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Header Section -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">1D Heat Equation Visualization</h1>
+            <p class="mt-2 text-lg text-gray-600">
+                Visualizing the solution <span class="font-mono bg-gray-200 p-1 rounded-md">u(x,t)</span> for <span class="font-mono bg-gray-200 p-1 rounded-md">u<sub>t</sub> = α u<sub>xx</sub></span>
+            </p>
+        </header>
+
+        <!-- Controls Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <!-- Initial Condition f(x) Controls -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">Initial Condition: f(x) = u(x, 0)</h2>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-grow">
+                        <label for="f-function-input" class="block text-sm font-medium text-gray-700">f(x) =</label>
+                        <input type="text" id="f-function-input" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="f-preset-select" class="block text-sm font-medium text-gray-700">Presets</label>
+                        <select id="f-preset-select" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                            <option value="custom">Custom</option>
+                            <option value="gaussian">Gaussian Bump</option>
+                            <option value="sharp_gaussian">Sharp Gaussian</option>
+                            <option value="square">Square Pulse</option>
+                            <option value="double_square">Two Square Pulses</option>
+                            <option value="triangle">Triangle Pulse</option>
+                            <option value="sine">Sine Wave</option>
+                            <option value="step">Step Function</option>
+                            <option value="zero">Zero</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Parameters Controls -->
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">Physical Parameters</h2>
+                <label for="alpha-slider" class="block text-sm font-medium text-gray-700">Thermal Diffusivity (α)</label>
+                <div class="flex items-center gap-4 mt-2">
+                    <input type="range" id="alpha-slider" min="0.1" max="5" value="1" step="0.1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    <span id="alpha-display" class="font-mono text-lg p-2 bg-gray-100 rounded-md w-24 text-center">α = 1.0</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Time Controls -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <label for="time-slider" class="block text-lg font-bold text-gray-700">Time (t)</label>
+            <div class="flex items-center gap-4 mt-2">
+                <button id="play-pause-btn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors w-24">Play</button>
+                <input type="range" id="time-slider" min="0" max="20" value="0" step="0.1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                <span id="time-display" class="font-mono text-lg p-2 bg-gray-100 rounded-md w-24 text-center">t = 0.0</span>
+            </div>
+        </div>
+
+        <!-- Plots Section -->
+        <div class="grid grid-cols-1 gap-8">
+            <!-- 1D Plot -->
+            <div class="bg-white p-4 rounded-xl shadow-md">
+                <h3 class="text-center font-bold text-lg mb-2">1D View: u(x, t) at current time</h3>
+                <div class="chart-container">
+                    <canvas id="heat-chart-1d"></canvas>
+                </div>
+            </div>
+            <!-- 3D Plot -->
+            <div class="bg-white p-4 rounded-xl shadow-md relative">
+                 <div id="loading-overlay">
+                    <div>
+                        <div class="spinner"></div>
+                        <p class="text-center mt-4 font-semibold">Calculating 3D surface...</p>
+                    </div>
+                </div>
+                <h3 class="text-center font-bold text-lg mb-2">3D Surface View: u(x, t)</h3>
+                <div class="chart-container">
+                    <canvas id="plot-3d"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- CONFIGURATION ---
+            const X_MIN = -20, X_MAX = 20;
+            const T_MIN = 0, T_MAX = 20;
+            const U_MIN = -1.5, U_MAX = 1.5;
+            const X_POINTS = 201; // Number of points in space for calculation
+            const X_POINTS_3D = 101; // Fewer points for 3D rendering performance
+            const T_POINTS_3D = 101;
+            const T_EPSILON = 1e-4; // Small time offset to avoid singularity at t=0
+
+            // --- DOM ELEMENTS ---
+            const fInput = document.getElementById('f-function-input');
+            const fPreset = document.getElementById('f-preset-select');
+            const alphaSlider = document.getElementById('alpha-slider');
+            const alphaDisplay = document.getElementById('alpha-display');
+            const timeSlider = document.getElementById('time-slider');
+            const timeDisplay = document.getElementById('time-display');
+            const playPauseBtn = document.getElementById('play-pause-btn');
+            const loadingOverlay = document.getElementById('loading-overlay');
+
+            // --- PRESET FUNCTIONS ---
+            const presets = {
+                gaussian: 'Math.exp(-Math.pow(x, 2))',
+                sharp_gaussian: 'Math.exp(-5 * Math.pow(x, 2))',
+                square: '(Math.abs(x) < 5 ? 1 : 0)',
+                double_square: '(Math.abs(x-7) < 3 ? 1 : (Math.abs(x+7) < 3 ? -1 : 0))',
+                triangle: '(Math.abs(x) < 5 ? 1 - Math.abs(x)/5 : 0)',
+                sine: 'Math.sin(Math.PI * x / 10) * (Math.abs(x) < 10 ? 1 : 0)',
+                step: '(x > 0 ? 1 : 0)',
+                zero: '0'
+            };
+
+            // --- APPLICATION STATE ---
+            let t = 0;
+            let alpha = 1; // Thermal diffusivity
+            let funcF = (x) => 0;
+            let isPlaying = false;
+            let animationFrameId = null;
+            // xValues for calculation (higher resolution) and for plotting (can be same or different)
+            const xValuesForCalc = Array.from({ length: X_POINTS }, (_, i) => X_MIN + i * (X_MAX - X_MIN) / (X_POINTS - 1));
+            const xValuesForPlot = xValuesForCalc; // Use the same resolution for plotting
+
+            // --- 1D CHART SETUP ---
+            const ctx1d = document.getElementById('heat-chart-1d').getContext('2d');
+            const heatChart1D = new Chart(ctx1d, {
+                type: 'line', 
+                data: { 
+                    labels: xValuesForPlot.map(x => x.toFixed(1)), 
+                    datasets: [ 
+                        { label: 'Initial f(x)', data: [], borderColor: 'rgb(239, 68, 68)', borderWidth: 2, borderDash: [5, 5], pointRadius: 0, tension: 0.1 }, 
+                        { label: 'Solution u(x,t)', data: [], borderColor: 'rgb(59, 130, 246)', borderWidth: 3, pointRadius: 0, tension: 0.1 } 
+                    ] 
+                },
+                options: { 
+                    animation: false, 
+                    responsive: true, 
+                    maintainAspectRatio: false, 
+                    scales: { 
+                        x: { title: { display: true, text: 'x' } }, 
+                        y: { min: U_MIN, max: U_MAX, title: { display: true, text: 'Temperature' } } 
+                    }, 
+                    plugins: { legend: { display: true, position: 'top' } } 
+                }
+            });
+
+            // --- 3D SCENE SETUP ---
+            let scene, camera, renderer, controls, surfaceMesh, slicePlane, sliceCurve;
+            
+            const init3D = () => {
+                const canvas = document.getElementById('plot-3d');
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xffffff);
+                camera = new THREE.PerspectiveCamera(50, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+                camera.position.set(35, 25, 35);
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                scene.add(new THREE.AmbientLight(0xcccccc, 0.6));
+                scene.add(new THREE.DirectionalLight(0xffffff, 0.8));
+                scene.add(new THREE.AxesHelper(Math.max(X_MAX, T_MAX, U_MAX)));
+                
+                // Handle resize
+                new ResizeObserver(() => {
+                    camera.aspect = canvas.clientWidth / canvas.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+                }).observe(canvas.parentElement);
+            };
+
+            const disposeObject = (obj) => {
+                if (obj) {
+                    if (obj.geometry) obj.geometry.dispose();
+                    if (obj.material) obj.material.dispose();
+                    scene.remove(obj);
+                }
+            };
+
+            // --- CORE CALCULATION ---
+            
+            /**
+             * The heat kernel (fundamental solution to the heat equation).
+             * @param {number} x - position
+             * @param {number} t - time
+             * @param {number} alpha_diff - thermal diffusivity
+             * @returns {number} Value of the kernel.
+             */
+            const heatKernel = (x, t, alpha_diff) => {
+                if (t <= 0) return 0;
+                return (1 / Math.sqrt(4 * Math.PI * alpha_diff * t)) * Math.exp(-Math.pow(x, 2) / (4 * alpha_diff * t));
+            };
+
+            /**
+             * Calculates the solution u(x, t) using numerical convolution.
+             * u(x,t) = integral( f(s) * G(x-s, t) ds ) from -inf to inf
+             * where G is the heat kernel. We approximate this with a Riemann sum.
+             * @param {number} x - The position at which to calculate the solution.
+             * @param {number} t - The time at which to calculate the solution.
+             * @returns {number} The value of u(x, t).
+             */
+            const calculateU = (x, t) => {
+                // For t=0, the solution is just the initial condition.
+                // For t>0, we use a small epsilon to avoid division by zero in the kernel.
+                const effectiveT = Math.max(t, T_EPSILON);
+                
+                if (t === 0) {
+                    return funcF(x);
+                }
+
+                let integral = 0;
+                const ds = xValuesForCalc[1] - xValuesForCalc[0]; // Step size for integration
+
+                for (let i = 0; i < xValuesForCalc.length; i++) {
+                    const s = xValuesForCalc[i];
+                    const f_s = funcF(s);
+                    const kernel_val = heatKernel(x - s, effectiveT, alpha);
+                    integral += f_s * kernel_val * ds;
+                }
+                return integral;
+            };
+
+            const update3DSurface = () => {
+                // Show loading indicator
+                loadingOverlay.style.opacity = '1';
+                loadingOverlay.style.pointerEvents = 'auto';
+
+                // Allow the UI to update before starting the heavy calculation
+                setTimeout(() => {
+                    disposeObject(surfaceMesh);
+                    
+                    const geometry = new THREE.BufferGeometry();
+                    const vertices = [];
+                    const indices = [];
+                    const tValues = Array.from({ length: T_POINTS_3D }, (_, i) => T_MIN + i * (T_MAX - T_MIN) / (T_POINTS_3D - 1));
+                    const xValues3D = Array.from({ length: X_POINTS_3D }, (_, i) => X_MIN + i * (X_MAX - X_MIN) / (X_POINTS_3D - 1));
+
+
+                    for (let j = 0; j < T_POINTS_3D; j++) {
+                        for (let i = 0; i < X_POINTS_3D; i++) {
+                            const x = xValues3D[i];
+                            const t_surf = tValues[j];
+                            const val = calculateU(x, t_surf);
+                            vertices.push(x, t_surf, Math.max(U_MIN, Math.min(U_MAX, val)));
+                        }
+                    }
+
+                    for (let j = 0; j < T_POINTS_3D - 1; j++) {
+                        for (let i = 0; i < X_POINTS_3D - 1; i++) {
+                            const a = j * X_POINTS_3D + i;
+                            const b = a + 1;
+                            const c = (j + 1) * X_POINTS_3D + i;
+                            const d = c + 1;
+                            indices.push(a, c, b);
+                            indices.push(b, c, d);
+                        }
+                    }
+
+                    geometry.setIndex(indices);
+                    geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                    geometry.computeVertexNormals();
+
+                    const material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, wireframe: true, transparent: true, opacity: 0.7 });
+                    surfaceMesh = new THREE.Mesh(geometry, material);
+                    scene.add(surfaceMesh);
+
+                    // Update the slice for the current time
+                    update3DSlice();
+
+                    // Hide loading indicator
+                    loadingOverlay.style.opacity = '0';
+                    loadingOverlay.style.pointerEvents = 'none';
+                }, 50); // 50ms timeout
+            };
+            
+            const update3DSlice = () => {
+                disposeObject(slicePlane);
+                disposeObject(sliceCurve);
+
+                // A plane indicating the current time slice
+                const planeGeom = new THREE.PlaneGeometry(X_MAX - X_MIN, U_MAX - U_MIN);
+                const planeMat = new THREE.MeshBasicMaterial({ color: 0x3b82f6, transparent: true, opacity: 0.2, side: THREE.DoubleSide }); // blue-500
+                slicePlane = new THREE.Mesh(planeGeom, planeMat);
+                slicePlane.position.set(0, t, 0);
+                slicePlane.rotation.x = -Math.PI / 2;
+                scene.add(slicePlane);
+
+                // The curve representing u(x, t) at the current time
+                const points = xValuesForPlot.map(x => {
+                    const val = calculateU(x, t);
+                    return new THREE.Vector3(x, t, Math.max(U_MIN, Math.min(U_MAX, val)));
+                });
+                const curveGeom = new THREE.BufferGeometry().setFromPoints(points);
+                const curveMat = new THREE.LineBasicMaterial({ color: 0x3b82f6, linewidth: 4 });
+                sliceCurve = new THREE.Line(curveGeom, curveMat);
+                scene.add(sliceCurve);
+            };
+
+            const animate3D = () => {
+                requestAnimationFrame(animate3D);
+                controls.update();
+                renderer.render(scene, camera);
+            };
+
+            const parseFunction = (inputString, varName, inputElement) => {
+                try {
+                    const func = new Function(varName, 'return ' + inputString);
+                    func(0); 
+                    inputElement.classList.remove('border-red-500');
+                    return func;
+                } catch (e) {
+                    console.error("Function parsing error:", e);
+                    inputElement.classList.add('border-red-500');
+                    return () => 0; // Return a safe function
+                }
+            };
+            
+            const update1DChart = () => {
+                const dataU = xValuesForPlot.map(x => calculateU(x, t));
+                heatChart1D.data.datasets[1].data = dataU;
+                heatChart1D.update();
+            };
+            
+            const updateInitialCondition = () => {
+                 const dataF = xValuesForPlot.map(x => funcF(x));
+                 heatChart1D.data.datasets[0].data = dataF;
+            }
+
+            const updateAndParseAll = () => {
+                funcF = parseFunction(fInput.value, 'x', fInput);
+                alpha = parseFloat(alphaSlider.value);
+                updateInitialCondition();
+                update1DChart();
+                update3DSurface();
+            };
+
+            const handleTextInput = () => { fPreset.value = 'custom'; pauseAnimation(); updateAndParseAll(); };
+            const onPresetSelect = (e) => { if (e.target.value === 'custom' || !presets[e.target.value]) return; pauseAnimation(); fInput.value = presets[e.target.value]; updateAndParseAll(); };
+            const pauseAnimation = () => { isPlaying = false; playPauseBtn.textContent = 'Play'; if (animationFrameId) cancelAnimationFrame(animationFrameId); animationFrameId = null; };
+            const playAnimation = () => { isPlaying = true; playPauseBtn.textContent = 'Pause'; animationLoop(); };
+            
+            const animationLoop = () => {
+                if (!isPlaying) return;
+                t = parseFloat(timeSlider.value) + 0.1;
+                if (t > T_MAX) t = T_MIN; // Loop back to start
+                timeSlider.value = t;
+                timeDisplay.textContent = `t = ${t.toFixed(1)}`;
+                update1DChart();
+                update3DSlice();
+                animationFrameId = requestAnimationFrame(animationLoop);
+            };
+
+            // --- EVENT LISTENERS ---
+            playPauseBtn.addEventListener('click', () => isPlaying ? pauseAnimation() : playAnimation());
+            timeSlider.addEventListener('input', (e) => { pauseAnimation(); t = parseFloat(e.target.value); timeDisplay.textContent = `t = ${t.toFixed(1)}`; update1DChart(); update3DSlice(); });
+            alphaSlider.addEventListener('input', (e) => { pauseAnimation(); alpha = parseFloat(e.target.value); alphaDisplay.textContent = `α = ${alpha.toFixed(1)}`; updateAndParseAll(); });
+            fInput.addEventListener('change', handleTextInput);
+            fPreset.addEventListener('change', onPresetSelect);
+
+            // --- INITIALIZATION ---
+            const initialize = () => {
+                init3D();
+                fPreset.value = 'gaussian';
+                fInput.value = presets.gaussian;
+                alphaSlider.value = alpha;
+                alphaDisplay.textContent = `α = ${alpha.toFixed(1)}`;
+                updateAndParseAll();
+                animate3D();
+            };
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>
