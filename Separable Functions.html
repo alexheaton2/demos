@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visualizing Separable Functions u(x,t) = X(x)T(t)</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Three.js for 3D plotting -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <!-- KaTeX for LaTeX rendering -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        #plot-3d-container {
+             position: relative;
+            height: 60vh;
+            min-height: 450px;
+            width: 100%;
+        }
+        #plot-3d {
+            width: 100%;
+            height: 100%;
+            display: block;
+            cursor: grab;
+        }
+        #plot-3d:active {
+            cursor: grabbing;
+        }
+        .katex { font-size: 1.1em; }
+        #formula-display {
+            font-size: 1.25rem;
+            min-height: 50px; /* Reserve space to prevent layout shift */
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Visualizing Separable Functions</h1>
+            <p class="mt-2 text-lg text-gray-600">
+                Understanding solutions of the form <span class="font-mono bg-gray-200 p-1 rounded-md">u(x,t) = X(x)T(t)</span>
+            </p>
+        </header>
+
+        <!-- Explanatory Text -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8 prose max-w-none">
+            <h2 class="text-2xl font-bold">What is a Separable Function?</h2>
+            <p>
+                In the study of Partial Differential Equations (PDEs), a common technique is the <strong class="text-indigo-600">method of separation of variables</strong>. The fundamental assumption of this method is that a solution can be expressed as a product of functions, each of which depends on only one of the independent variables. For a function $u(x,t)$, this means we assume:
+            </p>
+            <div class="text-center text-xl my-4 p-2 bg-gray-100 rounded-md">
+                $u(x,t) = X(x) \cdot T(t)$
+            </div>
+            <p>
+                Here, $X(x)$ is a function purely of the spatial variable $x$, and $T(t)$ is a function purely of the time variable $t$. While not all solutions to PDEs can be written this way, many fundamental solutions (often called "modes") can. The general solution is then constructed by summing up these simpler product solutions, a concept known as superposition.
+            </p>
+        </div>
+
+        <!-- Controls Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">Spatial Function: X(x)</h2>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-grow">
+                        <label for="x-function-input" class="block text-sm font-medium text-gray-700">X(x) =</label>
+                        <input type="text" id="x-function-input" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="x-preset-select" class="block text-sm font-medium text-gray-700">Presets</label>
+                        <select id="x-preset-select" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md">
+                <h2 class="text-xl font-bold mb-4">Temporal Function: T(t)</h2>
+                 <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="flex-grow">
+                        <label for="t-function-input" class="block text-sm font-medium text-gray-700">T(t) =</label>
+                        <input type="text" id="t-function-input" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label for="t-preset-select" class="block text-sm font-medium text-gray-700">Presets</label>
+                        <select id="t-preset-select" class="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500"></select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sliders -->
+        <div class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <label for="time-slider" class="block text-lg font-bold text-gray-700">Time Slice (t)</label>
+                    <div class="flex items-center gap-4 mt-2">
+                        <button id="play-pause-t-btn" class="bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-indigo-700 transition-colors w-24">Play</button>
+                        <input type="range" id="time-slider" min="-6" max="6" value="0" step="0.05" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <span id="time-display" class="font-mono text-lg p-2 bg-gray-100 rounded-md w-24 text-center">t = 0.0</span>
+                    </div>
+                </div>
+                <div>
+                    <label for="space-slider" class="block text-lg font-bold text-gray-700">Space Slice (x)</label>
+                    <div class="flex items-center gap-4 mt-2">
+                        <button id="play-pause-x-btn" class="bg-teal-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-teal-700 transition-colors w-24">Play</button>
+                        <input type="range" id="space-slider" min="-6" max="6" value="2.0" step="0.05" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        <span id="space-display" class="font-mono text-lg p-2 bg-gray-100 rounded-md w-24 text-center">x = 2.0</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Formula Display -->
+        <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+            <h3 class="text-center font-bold text-lg mb-2">Selected Function</h3>
+            <div id="formula-display" class="text-center p-4 flex items-center justify-center"></div>
+        </div>
+
+        <!-- 3D Plot -->
+        <div class="bg-white p-4 rounded-xl shadow-md mb-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center mb-2">
+                <h3 class="text-center font-bold text-lg mb-2 sm:mb-0">3D Surface View: u(x, t) = X(x)T(t)</h3>
+                <div class="flex items-center gap-2">
+                    <span class="text-sm font-medium">Camera View:</span>
+                    <button id="view-default" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-lg">Default</button>
+                    <button id="view-top" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-lg">Top</button>
+                    <button id="view-front" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-lg">Front</button>
+                    <button id="view-side" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 font-semibold py-1 px-3 rounded-lg">Side</button>
+                </div>
+            </div>
+            <div id="plot-3d-container">
+                <canvas id="plot-3d"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- RENDER MATH ---
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false}
+                ]
+            });
+
+            // --- CONFIGURATION ---
+            const X_MIN = -6, X_MAX = 6;
+            const T_MIN = -6, T_MAX = 6;
+            const U_MIN = -5, U_MAX = 5;
+            const X_POINTS = 101;
+            const T_POINTS = 101;
+            const T_POINTS_3D = 51;
+
+            // --- DOM ELEMENTS ---
+            const xInput = document.getElementById('x-function-input');
+            const tInput = document.getElementById('t-function-input');
+            const xPreset = document.getElementById('x-preset-select');
+            const tPreset = document.getElementById('t-preset-select');
+            const timeSlider = document.getElementById('time-slider');
+            const timeDisplay = document.getElementById('time-display');
+            const spaceSlider = document.getElementById('space-slider');
+            const spaceDisplay = document.getElementById('space-display');
+            const playPauseTBtn = document.getElementById('play-pause-t-btn');
+            const playPauseXBtn = document.getElementById('play-pause-x-btn');
+            const formulaDisplay = document.getElementById('formula-display');
+            const viewDefaultBtn = document.getElementById('view-default');
+            const viewTopBtn = document.getElementById('view-top');
+            const viewFrontBtn = document.getElementById('view-front');
+            const viewSideBtn = document.getElementById('view-side');
+
+            // --- PRESET FUNCTIONS ---
+            const presets = {
+                'Sine': 'Math.sin(z)', 'Cosine': 'Math.cos(z)', 'Gaussian': 'Math.exp(-Math.pow(z, 2))',
+                'Exp. Decay': 'Math.exp(-Math.abs(z))', 'Wave Packet': 'Math.exp(-0.1 * Math.pow(z, 2)) * Math.cos(3 * z)',
+                'Gaussian Deriv.': '-2 * z * Math.exp(-Math.pow(z, 2))', 'Square Pulse': '(Math.abs(z) < 2 ? 1 : 0)',
+                'Triangle Pulse': '(Math.abs(z) < 2 ? 1 - Math.abs(z)/2 : 0)', 'Linear': 'z', 'Quadratic': 'Math.pow(z, 2)',
+                'Sech': '1 / Math.cosh(z)', 'Constant': '1', 'Zero': '0'
+            };
+            const presets_latex = {
+                'Sine': '\\sin(z)', 'Cosine': '\\cos(z)', 'Gaussian': 'e^{-z^2}', 'Exp. Decay': 'e^{-|z|}',
+                'Wave Packet': 'e^{-0.1z^2} \\cos(3z)', 'Gaussian Deriv.': '-2z e^{-z^2}',
+                'Square Pulse': '\\begin{cases} 1 & |z|<2 \\\\ 0 & |z| \\ge 2 \\end{cases}',
+                'Triangle Pulse': '\\begin{cases} 1 - |z|/2 & |z|<2 \\\\ 0 & |z| \\ge 2 \\end{cases}',
+                'Linear': 'z', 'Quadratic': 'z^2', 'Sech': '\\text{sech}(z)', 'Constant': '1', 'Zero': '0'
+            };
+            
+            // --- APPLICATION STATE ---
+            let currentTime = 0; let currentX = 2.0;
+            let funcX = (x) => 0; let funcT = (t) => 0;
+            let isPlayingT = false; let animationFrameIdT = null;
+            let isPlayingX = false; let animationFrameIdX = null;
+            const xValues = Array.from({ length: X_POINTS }, (_, i) => X_MIN + i * (X_MAX - X_MIN) / (X_POINTS - 1));
+            const tValues = Array.from({ length: T_POINTS }, (_, i) => T_MIN + i * (T_MAX - T_MIN) / (T_POINTS - 1));
+            
+            // --- 3D SCENE SETUP ---
+            let scene, camera, renderer, controls, surfaceMesh, slicePlaneT, sliceCurveT, slicePlaneX, sliceCurveX;
+            
+            const createAxisLabel = (text, position) => {
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                const size = 256; canvas.width = size; canvas.height = size;
+                context.font = `bold ${size/4}px Arial`; context.fillStyle = 'rgba(0,0,0,1)';
+                context.textAlign = 'center'; context.textBaseline = 'middle';
+                context.fillText(text, size/2, size/2);
+                const texture = new THREE.CanvasTexture(canvas);
+                const spriteMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
+                const sprite = new THREE.Sprite(spriteMaterial);
+                sprite.scale.set(2, 2, 1); sprite.position.copy(position);
+                return sprite;
+            };
+
+            const init3D = () => {
+                const container = document.getElementById('plot-3d-container');
+                const canvas = document.getElementById('plot-3d');
+                scene = new THREE.Scene();
+                scene.background = new THREE.Color(0xffffff);
+                camera = new THREE.PerspectiveCamera(50, container.clientWidth / container.clientHeight, 0.1, 1000);
+                renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+                controls = new THREE.OrbitControls(camera, renderer.domElement);
+                controls.enableDamping = true;
+                scene.add(new THREE.AmbientLight(0xcccccc, 0.6));
+                scene.add(new THREE.DirectionalLight(0xffffff, 0.8));
+                const axesHelper = new THREE.AxesHelper(Math.max(X_MAX, T_MAX, U_MAX) + 1);
+                scene.add(axesHelper);
+                scene.add(createAxisLabel('x', new THREE.Vector3(X_MAX + 1.5, 0, 0)));
+                scene.add(createAxisLabel('t', new THREE.Vector3(0, T_MAX + 1.5, 0)));
+                scene.add(createAxisLabel('u', new THREE.Vector3(0, 0, U_MAX + 1.5)));
+                setCameraView(new THREE.Vector3(10, 10, 15));
+                new ResizeObserver(() => {
+                    const width = container.clientWidth; const height = container.clientHeight;
+                    camera.aspect = width / height; camera.updateProjectionMatrix();
+                    renderer.setSize(width, height);
+                }).observe(container);
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            };
+
+            const setCameraView = (position, lookAt = new THREE.Vector3(0, 0, 0)) => {
+                camera.position.copy(position);
+                controls.target.copy(lookAt);
+            };
+
+            const disposeObject = (obj) => {
+                if (!obj) return;
+                if (obj.geometry) obj.geometry.dispose();
+                if (obj.material) {
+                    if (Array.isArray(obj.material)) obj.material.forEach(m => m.dispose());
+                    else obj.material.dispose();
+                }
+                scene.remove(obj);
+            };
+
+            const update3DSurface = () => {
+                disposeObject(surfaceMesh);
+                const geometry = new THREE.BufferGeometry();
+                const vertices = []; const indices = [];
+                const tValues3D = Array.from({ length: T_POINTS_3D }, (_, i) => T_MIN + i * (T_MAX - T_MIN) / (T_POINTS_3D - 1));
+                for (let j = 0; j < T_POINTS_3D; j++) {
+                    for (let i = 0; i < X_POINTS; i++) {
+                        const x = xValues[i]; const t_surf = tValues3D[j];
+                        const val = funcX(x) * funcT(t_surf);
+                        vertices.push(x, t_surf, Math.max(U_MIN, Math.min(U_MAX, val)));
+                    }
+                }
+                for (let j = 0; j < T_POINTS_3D - 1; j++) {
+                    for (let i = 0; i < X_POINTS - 1; i++) {
+                        const a = j * X_POINTS + i; const b = a + 1;
+                        const c = (j + 1) * X_POINTS + i; const d = c + 1;
+                        indices.push(a, c, b); indices.push(b, c, d);
+                    }
+                }
+                geometry.setIndex(indices);
+                geometry.setAttribute('position', new THREE.Float32BufferAttribute(vertices, 3));
+                geometry.computeVertexNormals();
+                const material = new THREE.MeshStandardMaterial({ color: 0xaaaaaa, wireframe: false, transparent: true, opacity: 0.7, side: THREE.DoubleSide });
+                surfaceMesh = new THREE.Mesh(geometry, material);
+                scene.add(surfaceMesh);
+            };
+            
+            const update3DSlices = () => {
+                disposeObject(slicePlaneT); disposeObject(sliceCurveT);
+                disposeObject(slicePlaneX); disposeObject(sliceCurveX);
+
+                const planeGeomT = new THREE.PlaneGeometry(X_MAX - X_MIN, U_MAX - U_MIN);
+                const planeMatT = new THREE.MeshBasicMaterial({ color: 0xff0000, transparent: true, opacity: 0.2, side: THREE.DoubleSide });
+                slicePlaneT = new THREE.Mesh(planeGeomT, planeMatT);
+                slicePlaneT.position.set(0, currentTime, 0); slicePlaneT.rotation.x = -Math.PI / 2;
+                scene.add(slicePlaneT);
+                const pointsT = xValues.map(x => new THREE.Vector3(x, currentTime, Math.max(U_MIN, Math.min(U_MAX, funcX(x) * funcT(currentTime)))));
+                const curveGeomT = new THREE.BufferGeometry().setFromPoints(pointsT);
+                const curveMatT = new THREE.LineBasicMaterial({ color: 0xff0000, linewidth: 4 });
+                sliceCurveT = new THREE.Line(curveGeomT, curveMatT);
+                scene.add(sliceCurveT);
+                
+                const planeGeomX = new THREE.PlaneGeometry(T_MAX - T_MIN, U_MAX - U_MIN);
+                const planeMatX = new THREE.MeshBasicMaterial({ color: 0x0000ff, transparent: true, opacity: 0.2, side: THREE.DoubleSide });
+                slicePlaneX = new THREE.Mesh(planeGeomX, planeMatX);
+                slicePlaneX.position.set(currentX, 0, 0); slicePlaneX.rotation.y = -Math.PI / 2;
+                scene.add(slicePlaneX);
+                const pointsX = tValues.map(t => new THREE.Vector3(currentX, t, Math.max(U_MIN, Math.min(U_MAX, funcX(currentX) * funcT(t)))));
+                const curveGeomX = new THREE.BufferGeometry().setFromPoints(pointsX);
+                const curveMatX = new THREE.LineBasicMaterial({ color: 0x0000ff, linewidth: 4 });
+                sliceCurveX = new THREE.Line(curveGeomX, curveMatX);
+                scene.add(sliceCurveX);
+            };
+
+            const animate3D = () => { requestAnimationFrame(animate3D); controls.update(); renderer.render(scene, camera); };
+            
+            const parseFunction = (inputString, varName, inputElement) => {
+                try {
+                    const func = new Function(varName, 'return ' + inputString);
+                    func(0); inputElement.classList.remove('border-red-500'); return func;
+                } catch (e) {
+                    console.error("Function parsing error:", e); inputElement.classList.add('border-red-500'); return () => 0;
+                }
+            };
+            
+            const updateFormulaDisplay = () => {
+                let x_str = xPreset.value === 'Custom' ? `\\text{${xInput.value}}` : presets_latex[xPreset.value].replace(/z/g, 'x');
+                let t_str = tPreset.value === 'Custom' ? `\\text{${tInput.value}}` : presets_latex[tPreset.value].replace(/z/g, 't');
+                const final_formula = `u(x,t) = X(x)T(t) = \\left( ${x_str} \\right) \\cdot \\left( ${t_str} \\right)`;
+                try {
+                    katex.render(final_formula, formulaDisplay, { throwOnError: false, displayMode: true });
+                } catch (e) {
+                    formulaDisplay.textContent = "Error rendering formula."; console.error(e);
+                }
+            };
+
+            const updateAll = (updateSurface = true) => {
+                funcX = parseFunction(xInput.value, 'x', xInput);
+                funcT = parseFunction(tInput.value, 't', tInput);
+                if (updateSurface) update3DSurface();
+                update3DSlices();
+                updateFormulaDisplay();
+            };
+
+            const handleTextInput = (presetElement, updateSurface) => { presetElement.value = 'Custom'; pauseAllAnimations(); updateAll(updateSurface); };
+            const onPresetSelect = (e, targetInput, varName, updateSurface) => {
+                if (e.target.value === 'Custom' || !presets[e.target.value]) return;
+                targetInput.value = presets[e.target.value].replace(/z/g, varName);
+                pauseAllAnimations(); updateAll(updateSurface);
+            };
+            
+            const pauseAnimationT = () => { isPlayingT = false; playPauseTBtn.textContent = 'Play'; if (animationFrameIdT) cancelAnimationFrame(animationFrameIdT); animationFrameIdT = null; };
+            const playAnimationT = () => { pauseAnimationX(); isPlayingT = true; playPauseTBtn.textContent = 'Pause'; animationLoopT(); };
+            const animationLoopT = () => {
+                if (!isPlayingT) return;
+                let t_val = parseFloat(timeSlider.value) + 0.05;
+                if (t_val > T_MAX) t_val = T_MIN;
+                timeSlider.value = t_val; currentTime = t_val;
+                timeDisplay.textContent = `t = ${currentTime.toFixed(1)}`;
+                update3DSlices();
+                animationFrameIdT = requestAnimationFrame(animationLoopT);
+            };
+
+            const pauseAnimationX = () => { isPlayingX = false; playPauseXBtn.textContent = 'Play'; if (animationFrameIdX) cancelAnimationFrame(animationFrameIdX); animationFrameIdX = null; };
+            const playAnimationX = () => { pauseAnimationT(); isPlayingX = true; playPauseXBtn.textContent = 'Pause'; animationLoopX(); };
+            const animationLoopX = () => {
+                if (!isPlayingX) return;
+                let x_val = parseFloat(spaceSlider.value) + 0.05;
+                if (x_val > X_MAX) x_val = X_MIN;
+                spaceSlider.value = x_val; currentX = x_val;
+                spaceDisplay.textContent = `x = ${currentX.toFixed(1)}`;
+                update3DSlices();
+                animationFrameIdX = requestAnimationFrame(animationLoopX);
+            };
+            
+            const pauseAllAnimations = () => { pauseAnimationT(); pauseAnimationX(); };
+
+            playPauseTBtn.addEventListener('click', () => isPlayingT ? pauseAnimationT() : playAnimationT());
+            playPauseXBtn.addEventListener('click', () => isPlayingX ? pauseAnimationX() : playAnimationX());
+            timeSlider.addEventListener('input', (e) => { pauseAllAnimations(); currentTime = parseFloat(e.target.value); timeDisplay.textContent = `t = ${currentTime.toFixed(1)}`; update3DSlices(); });
+            spaceSlider.addEventListener('input', (e) => { pauseAllAnimations(); currentX = parseFloat(e.target.value); spaceDisplay.textContent = `x = ${currentX.toFixed(1)}`; update3DSlices(); });
+            xInput.addEventListener('change', () => handleTextInput(xPreset, true));
+            tInput.addEventListener('change', () => handleTextInput(tPreset, true));
+            xPreset.addEventListener('change', (e) => onPresetSelect(e, xInput, 'x', true));
+            tPreset.addEventListener('change', (e) => onPresetSelect(e, tInput, 't', true));
+            viewDefaultBtn.addEventListener('click', () => setCameraView(new THREE.Vector3(10, 10, 15)));
+            viewTopBtn.addEventListener('click', () => setCameraView(new THREE.Vector3(0, 0, 20)));
+            viewFrontBtn.addEventListener('click', () => setCameraView(new THREE.Vector3(0, 20, 0)));
+            viewSideBtn.addEventListener('click', () => setCameraView(new THREE.Vector3(20, 0, 0)));
+
+            const initialize = () => {
+                ['Custom', ...Object.keys(presets)].forEach(p => {
+                    xPreset.add(new Option(p, p));
+                    tPreset.add(new Option(p, p));
+                });
+                xPreset.value = 'Sine'; tPreset.value = 'Cosine';
+                xInput.value = presets['Sine'].replace('z', 'x');
+                tInput.value = presets['Cosine'].replace('z', 't');
+                init3D(); updateAll(true); animate3D();
+            };
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>
