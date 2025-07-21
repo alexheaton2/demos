@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Key Functions in Calculus: An Interactive Presentation</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for interactive plots -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- KaTeX for rendering mathematical formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" xintegrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HffJpGxF" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" xintegrity="sha384-cpW21h6ybjhKBPFGTSEwtN7MGEWIazOKug4IWYAp5nSN5FN/TCkRuleiQupgLqB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .slide {
+            display: none;
+            min-height: 80vh;
+        }
+        .slide.active {
+            display: flex;
+        }
+        .question-slide {
+            background-color: #e0f2fe; /* Light blue background for question slides */
+        }
+        .katex-display {
+            margin: 1em 0;
+        }
+        .katex {
+            font-size: 1.2em;
+        }
+        h1, h2, .question-title {
+            font-family: 'Lora', serif;
+        }
+        .slider-label {
+            min-width: 150px;
+            text-align: right;
+            margin-right: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4 md:p-8">
+
+    <div id="presentation-container" class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide active flex-col items-center justify-center text-center p-8">
+            <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-4">Key Functions in Calculus</h1>
+            <p class="text-2xl md:text-3xl text-gray-600">An Interactive Guide</p>
+            <div class="mt-12 text-lg text-gray-500">
+                <p>Use the "Next" and "Previous" buttons to navigate.</p>
+                <p>On each topic, pause and try to answer the question before proceeding.</p>
+            </div>
+        </div>
+
+        <!-- Question Slide for Exponential -->
+        <div id="slide-2" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Exponential Function</h2>
+            <p class="text-2xl text-gray-600">What does it look like? Can you see it?</p>
+        </div>
+
+        <!-- Slide 3: Exponential Function -->
+        <div id="slide-3" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Exponential Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span class="font-semibold">$f(t) = e^{at}$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dt} e^{at} = a e^{at}$</span></p>
+                    <p>Integral: <span>$\int e^{at} dt = \frac{e^{at}}{a} + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="exp-a" class="slider-label">Parameter a:</label>
+                        <input type="range" id="exp-a" min="-2" max="2" value="1" step="0.1" class="w-full">
+                        <span id="exp-a-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="expChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Question Slide for Linear -->
+        <div id="slide-4" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Linear Function</h2>
+            <p class="text-2xl text-gray-600">What defines a straight line?</p>
+        </div>
+
+        <!-- Slide 5: Linear Function -->
+        <div id="slide-5" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Linear Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = mx + b$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx} f(x) = m$</span></p>
+                    <p>Integral: <span>$\int f(x) dx = \frac{m}{2}x^2 + bx + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="linear-m" class="slider-label">Slope m:</label>
+                        <input type="range" id="linear-m" min="-5" max="5" value="1" step="0.1" class="w-full">
+                        <span id="linear-m-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="linear-b" class="slider-label">Y-intercept b:</label>
+                        <input type="range" id="linear-b" min="-5" max="5" value="0" step="0.5" class="w-full">
+                        <span id="linear-b-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="linearChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Question Slide for Quadratic -->
+        <div id="slide-6" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Quadratic Function</h2>
+            <p class="text-2xl text-gray-600">How does a parabola change?</p>
+        </div>
+
+        <!-- Slide 7: Quadratic Function -->
+        <div id="slide-7" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Quadratic Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = ax^2 + bx + c$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx} f(x) = 2ax + b$</span></p>
+                    <p>Integral: <span>$\int f(x) dx = \frac{a}{3}x^3 + \frac{b}{2}x^2 + cx + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="quad-a" class="slider-label">a:</label>
+                        <input type="range" id="quad-a" min="-2" max="2" value="1" step="0.1" class="w-full">
+                        <span id="quad-a-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="quad-b" class="slider-label">b:</label>
+                        <input type="range" id="quad-b" min="-5" max="5" value="0" step="0.5" class="w-full">
+                        <span id="quad-b-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="quad-c" class="slider-label">c:</label>
+                        <input type="range" id="quad-c" min="-5" max="5" value="0" step="0.5" class="w-full">
+                        <span id="quad-c-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="quadChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Logarithm -->
+        <div id="slide-8" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Natural Logarithm</h2>
+            <p class="text-2xl text-gray-600">What is the inverse of an exponential?</p>
+        </div>
+
+        <!-- Slide 9: Natural Logarithm -->
+        <div id="slide-9" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Natural Logarithm</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = a \ln(x)$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx} f(x) = \frac{a}{x}$</span></p>
+                    <p>Integral: <span>$\int f(x) dx = a(x \ln(x) - x) + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="log-a" class="slider-label">Multiplier a:</label>
+                        <input type="range" id="log-a" min="-3" max="3" value="1" step="0.1" class="w-full">
+                        <span id="log-a-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="logChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Sine -->
+        <div id="slide-10" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Sine Function</h2>
+            <p class="text-2xl text-gray-600">What does a wave look like?</p>
+        </div>
+
+        <!-- Slide 11: Sine Function -->
+        <div id="slide-11" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Sine Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = a \sin(bx)$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx} f(x) = ab \cos(bx)$</span></p>
+                    <p>Integral: <span>$\int f(x) dx = -\frac{a}{b} \cos(bx) + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="sin-a" class="slider-label">Amplitude a:</label>
+                        <input type="range" id="sin-a" min="0" max="5" value="2" step="0.1" class="w-full">
+                        <span id="sin-a-value" class="ml-4 font-mono w-12 text-center">2.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="sin-b" class="slider-label">Frequency b:</label>
+                        <input type="range" id="sin-b" min="0.5" max="5" value="1" step="0.1" class="w-full">
+                        <span id="sin-b-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="sinChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Cosine -->
+        <div id="slide-12" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Cosine Function</h2>
+            <p class="text-2xl text-gray-600">How is it related to the sine wave?</p>
+        </div>
+
+        <!-- Slide 13: Cosine Function -->
+        <div id="slide-13" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Cosine Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = a \cos(bx)$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx} f(x) = -ab \sin(bx)$</span></p>
+                    <p>Integral: <span>$\int f(x) dx = \frac{a}{b} \sin(bx) + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="cos-a" class="slider-label">Amplitude a:</label>
+                        <input type="range" id="cos-a" min="0" max="5" value="2" step="0.1" class="w-full">
+                        <span id="cos-a-value" class="ml-4 font-mono w-12 text-center">2.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="cos-b" class="slider-label">Frequency b:</label>
+                        <input type="range" id="cos-b" min="0.5" max="5" value="1" step="0.1" class="w-full">
+                        <span id="cos-b-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="cosChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Unit Circle -->
+        <div id="slide-14" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Unit Circle</h2>
+            <p class="text-2xl text-gray-600">How do cosine and sine appear in circular motion?</p>
+        </div>
+
+        <!-- Slide 15: Unit Circle Definition -->
+        <div id="slide-15" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Unit Circle Definition</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Coordinates: <span>$(x, y) = (\cos\theta, \sin\theta)$</span></p>
+                    <p class="text-sm text-blue-600">Sine and cosine record the vertical and horizontal components of circular motion. This is why they are fundamental to describing all cyclic or periodic phenomena in math, science, and engineering.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="unit-theta" class="slider-label">Angle $\theta$:</label>
+                        <input type="range" id="unit-theta" min="0" max="6.283" value="0.785" step="0.01" class="w-full">
+                        <span id="unit-theta-value" class="ml-4 font-mono w-12 text-center">45°</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
+                <canvas id="unitCircleChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Rational -->
+        <div id="slide-16" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Rational Function</h2>
+            <p class="text-2xl text-gray-600">What happens when you divide by zero?</p>
+        </div>
+
+        <!-- Slide 17: Rational Function -->
+        <div id="slide-17" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Rational Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = \frac{1}{x - a}$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx} f(x) = -\frac{1}{(x - a)^2}$</span></p>
+                    <p>Integral: <span>$\int f(x) dx = \ln|x - a| + C$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                     <div class="flex items-center">
+                        <label for="rational-a" class="slider-label">Asymptote a:</label>
+                        <input type="range" id="rational-a" min="-4" max="4" value="0" step="0.1" class="w-full">
+                        <span id="rational-a-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="rationalChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Absolute Value -->
+        <div id="slide-18" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Absolute Value</h2>
+            <p class="text-2xl text-gray-600">What does a 'sharp corner' look like?</p>
+        </div>
+
+        <!-- Slide 19: Absolute Value Function -->
+        <div id="slide-19" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Absolute Value Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = |x - a|$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx}f(x) = \begin{cases} -1 & x < a \\ 1 & x > a \end{cases}$</span></p>
+                    <p class="text-sm text-red-600">A key example of a function that is continuous everywhere but not differentiable at $x=a$.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                     <div class="flex items-center">
+                        <label for="abs-a" class="slider-label">Vertex a:</label>
+                        <input type="range" id="abs-a" min="-5" max="5" value="0" step="0.25" class="w-full">
+                        <span id="abs-a-value" class="ml-4 font-mono w-12 text-center">0.00</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="absChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Logistic -->
+        <div id="slide-20" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Logistic Function</h2>
+            <p class="text-2xl text-gray-600">How can growth be limited?</p>
+        </div>
+
+        <!-- Slide 21: Logistic Function -->
+        <div id="slide-21" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Logistic Function</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = \frac{L}{1 + e^{-k(x - x_0)}}$</span></p>
+                    <p>Derivative: <span>$\frac{d}{dx}f(x) = \frac{Lk e^{-k(x - x_0)}}{(1 + e^{-k(x - x_0)})^2}$</span></p>
+                    <p class="text-sm text-blue-600">Models growth with a carrying capacity. Foundational in biology, economics, and machine learning.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="logistic-L" class="slider-label">Capacity L:</label>
+                        <input type="range" id="logistic-L" min="1" max="10" value="5" step="0.5" class="w-full">
+                        <span id="logistic-L-value" class="ml-4 font-mono w-12 text-center">5.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="logistic-k" class="slider-label">Steepness k:</label>
+                        <input type="range" id="logistic-k" min="0.1" max="3" value="1" step="0.1" class="w-full">
+                        <span id="logistic-k-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="logistic-x0" class="slider-label">Midpoint $x_0$:</label>
+                        <input type="range" id="logistic-x0" min="-5" max="5" value="0" step="0.5" class="w-full">
+                        <span id="logistic-x0-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="logisticChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Normal Dist -->
+        <div id="slide-22" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Normal Distribution</h2>
+            <p class="text-2xl text-gray-600">What does the 'bell curve' look like?</p>
+        </div>
+
+        <!-- Slide 23: Normal Distribution -->
+        <div id="slide-23" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Normal Distribution</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = \frac{1}{\sigma\sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}$</span></p>
+                    <p class="text-sm text-blue-600">The "bell curve" is the cornerstone of statistics. Its integral, the cumulative distribution function (CDF), has no simple closed-form expression.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="normal-mu" class="slider-label">Mean $\mu$:</label>
+                        <input type="range" id="normal-mu" min="-3" max="3" value="0" step="0.1" class="w-full">
+                        <span id="normal-mu-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="normal-sigma" class="slider-label">Std Dev $\sigma$:</label>
+                        <input type="range" id="normal-sigma" min="0.5" max="3" value="1" step="0.1" class="w-full">
+                        <span id="normal-sigma-value" class="ml-4 font-mono w-12 text-center">1.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="normalChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Damped Oscillation -->
+        <div id="slide-24" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Damped Oscillation</h2>
+            <p class="text-2xl text-gray-600">What happens to a wave with friction?</p>
+        </div>
+
+        <!-- Slide 25: Damped Oscillation -->
+        <div id="slide-25" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Damped Oscillation</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(t) = A e^{-\lambda t} \cos(\omega t)$</span></p>
+                    <p class="text-sm text-blue-600">Models systems that oscillate with decreasing amplitude, like a pendulum with air resistance, a car's shock absorbers, or an RLC electrical circuit.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="damped-lambda" class="slider-label">Damping $\lambda$:</label>
+                        <input type="range" id="damped-lambda" min="0" max="1" value="0.2" step="0.05" class="w-full">
+                        <span id="damped-lambda-value" class="ml-4 font-mono w-12 text-center">0.20</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="damped-omega" class="slider-label">Frequency $\omega$:</label>
+                        <input type="range" id="damped-omega" min="1" max="10" value="5" step="0.2" class="w-full">
+                        <span id="damped-omega-value" class="ml-4 font-mono w-12 text-center">5.0</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="dampedChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Cooling -->
+        <div id="slide-26" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Newton's Law of Cooling</h2>
+            <p class="text-2xl text-gray-600">How does a hot object cool down?</p>
+        </div>
+
+        <!-- Slide 27: Newton's Law of Cooling -->
+        <div id="slide-27" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Newton's Law of Cooling</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$T(t) = T_a + (T_0 - T_a)e^{-kt}$</span></p>
+                    <p class="text-sm text-blue-600">Describes how an object's temperature exponentially approaches the temperature of its surroundings. A classic first-order differential equation application.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="cooling-ta" class="slider-label">Ambient $T_a$:</label>
+                        <input type="range" id="cooling-ta" min="0" max="50" value="20" step="1" class="w-full">
+                        <span id="cooling-ta-value" class="ml-4 font-mono w-12 text-center">20</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="cooling-t0" class="slider-label">Initial $T_0$:</label>
+                        <input type="range" id="cooling-t0" min="0" max="100" value="100" step="1" class="w-full">
+                        <span id="cooling-t0-value" class="ml-4 font-mono w-12 text-center">100</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="cooling-k" class="slider-label">Constant k:</label>
+                        <input type="range" id="cooling-k" min="0.1" max="2" value="0.5" step="0.1" class="w-full">
+                        <span id="cooling-k-value" class="ml-4 font-mono w-12 text-center">0.5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="coolingChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Wave Packet -->
+        <div id="slide-28" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Wave Packet</h2>
+            <p class="text-2xl text-gray-600">How can a wave be localized in space?</p>
+        </div>
+
+        <!-- Slide 29: Wave Packet -->
+        <div id="slide-29" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Wave Packet</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Formula: <span>$f(x) = e^{-ax^2} \cos(kx)$</span></p>
+                    <p class="text-sm text-blue-600">A localized wave used in quantum mechanics to represent a particle's probability. It's built by combining an exponential "envelope" with a traveling wave.</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="wave-a" class="slider-label">Envelope a:</label>
+                        <input type="range" id="wave-a" min="0.1" max="2" value="0.5" step="0.1" class="w-full">
+                        <span id="wave-a-value" class="ml-4 font-mono w-12 text-center">0.5</span>
+                    </div>
+                    <div class="flex items-center">
+                        <label for="wave-k" class="slider-label">Wave Number k:</label>
+                        <input type="range" id="wave-k" min="1" max="50" value="20" step="1" class="w-full">
+                        <span id="wave-k-value" class="ml-4 font-mono w-12 text-center">20</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="waveChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Taylor Series -->
+        <div id="slide-30" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-700 mb-4">Taylor Approximation</h2>
+            <p class="text-2xl text-gray-600">Can we build any function from polynomials?</p>
+        </div>
+
+        <!-- Slide 31: Taylor Series Approximation -->
+        <div id="slide-31" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Taylor Approximation</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Approximation of $\sin(x)$: <span>$\sin(x) \approx x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots$</span></p>
+                    <p class="text-sm text-blue-600">Taylor series approximate complex functions with simpler polynomials. More terms give a better fit near the center point (here, $x=0$).</p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="taylor-n" class="slider-label">Degree of Approx:</label>
+                        <input type="range" id="taylor-n" min="0" max="7" value="2" step="1" class="w-full">
+                        <span id="taylor-n-value" class="ml-4 font-mono w-12 text-center">5</span>
+                    </div>
+                </div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="taylorChart"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex justify-between w-full max-w-6xl mt-6">
+        <button id="prevBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none">Previous</button>
+        <div id="slide-counter" class="flex items-center font-semibold text-gray-700">Slide 1 of 31</div>
+        <button id="nextBtn" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Next</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- General Presentation Logic ---
+            let currentSlide = 1;
+            const totalSlides = 31;
+            const slides = document.querySelectorAll('.slide');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const slideCounter = document.getElementById('slide-counter');
+
+            function updateSlideView() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', (index + 1) === currentSlide);
+                });
+                slideCounter.textContent = `Slide ${currentSlide} of ${totalSlides}`;
+                prevBtn.disabled = currentSlide === 1;
+                nextBtn.disabled = currentSlide === totalSlides;
+                
+                const activeSlide = document.getElementById(`slide-${currentSlide}`);
+                if (!activeSlide.hasAttribute('data-katex-rendered')) {
+                    renderMathInElement(activeSlide, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ]
+                    });
+                    activeSlide.setAttribute('data-katex-rendered', 'true');
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides) {
+                    currentSlide++;
+                    updateSlideView();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 1) {
+                    currentSlide--;
+                    updateSlideView();
+                }
+            });
+            
+            // --- Chart and Interactivity Setup ---
+            const chartOptions = (yMin, yMax) => ({
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        type: 'linear', position: 'bottom', min: -5, max: 5, 
+                        grid: { 
+                            color: context => context.tick.value === 0 ? '#666' : '#e0e0e0',
+                            lineWidth: context => context.tick.value === 0 ? 2 : 1,
+                        },
+                        ticks: { color: '#333' }
+                    },
+                    y: { 
+                        min: yMin, max: yMax, 
+                        grid: { 
+                            color: context => context.tick.value === 0 ? '#666' : '#e0e0e0',
+                            lineWidth: context => context.tick.value === 0 ? 2 : 1,
+                        },
+                        ticks: { color: '#333' }
+                    }
+                },
+                plugins: { legend: { display: false } },
+                elements: { point: { radius: 0 }, line: { borderWidth: 3, tension: 0.1 } },
+                animation: false,
+                transitions: { default: { animation: { duration: 100, easing: 'linear' } } }
+            });
+            
+            const xValues = Array.from({ length: 201 }, (_, i) => -5 + i * 0.05);
+
+            // --- Slide 3: Exponential ---
+            const expA = document.getElementById('exp-a');
+            const expAValue = document.getElementById('exp-a-value');
+            const expCtx = document.getElementById('expChart').getContext('2d');
+            const expChart = new Chart(expCtx, { type: 'line', data: {}, options: chartOptions(-10, 10) });
+            function updateExp() {
+                const a = parseFloat(expA.value);
+                expAValue.textContent = a.toFixed(1);
+                expChart.data = { labels: xValues, datasets: [{ label: 'e^(at)', data: xValues.map(t => Math.exp(a * t)), borderColor: '#ef4444' }] };
+                expChart.update('none');
+            }
+            expA.addEventListener('input', updateExp);
+            
+            // --- Slide 5: Linear ---
+            const linearM = document.getElementById('linear-m');
+            const linearB = document.getElementById('linear-b');
+            const linearMValue = document.getElementById('linear-m-value');
+            const linearBValue = document.getElementById('linear-b-value');
+            const linearCtx = document.getElementById('linearChart').getContext('2d');
+            const linearChart = new Chart(linearCtx, { type: 'line', data: {}, options: chartOptions(-10, 10) });
+            function updateLinear() {
+                const m = parseFloat(linearM.value);
+                const b = parseFloat(linearB.value);
+                linearMValue.textContent = m.toFixed(1);
+                linearBValue.textContent = b.toFixed(1);
+                linearChart.data = { labels: xValues, datasets: [{ label: 'mx + b', data: xValues.map(x => m * x + b), borderColor: '#3b82f6' }] };
+                linearChart.update('none');
+            }
+            linearM.addEventListener('input', updateLinear);
+            linearB.addEventListener('input', updateLinear);
+
+            // --- Slide 7: Quadratic ---
+            const quadA = document.getElementById('quad-a');
+            const quadB = document.getElementById('quad-b');
+            const quadC = document.getElementById('quad-c');
+            const quadAValue = document.getElementById('quad-a-value');
+            const quadBValue = document.getElementById('quad-b-value');
+            const quadCValue = document.getElementById('quad-c-value');
+            const quadCtx = document.getElementById('quadChart').getContext('2d');
+            const quadChart = new Chart(quadCtx, { type: 'line', data: {}, options: chartOptions(-10, 10) });
+            function updateQuad() {
+                const a = parseFloat(quadA.value);
+                const b = parseFloat(quadB.value);
+                const c = parseFloat(quadC.value);
+                quadAValue.textContent = a.toFixed(1);
+                quadBValue.textContent = b.toFixed(1);
+                quadCValue.textContent = c.toFixed(1);
+                quadChart.data = { labels: xValues, datasets: [{ label: 'ax^2+bx+c', data: xValues.map(x => a * x * x + b * x + c), borderColor: '#10b981' }] };
+                quadChart.update('none');
+            }
+            quadA.addEventListener('input', updateQuad);
+            quadB.addEventListener('input', updateQuad);
+            quadC.addEventListener('input', updateQuad);
+
+            // --- Slide 9: Natural Logarithm ---
+            const logA = document.getElementById('log-a');
+            const logAValue = document.getElementById('log-a-value');
+            const logCtx = document.getElementById('logChart').getContext('2d');
+            const logChart = new Chart(logCtx, { type: 'line', data: {}, options: chartOptions(-10, 10) });
+            const logXValues = Array.from({ length: 100 }, (_, i) => 0.05 + i * 0.05);
+            function updateLog() {
+                const a = parseFloat(logA.value);
+                logAValue.textContent = a.toFixed(1);
+                logChart.data = { labels: logXValues, datasets: [{ label: 'a*ln(x)', data: logXValues.map(x => a * Math.log(x)), borderColor: '#8b5cf6' }] };
+                logChart.options.scales.x.min = 0;
+                logChart.update('none');
+            }
+            logA.addEventListener('input', updateLog);
+            
+            // --- Slide 11: Sine Function ---
+            const sinA = document.getElementById('sin-a');
+            const sinB = document.getElementById('sin-b');
+            const sinAValue = document.getElementById('sin-a-value');
+            const sinBValue = document.getElementById('sin-b-value');
+            const sinCtx = document.getElementById('sinChart').getContext('2d');
+            const sinChart = new Chart(sinCtx, { type: 'line', data: {}, options: chartOptions(-6, 6) });
+            function updateSin() {
+                const a = parseFloat(sinA.value);
+                const b = parseFloat(sinB.value);
+                sinAValue.textContent = a.toFixed(1);
+                sinBValue.textContent = b.toFixed(1);
+                sinChart.data = { labels: xValues, datasets: [{ label: 'a*sin(bx)', data: xValues.map(x => a * Math.sin(b * x)), borderColor: '#ec4899' }] };
+                sinChart.update('none');
+            }
+            sinA.addEventListener('input', updateSin);
+            sinB.addEventListener('input', updateSin);
+
+            // --- Slide 13: Cosine Function ---
+            const cosA = document.getElementById('cos-a');
+            const cosB = document.getElementById('cos-b');
+            const cosAValue = document.getElementById('cos-a-value');
+            const cosBValue = document.getElementById('cos-b-value');
+            const cosCtx = document.getElementById('cosChart').getContext('2d');
+            const cosChart = new Chart(cosCtx, { type: 'line', data: {}, options: chartOptions(-6, 6) });
+            function updateCos() {
+                const a = parseFloat(cosA.value);
+                const b = parseFloat(cosB.value);
+                cosAValue.textContent = a.toFixed(1);
+                cosBValue.textContent = b.toFixed(1);
+                cosChart.data = { labels: xValues, datasets: [{ label: 'a*cos(bx)', data: xValues.map(x => a * Math.cos(b * x)), borderColor: '#f97316' }] };
+                cosChart.update('none');
+            }
+            cosA.addEventListener('input', updateCos);
+            cosB.addEventListener('input', updateCos);
+
+            // --- Slide 15: Unit Circle ---
+            const unitTheta = document.getElementById('unit-theta');
+            const unitThetaValue = document.getElementById('unit-theta-value');
+            const unitCtx = document.getElementById('unitCircleChart').getContext('2d');
+
+            const unitCirclePoints = [];
+            for (let i = 0; i <= 360; i++) {
+                const angle = i * Math.PI / 180;
+                unitCirclePoints.push({x: Math.cos(angle), y: Math.sin(angle)});
+            }
+
+            const unitCirclePlugin = {
+                id: 'unitCirclePlugin',
+                afterDraw: (chart) => {
+                    const { ctx, scales: { x, y } } = chart;
+                    const theta = chart.options.plugins.unitCirclePlugin.theta;
+                    const cosT = Math.cos(theta);
+                    const sinT = Math.sin(theta);
+
+                    ctx.save();
+                    
+                    // Draw radius
+                    ctx.beginPath();
+                    ctx.moveTo(x.getPixelForValue(0), y.getPixelForValue(0));
+                    ctx.lineTo(x.getPixelForValue(cosT), y.getPixelForValue(sinT));
+                    ctx.strokeStyle = '#ef4444'; // red
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+
+                    // Draw sin(theta) line
+                    ctx.beginPath();
+                    ctx.setLineDash([4, 4]);
+                    ctx.strokeStyle = '#3b82f6'; // blue
+                    ctx.lineWidth = 2;
+                    ctx.moveTo(x.getPixelForValue(cosT), y.getPixelForValue(sinT));
+                    ctx.lineTo(x.getPixelForValue(cosT), y.getPixelForValue(0));
+                    ctx.stroke();
+
+                    // Draw cos(theta) line
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#10b981'; // green
+                    ctx.moveTo(x.getPixelForValue(cosT), y.getPixelForValue(0));
+                    ctx.lineTo(x.getPixelForValue(0), y.getPixelForValue(0));
+                    ctx.stroke();
+                    
+                    ctx.setLineDash([]);
+
+                    // Draw angle arc
+                    ctx.beginPath();
+                    ctx.lineWidth = 1.5;
+                    ctx.strokeStyle = 'rgba(0, 0, 0, 0.6)';
+                    ctx.arc(x.getPixelForValue(0), y.getPixelForValue(0), 30, 0, -theta, true);
+                    ctx.stroke();
+
+                    // Draw text
+                    ctx.font = '14px Inter';
+                    ctx.fillStyle = '#3b82f6';
+                    ctx.fillText('sin(θ)', x.getPixelForValue(cosT) + 8, y.getPixelForValue(sinT / 2));
+                    ctx.fillStyle = '#10b981';
+                    ctx.fillText('cos(θ)', x.getPixelForValue(cosT / 2), y.getPixelForValue(0) - 8);
+                    
+                    ctx.restore();
+                }
+            };
+            Chart.register(unitCirclePlugin);
+
+            const unitCircleChart = new Chart(unitCtx, {
+                type: 'scatter',
+                data: {
+                    datasets: [
+                        { // The unit circle outline
+                            data: unitCirclePoints,
+                            borderColor: '#9ca3af',
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            showLine: true,
+                            tension: 0.1
+                        },
+                        { // The moving point on the circle
+                            data: [{x: 1, y: 0}],
+                            backgroundColor: '#ef4444',
+                            pointRadius: 6,
+                            pointHoverRadius: 8
+                        }
+                    ]
+                },
+                options: {
+                    ...chartOptions(-1.5, 1.5),
+                    aspectRatio: 1,
+                    scales: {
+                         x: { min: -1.5, max: 1.5, grid: { color: context => context.tick.value === 0 ? '#666' : '#e0e0e0', lineWidth: context => context.tick.value === 0 ? 2 : 1, }, ticks: { color: '#333' } },
+                         y: { min: -1.5, max: 1.5, grid: { color: context => context.tick.value === 0 ? '#666' : '#e0e0e0', lineWidth: context => context.tick.value === 0 ? 2 : 1, }, ticks: { color: '#333' } }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        unitCirclePlugin: { theta: 0 }
+                    }
+                }
+            });
+
+            function updateUnitCircle() {
+                const theta = parseFloat(unitTheta.value);
+                unitThetaValue.textContent = `${(theta * 180 / Math.PI).toFixed(0)}°`;
+                
+                const cosT = Math.cos(theta);
+                const sinT = Math.sin(theta);
+
+                unitCircleChart.data.datasets[1].data[0] = { x: cosT, y: sinT };
+                unitCircleChart.options.plugins.unitCirclePlugin.theta = theta;
+                unitCircleChart.update('none');
+            }
+            unitTheta.addEventListener('input', updateUnitCircle);
+
+            // --- Slide 17: Rational Function ---
+            const rationalA = document.getElementById('rational-a');
+            const rationalAValue = document.getElementById('rational-a-value');
+            const rationalCtx = document.getElementById('rationalChart').getContext('2d');
+            const rationalChart = new Chart(rationalCtx, { type: 'line', data: {}, options: chartOptions(-10, 10) });
+            function updateRational() {
+                const a = parseFloat(rationalA.value);
+                rationalAValue.textContent = a.toFixed(1);
+                const data = xValues.map(x => Math.abs(x - a) < 0.05 ? NaN : 1 / (x - a));
+                rationalChart.data = { labels: xValues, datasets: [{ label: '1/(x-a)', data: data, borderColor: '#0ea5e9', spanGaps: false }] };
+                rationalChart.update('none');
+            }
+            rationalA.addEventListener('input', updateRational);
+
+            // --- Slide 19: Absolute Value ---
+            const absA = document.getElementById('abs-a');
+            const absAValue = document.getElementById('abs-a-value');
+            const absCtx = document.getElementById('absChart').getContext('2d');
+            const absChart = new Chart(absCtx, { type: 'line', data: {}, options: chartOptions(-1, 10) });
+            function updateAbs() {
+                const a = parseFloat(absA.value);
+                absAValue.textContent = a.toFixed(2);
+                absChart.data = { labels: xValues, datasets: [{ label: '|x-a|', data: xValues.map(x => Math.abs(x - a)), borderColor: '#d946ef', tension: 0 }] };
+                absChart.update('none');
+            }
+            absA.addEventListener('input', updateAbs);
+
+            // --- Slide 21: Logistic Function ---
+            const logisticL = document.getElementById('logistic-L');
+            const logisticK = document.getElementById('logistic-k');
+            const logisticX0 = document.getElementById('logistic-x0');
+            const logisticLValue = document.getElementById('logistic-L-value');
+            const logisticKValue = document.getElementById('logistic-k-value');
+            const logisticX0Value = document.getElementById('logistic-x0-value');
+            const logisticCtx = document.getElementById('logisticChart').getContext('2d');
+            const logisticChart = new Chart(logisticCtx, { type: 'line', data: {}, options: chartOptions(0, 11) });
+            function updateLogistic() {
+                const L = parseFloat(logisticL.value);
+                const k = parseFloat(logisticK.value);
+                const x0 = parseFloat(logisticX0.value);
+                logisticLValue.textContent = L.toFixed(1);
+                logisticKValue.textContent = k.toFixed(1);
+                logisticX0Value.textContent = x0.toFixed(1);
+                logisticChart.data = { labels: xValues, datasets: [{ label: 'Logistic', data: xValues.map(x => L / (1 + Math.exp(-k * (x - x0)))), borderColor: '#65a30d' }] };
+                logisticChart.update('none');
+            }
+            logisticL.addEventListener('input', updateLogistic);
+            logisticK.addEventListener('input', updateLogistic);
+            logisticX0.addEventListener('input', updateLogistic);
+
+            // --- Slide 23: Normal Distribution ---
+            const normalMu = document.getElementById('normal-mu');
+            const normalSigma = document.getElementById('normal-sigma');
+            const normalMuValue = document.getElementById('normal-mu-value');
+            const normalSigmaValue = document.getElementById('normal-sigma-value');
+            const normalCtx = document.getElementById('normalChart').getContext('2d');
+            const normalChart = new Chart(normalCtx, { type: 'line', data: {}, options: chartOptions(0, 1) });
+            function updateNormal() {
+                const mu = parseFloat(normalMu.value);
+                const sigma = parseFloat(normalSigma.value);
+                normalMuValue.textContent = mu.toFixed(1);
+                normalSigmaValue.textContent = sigma.toFixed(1);
+                const constant = 1 / (sigma * Math.sqrt(2 * Math.PI));
+                normalChart.data = { labels: xValues, datasets: [{ label: 'Normal', data: xValues.map(x => constant * Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2))), borderColor: '#7c3aed' }] };
+                normalChart.update('none');
+            }
+            normalMu.addEventListener('input', updateNormal);
+            normalSigma.addEventListener('input', updateNormal);
+
+            // --- Slide 25: Damped Oscillation ---
+            const dampedLambda = document.getElementById('damped-lambda');
+            const dampedOmega = document.getElementById('damped-omega');
+            const dampedLambdaValue = document.getElementById('damped-lambda-value');
+            const dampedOmegaValue = document.getElementById('damped-omega-value');
+            const dampedCtx = document.getElementById('dampedChart').getContext('2d');
+            const dampedChart = new Chart(dampedCtx, { type: 'line', data: {}, options: chartOptions(-5, 5) });
+            function updateDamped() {
+                const lambda = parseFloat(dampedLambda.value);
+                const omega = parseFloat(dampedOmega.value);
+                const A = 4; // Fixed amplitude for visualization
+                dampedLambdaValue.textContent = lambda.toFixed(2);
+                dampedOmegaValue.textContent = omega.toFixed(1);
+                const dampedXValues = Array.from({ length: 201 }, (_, i) => 0 + i * 0.05); // time is positive
+                dampedChart.data = { labels: dampedXValues, datasets: [{ label: 'Damped', data: dampedXValues.map(t => A * Math.exp(-lambda * t) * Math.cos(omega * t)), borderColor: '#db2777' }] };
+                dampedChart.options.scales.x.min = 0;
+                dampedChart.update('none');
+            }
+            dampedLambda.addEventListener('input', updateDamped);
+            dampedOmega.addEventListener('input', updateDamped);
+
+            // --- Slide 27: Newton's Law of Cooling ---
+            const coolingTa = document.getElementById('cooling-ta');
+            const coolingT0 = document.getElementById('cooling-t0');
+            const coolingK = document.getElementById('cooling-k');
+            const coolingTaValue = document.getElementById('cooling-ta-value');
+            const coolingT0Value = document.getElementById('cooling-t0-value');
+            const coolingKValue = document.getElementById('cooling-k-value');
+            const coolingCtx = document.getElementById('coolingChart').getContext('2d');
+            const coolingChart = new Chart(coolingCtx, { type: 'line', data: {}, options: chartOptions(0, 110) });
+            function updateCooling() {
+                const Ta = parseFloat(coolingTa.value);
+                const T0 = parseFloat(coolingT0.value);
+                const k = parseFloat(coolingK.value);
+                coolingTaValue.textContent = Ta.toFixed(0);
+                coolingT0Value.textContent = T0.toFixed(0);
+                coolingKValue.textContent = k.toFixed(1);
+                const coolingXValues = Array.from({ length: 101 }, (_, i) => 0 + i * 0.05); // time is positive
+                coolingChart.data = { labels: coolingXValues, datasets: [{ label: 'Cooling', data: coolingXValues.map(t => Ta + (T0 - Ta) * Math.exp(-k * t)), borderColor: '#ea580c' }] };
+                coolingChart.options.scales.x.min = 0;
+                coolingChart.update('none');
+            }
+            coolingTa.addEventListener('input', updateCooling);
+            coolingT0.addEventListener('input', updateCooling);
+            coolingK.addEventListener('input', updateCooling);
+
+            // --- Slide 29: Wave Packet ---
+            const waveA = document.getElementById('wave-a');
+            const waveK = document.getElementById('wave-k');
+            const waveAValue = document.getElementById('wave-a-value');
+            const waveKValue = document.getElementById('wave-k-value');
+            const waveCtx = document.getElementById('waveChart').getContext('2d');
+            const waveChart = new Chart(waveCtx, { type: 'line', data: {}, options: chartOptions(-1.2, 1.2) });
+            function updateWavePacket() {
+                const a = parseFloat(waveA.value);
+                const k = parseFloat(waveK.value);
+                waveAValue.textContent = a.toFixed(1);
+                waveKValue.textContent = k.toFixed(0);
+                waveChart.data = { labels: xValues, datasets: [{ label: 'Wave Packet', data: xValues.map(x => Math.exp(-a * x * x) * Math.cos(k * x)), borderColor: '#0891b2' }] };
+                waveChart.update('none');
+            }
+            waveA.addEventListener('input', updateWavePacket);
+            waveK.addEventListener('input', updateWavePacket);
+
+            // --- Slide 31: Taylor Series ---
+            const taylorN = document.getElementById('taylor-n');
+            const taylorNValue = document.getElementById('taylor-n-value');
+            const taylorCtx = document.getElementById('taylorChart').getContext('2d');
+            const taylorChart = new Chart(taylorCtx, { type: 'line', data: {}, options: chartOptions(-2, 2) });
+            const factorial = n => n > 1 ? n * factorial(n - 1) : 1;
+            function updateTaylor() {
+                const N = parseInt(taylorN.value);
+                const degree = 2 * N + 1;
+                taylorNValue.textContent = degree;
+                
+                const taylorApprox = xValues.map(x => {
+                    let sum = 0;
+                    for (let n = 0; n <= N; n++) {
+                        sum += Math.pow(-1, n) * Math.pow(x, 2 * n + 1) / factorial(2 * n + 1);
+                    }
+                    return sum;
+                });
+                
+                taylorChart.data = {
+                    labels: xValues,
+                    datasets: [
+                        { label: 'sin(x)', data: xValues.map(x => Math.sin(x)), borderColor: '#ef4444', borderWidth: 2, borderDash: [5, 5] },
+                        { label: 'Taylor Approx.', data: taylorApprox, borderColor: '#3b82f6', borderWidth: 3 }
+                    ]
+                };
+                taylorChart.update('none');
+            }
+            taylorN.addEventListener('input', updateTaylor);
+
+            // --- Initial State ---
+            function initializeSlides() {
+                updateExp(); updateLinear(); updateQuad(); updateLog(); updateSin(); updateCos();
+                updateUnitCircle(); updateRational(); updateAbs(); updateLogistic(); updateNormal(); 
+                updateDamped(); updateCooling(); updateWavePacket(); updateTaylor();
+                updateSlideView();
+            }
+
+            initializeSlides();
+        });
+    </script>
+</body>
+</html>
