@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Power of Limits: A Visual Journey</title>
+    
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js for interactive plots -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- KaTeX for rendering mathematical formulas -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" xintegrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HffJpGxF" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js" xintegrity="sha384-cpW21h6ybjhKBPFGTSEwtN7MGEWIazOKug4IWYAp5nSN5FN/TCkRuleiQupgLqB6" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" xintegrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" crossorigin="anonymous"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Lora:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8;
+        }
+        .slide {
+            display: none;
+            min-height: 80vh;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .slide.active {
+            display: flex;
+            opacity: 1;
+        }
+        .question-slide {
+            background-color: #0c4a6e; /* Dark blue background for question slides */
+            color: #f0f8ff; /* Alice blue text */
+        }
+        .katex-display {
+            margin: 1em 0;
+        }
+        .katex {
+            font-size: 1.2em;
+        }
+        h1, h2, .question-title {
+            font-family: 'Lora', serif;
+        }
+        .slider-label {
+            min-width: 180px;
+            text-align: right;
+            margin-right: 1rem;
+        }
+        .info-box {
+            background-color: rgba(239, 246, 255, 0.8); /* blue-50 with opacity */
+            backdrop-filter: blur(5px);
+            border-left: 4px solid #3b82f6; /* blue-500 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen p-4 md:p-8">
+
+    <div id="presentation-container" class="w-full max-w-6xl bg-white rounded-2xl shadow-2xl overflow-hidden">
+        
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide active flex-col items-center justify-center text-center p-8">
+            <h1 class="text-5xl md:text-6xl font-bold text-sky-900 mb-4">The Power of Limits</h1>
+            <p class="text-2xl md:text-3xl text-gray-600">A Visual Journey Through Calculus and Beyond</p>
+            <div class="mt-12 text-lg text-gray-500">
+                <p>Use the navigation buttons to explore the concept of a "limit."</p>
+                <p>On each topic, pause and imagine the visual before proceeding.</p>
+            </div>
+        </div>
+
+        <!-- Question Slide for Derivative -->
+        <div id="slide-2" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold mb-4">The Derivative</h2>
+            <p class="text-2xl text-sky-200">How do you find the exact slope at a single point on a curve?</p>
+        </div>
+
+        <!-- Slide 3: Derivative Visualization -->
+        <div id="slide-3" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">The Tangent as a Limit of Secants</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>The derivative measures instantaneous rate of change. We find it by taking the limit of the slope of secant lines as the two points become one.</p>
+                    <p>Secant Slope: <span>$m_{sec} = \frac{f(x+h) - f(x)}{h}$</span></p>
+                    <p>Derivative: <span>$f'(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="h-slider" class="slider-label">Separation $h$:</label>
+                        <input type="range" id="h-slider" min="0.01" max="2" value="2" step="0.01" class="w-full">
+                        <span id="h-value" class="ml-4 font-mono w-16 text-center">2.00</span>
+                    </div>
+                </div>
+                <div id="derivative-info" class="info-box"></div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="derivativeChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Question Slide for Integral -->
+        <div id="slide-4" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-100 mb-4">The Integral</h2>
+            <p class="text-2xl text-sky-200">How can you find the exact area under a curve using only rectangles?</p>
+        </div>
+
+        <!-- Slide 5: Integral Visualization -->
+        <div id="slide-5" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Area as a Limit of Riemann Sums</h2>
+                 <div class="text-lg text-gray-700 space-y-4">
+                    <p>The definite integral gives the area under a curve. We find it by summing the areas of infinitely many, infinitesimally thin rectangles.</p>
+                    <p>Area Approx: <span>$A \approx \sum_{i=1}^{n} f(x_i^*) \Delta x$</span></p>
+                    <p>Definite Integral: <span>$\int_a^b f(x)dx = \lim_{n \to \infty} \sum_{i=1}^{n} f(x_i^*) \Delta x$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="n-slider" class="slider-label">Number of Rectangles $n$:</label>
+                        <input type="range" id="n-slider" min="1" max="100" value="5" step="1" class="w-full">
+                        <span id="n-value" class="ml-4 font-mono w-12 text-center">5</span>
+                    </div>
+                </div>
+                 <div id="integral-info" class="info-box"></div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="integralChart"></canvas>
+            </div>
+        </div>
+        
+        <!-- Question Slide for Osculating Circle -->
+        <div id="slide-6" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-100 mb-4">Curvature</h2>
+            <p class="text-2xl text-sky-200">What is the "best fitting" circle that just kisses a curve at a point?</p>
+        </div>
+
+        <!-- Slide 7: Osculating Circle Visualization -->
+        <div id="slide-7" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">The Osculating Circle</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>The osculating circle is the limit of circles passing through three points on a curve as those points converge to a single point. Its radius defines the "radius of curvature."</p>
+                    <p>Curvature: <span>$\kappa(x) = \frac{|f''(x)|}{(1 + [f'(x)]^2)^{3/2}}$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="curve-h-slider" class="slider-label">Point Separation:</label>
+                        <input type="range" id="curve-h-slider" min="0.05" max="1.5" value="1.5" step="0.01" class="w-full">
+                        <span id="curve-h-value" class="ml-4 font-mono w-16 text-center">1.50</span>
+                    </div>
+                </div>
+                <div id="curvature-info" class="info-box"></div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="curvatureChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Taylor Series -->
+        <div id="slide-8" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-100 mb-4">Taylor Approximation</h2>
+            <p class="text-2xl text-sky-200">Can we build any function from simple polynomials?</p>
+        </div>
+
+        <!-- Slide 9: Taylor Series Visualization -->
+        <div id="slide-9" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Approximating with Polynomials</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>A Taylor series rebuilds a function using an infinite polynomial. Each term is calculated from the function's derivatives at a single point. Taking more terms (a higher degree) gives a better approximation.</p>
+                    <p>For $\sin(x)$ at $x=0$:</p>
+                    <p><span>$\sin(x) \approx x - \frac{x^3}{3!} + \frac{x^5}{5!} - \dots$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="taylor-n-slider" class="slider-label">Degree of Polynomial:</label>
+                        <input type="range" id="taylor-n-slider" min="0" max="5" value="1" step="1" class="w-full">
+                        <span id="taylor-n-value" class="ml-4 font-mono w-12 text-center">3</span>
+                    </div>
+                </div>
+                <div id="taylor-info" class="info-box"></div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="taylorChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Logistic Growth -->
+        <div id="slide-10" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-100 mb-4">Population Growth</h2>
+            <p class="text-2xl text-sky-200">How can growth be explosive at first, but then level off?</p>
+        </div>
+
+        <!-- Slide 11: Logistic Growth Visualization -->
+        <div id="slide-11" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Limits as Asymptotes</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>In many natural systems, growth is not infinite. The logistic curve models growth that is limited by a "carrying capacity" $L$, which is a horizontal asymptote.</p>
+                    <p>Population: <span>$P(t) = \frac{L}{1 + e^{-k(t-t_0)}}$</span></p>
+                    <p>Limit: <span>$\lim_{t \to \infty} P(t) = L$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="time-slider" class="slider-label">Time $t$:</label>
+                        <input type="range" id="time-slider" min="0" max="20" value="0" step="0.1" class="w-full">
+                        <span id="time-value" class="ml-4 font-mono w-12 text-center">0.0</span>
+                    </div>
+                </div>
+                <div id="logistic-info" class="info-box"></div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4">
+                <canvas id="logisticChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Question Slide for Fractals -->
+        <div id="slide-12" class="slide question-slide flex-col items-center justify-center text-center p-8">
+            <h2 class="question-title text-4xl font-bold text-gray-100 mb-4">Fractal Geometry</h2>
+            <p class="text-2xl text-sky-200">Can a shape have a finite area but an infinite perimeter?</p>
+        </div>
+
+        <!-- Slide 13: Koch Snowflake Visualization -->
+        <div id="slide-13" class="slide flex-col lg:flex-row items-center p-8 gap-8">
+            <div class="w-full lg:w-1/2 flex flex-col justify-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">The Koch Snowflake</h2>
+                <div class="text-lg text-gray-700 space-y-4">
+                    <p>Fractals are generated by a recursive process. The Koch snowflake is built by repeatedly adding smaller triangles to the sides of an initial one. This limiting process creates a paradoxical shape.</p>
+                    <p>Perimeter: <span>$P_n = P_0 (\frac{4}{3})^n \implies \lim_{n \to \infty} P_n = \infty$</span></p>
+                    <p>Area: <span>$A_n \to \frac{8}{5} A_0$</span></p>
+                </div>
+                <div class="mt-8 space-y-4">
+                    <div class="flex items-center">
+                        <label for="koch-slider" class="slider-label">Iteration Level:</label>
+                        <input type="range" id="koch-slider" min="0" max="5" value="0" step="1" class="w-full">
+                        <span id="koch-value" class="ml-4 font-mono w-12 text-center">0</span>
+                    </div>
+                </div>
+                <div id="koch-info" class="info-box"></div>
+            </div>
+            <div class="w-full lg:w-1/2 h-80 md:h-96 bg-gray-50 rounded-lg p-4 flex items-center justify-center">
+                <canvas id="kochCanvas" width="400" height="400"></canvas>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Navigation -->
+    <div class="flex justify-between w-full max-w-6xl mt-6">
+        <button id="prevBtn" class="bg-sky-700 hover:bg-sky-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105 disabled:bg-gray-400 disabled:cursor-not-allowed disabled:transform-none">Previous</button>
+        <div id="slide-counter" class="flex items-center font-semibold text-gray-700">Slide 1 of 13</div>
+        <button id="nextBtn" class="bg-sky-700 hover:bg-sky-800 text-white font-bold py-3 px-6 rounded-lg shadow-md transition-transform transform hover:scale-105">Next</button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // --- General Presentation Logic ---
+            let currentSlide = 1;
+            const totalSlides = 13;
+            const slides = document.querySelectorAll('.slide');
+            const nextBtn = document.getElementById('nextBtn');
+            const prevBtn = document.getElementById('prevBtn');
+            const slideCounter = document.getElementById('slide-counter');
+
+            function updateSlideView() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', (index + 1) === currentSlide);
+                });
+                slideCounter.textContent = `Slide ${currentSlide} of ${totalSlides}`;
+                prevBtn.disabled = currentSlide === 1;
+                nextBtn.disabled = currentSlide === totalSlides;
+                
+                const activeSlide = document.getElementById(`slide-${currentSlide}`);
+                if (activeSlide && !activeSlide.hasAttribute('data-katex-rendered')) {
+                    renderMathInElement(activeSlide, {
+                        delimiters: [
+                            {left: "$$", right: "$$", display: true},
+                            {left: "$", right: "$", display: false}
+                        ],
+                        throwOnError: false
+                    });
+                    activeSlide.setAttribute('data-katex-rendered', 'true');
+                }
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides) {
+                    currentSlide++;
+                    updateSlideView();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 1) {
+                    currentSlide--;
+                    updateSlideView();
+                }
+            });
+            
+            // --- Chart and Interactivity Setup ---
+            const chartOptions = (yMin, yMax, xMin = -5, xMax = 5) => ({
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { 
+                        type: 'linear', position: 'bottom', min: xMin, max: xMax, 
+                        grid: { color: context => context.tick.value === 0 ? '#999' : '#e9e9e9', lineWidth: context => context.tick.value === 0 ? 1.5 : 1 },
+                        ticks: { color: '#333' }
+                    },
+                    y: { 
+                        min: yMin, max: yMax, 
+                        grid: { color: context => context.tick.value === 0 ? '#999' : '#e9e9e9', lineWidth: context => context.tick.value === 0 ? 1.5 : 1 },
+                        ticks: { color: '#333' }
+                    }
+                },
+                plugins: { legend: { display: false } },
+                elements: { point: { radius: 0 } },
+                animation: false,
+            });
+
+            // --- Slide 3: Derivative ---
+            const hSlider = document.getElementById('h-slider');
+            const hValue = document.getElementById('h-value');
+            const derivativeInfo = document.getElementById('derivative-info');
+            const derivativeCtx = document.getElementById('derivativeChart').getContext('2d');
+            const derivativeChart = new Chart(derivativeCtx, { type: 'line', options: chartOptions(-1, 9, -3, 3) });
+            const f_deriv = x => x * x; // f(x) = x^2
+            const df_deriv = x => 2 * x; // f'(x) = 2x
+            const x0_deriv = 1;
+
+            function updateDerivative() {
+                const h = parseFloat(hSlider.value);
+                hValue.textContent = h.toFixed(2);
+                
+                const p1 = { x: x0_deriv, y: f_deriv(x0_deriv) };
+                const p2 = { x: x0_deriv + h, y: f_deriv(x0_deriv + h) };
+                const secantSlope = (p2.y - p1.y) / h;
+                const tangentSlope = df_deriv(x0_deriv);
+                
+                const xValues = Array.from({length: 101}, (_, i) => -3 + i * 0.06);
+                const curveData = xValues.map(x => f_deriv(x));
+                const tangentLine = xValues.map(x => tangentSlope * (x - p1.x) + p1.y);
+                
+                derivativeChart.data = {
+                    labels: xValues,
+                    datasets: [
+                        { label: 'f(x) = x^2', data: curveData, borderColor: '#0ea5e9', borderWidth: 3, tension: 0.1 },
+                        { label: 'Tangent Line', data: tangentLine, borderColor: '#10b981', borderWidth: 2, borderDash: [5, 5] },
+                        { label: 'Secant Line', type: 'line', data: [{x: p1.x - 2, y: p1.y - 2 * secantSlope}, {x: p2.x + 2, y: p2.y + 2*secantSlope}], borderColor: '#ef4444', borderWidth: 2.5, pointRadius: 0, tension: 0 },
+                        { label: 'Points', type: 'scatter', data: [p1, p2], backgroundColor: ['#ef4444', '#ef4444'], pointRadius: 5, pointHoverRadius: 7 }
+                    ]
+                };
+                derivativeChart.update('none');
+                derivativeInfo.innerHTML = `Secant Slope: <span class="font-mono">${secantSlope.toFixed(4)}</span><br>Tangent Slope (Limit): <span class="font-mono">${tangentSlope.toFixed(4)}</span>`;
+            }
+            hSlider.addEventListener('input', updateDerivative);
+
+            // --- Slide 5: Integral (FIXED) ---
+            const nSlider = document.getElementById('n-slider');
+            const nValue = document.getElementById('n-value');
+            const integralInfo = document.getElementById('integral-info');
+            const integralCtx = document.getElementById('integralChart').getContext('2d');
+            // Initialize as a mixed bar/line chart. The default type is 'bar'.
+            const integralChart = new Chart(integralCtx, { options: chartOptions(0, 5, 0, 2) });
+            const f_int = x => x * x + 1;
+            const a_int = 0, b_int = 2;
+            const trueArea = (b_int**3 / 3 + b_int) - (a_int**3 / 3 + a_int);
+
+            function updateIntegral() {
+                const n = parseInt(nSlider.value);
+                nValue.textContent = n;
+                
+                const deltaX = (b_int - a_int) / n;
+                const rectData = [];
+                let calculatedArea = 0;
+                
+                for (let i = 0; i < n; i++) {
+                    const x_i = a_int + (i + 0.5) * deltaX; // Midpoint rule
+                    const y_i = f_int(x_i);
+                    rectData.push({x: x_i, y: y_i});
+                    calculatedArea += y_i * deltaX;
+                }
+                
+                const xValues = Array.from({length: 51}, (_, i) => a_int + i * (b_int - a_int) / 50);
+                const curveData = xValues.map(x => ({x: x, y: f_int(x)}));
+
+                integralChart.data = {
+                    datasets: [
+                        {
+                            type: 'bar',
+                            label: 'Rectangles',
+                            data: rectData,
+                            backgroundColor: 'rgba(239, 68, 68, 0.6)',
+                            borderColor: 'rgba(239, 68, 68, 1)',
+                            borderWidth: 1,
+                            barThickness: deltaX * 0.9 * (integralChart.chartArea.width / (b_int - a_int)),
+                        },
+                        {
+                            type: 'line',
+                            label: 'f(x) = x^2+1',
+                            data: curveData,
+                            borderColor: '#0ea5e9',
+                            borderWidth: 3,
+                            tension: 0.1,
+                            pointRadius: 0
+                        }
+                    ]
+                };
+                integralChart.options.scales.x.min = a_int;
+                integralChart.options.scales.x.max = b_int;
+                integralChart.update('none');
+                integralInfo.innerHTML = `Approx. Area: <span class="font-mono">${calculatedArea.toFixed(4)}</span><br>True Area (Limit): <span class="font-mono">${trueArea.toFixed(4)}</span>`;
+            }
+            nSlider.addEventListener('input', updateIntegral);
+            
+            // --- Slide 7: Osculating Circle ---
+            const curveHSlider = document.getElementById('curve-h-slider');
+            const curveHValue = document.getElementById('curve-h-value');
+            const curvatureInfo = document.getElementById('curvature-info');
+            const curvatureCtx = document.getElementById('curvatureChart').getContext('2d');
+            const curvatureChart = new Chart(curvatureCtx, { type: 'line', options: chartOptions(-1, 5, -3, 3) });
+            const f_curve = x => 0.5 * x * x; // f(x) = 0.5x^2
+            const x0_curve = 0.8;
+
+            function getCircleFromPoints(p1, p2, p3) {
+                const m1 = (p2.y - p1.y) / (p2.x - p1.x);
+                const m2 = (p3.y - p2.y) / (p3.x - p2.x);
+                if (Math.abs(m1 - m2) < 1e-9 || Math.abs(p1.x - p2.x) < 1e-9 || Math.abs(p2.x - p3.x) < 1e-9) return null; // Collinear or vertical
+
+                const centerX = (m1 * m2 * (p1.y - p3.y) + m2 * (p1.x + p2.x) - m1 * (p2.x + p3.x)) / (2 * (m2 - m1));
+                const centerY = -1/m1 * (centerX - (p1.x + p2.x)/2) + (p1.y + p2.y)/2;
+                const radius = Math.sqrt((p1.x - centerX)**2 + (p1.y - centerY)**2);
+                return {x: centerX, y: centerY, r: radius};
+            }
+
+            function updateCurvature() {
+                const h = parseFloat(curveHSlider.value);
+                curveHValue.textContent = h.toFixed(2);
+
+                const p1 = { x: x0_curve - h, y: f_curve(x0_curve - h) };
+                const p2 = { x: x0_curve, y: f_curve(x0_curve) };
+                const p3 = { x: x0_curve + h, y: f_curve(x0_curve + h) };
+                
+                const circle = getCircleFromPoints(p1, p2, p3);
+                let circlePoints = [];
+                if (circle && circle.r < 100) { // Avoid huge circles
+                    for (let i = 0; i <= 360; i++) {
+                        const angle = i * Math.PI / 180;
+                        circlePoints.push({
+                            x: circle.x + circle.r * Math.cos(angle),
+                            y: circle.y + circle.r * Math.sin(angle)
+                        });
+                    }
+                }
+
+                const xValues = Array.from({length: 101}, (_, i) => -3 + i * 0.06);
+                const curveData = xValues.map(x => f_curve(x));
+                
+                curvatureChart.data = {
+                    datasets: [
+                        { label: 'f(x) = 0.5x^2', data: curveData.map((y,i) => ({x: xValues[i], y:y})), borderColor: '#0ea5e9', borderWidth: 3, tension: 0.1 },
+                        { label: 'Circle', data: circlePoints, borderColor: '#ef4444', borderWidth: 2, showLine: true, tension: 0.1 },
+                        { label: 'Points', type: 'scatter', data: [p1, p2, p3], backgroundColor: '#ef4444', pointRadius: 4 }
+                    ]
+                };
+                curvatureChart.update('none');
+                curvatureInfo.innerHTML = `Radius: <span class="font-mono">${circle ? circle.r.toFixed(3) : 'inf'}</span>`;
+            }
+            curveHSlider.addEventListener('input', updateCurvature);
+
+            // --- Slide 9: Taylor Series (REPLACED) ---
+            const taylorNSlider = document.getElementById('taylor-n-slider');
+            const taylorNValue = document.getElementById('taylor-n-value');
+            const taylorInfo = document.getElementById('taylor-info');
+            const taylorCtx = document.getElementById('taylorChart').getContext('2d');
+            const taylorChart = new Chart(taylorCtx, { type: 'line', options: chartOptions(-2, 2, -5, 5) });
+            const factorial = n => n > 1 ? n * factorial(n - 1) : 1;
+
+            function updateTaylor() {
+                const N = parseInt(taylorNSlider.value);
+                const degree = 2 * N + 1;
+                taylorNValue.textContent = degree;
+                
+                const xValues = Array.from({length: 201}, (_, i) => -5 + i * 0.05);
+
+                const taylorApprox = xValues.map(x => {
+                    let sum = 0;
+                    for (let n = 0; n <= N; n++) {
+                        sum += ((-1)**n) * (x**(2*n + 1)) / factorial(2*n + 1);
+                    }
+                    return sum;
+                });
+                
+                taylorChart.data = {
+                    labels: xValues,
+                    datasets: [
+                        { label: 'sin(x)', data: xValues.map(x => Math.sin(x)), borderColor: '#ef4444', borderWidth: 2.5, borderDash: [5, 5] },
+                        { label: 'Taylor Approx.', data: taylorApprox, borderColor: '#0ea5e9', borderWidth: 3 }
+                    ]
+                };
+                taylorChart.update('none');
+                taylorInfo.innerHTML = `Approximation using terms up to $x^{${degree}}$.`;
+                renderMathInElement(taylorInfo);
+            }
+            taylorNSlider.addEventListener('input', updateTaylor);
+
+            // --- Slide 11: Logistic Growth ---
+            const timeSlider = document.getElementById('time-slider');
+            const timeValue = document.getElementById('time-value');
+            const logisticInfo = document.getElementById('logistic-info');
+            const logisticCtx = document.getElementById('logisticChart').getContext('2d');
+            const logisticChart = new Chart(logisticCtx, { type: 'line', options: chartOptions(0, 12, 0, 20) });
+            const L = 10, k = 1, t0 = 10;
+            const f_logistic = t => L / (1 + Math.exp(-k * (t - t0)));
+
+            function updateLogistic() {
+                const t = parseFloat(timeSlider.value);
+                timeValue.textContent = t.toFixed(1);
+                
+                const tValues = Array.from({length: 101}, (_, i) => 0 + i * 0.2);
+                const pValues = tValues.map(time => f_logistic(time));
+                const currentP = f_logistic(t);
+
+                logisticChart.data = {
+                    labels: tValues,
+                    datasets: [
+                        { label: 'Population', data: pValues, borderColor: '#0ea5e9', borderWidth: 3, tension: 0.1 },
+                        { label: 'Carrying Capacity', data: tValues.map(tv => ({x:tv, y:L})), borderColor: '#10b981', borderWidth: 2, borderDash: [5,5] },
+                        { label: 'Current Time', type: 'scatter', data: [{x: t, y: currentP}], backgroundColor: '#ef4444', pointRadius: 6 }
+                    ]
+                };
+                logisticChart.update('none');
+                logisticInfo.innerHTML = `Population P(${t.toFixed(1)}): <span class="font-mono">${currentP.toFixed(3)}</span><br>Carrying Capacity L: <span class="font-mono">${L}</span>`;
+            }
+            timeSlider.addEventListener('input', updateLogistic);
+
+            // --- Slide 13: Koch Snowflake ---
+            const kochSlider = document.getElementById('koch-slider');
+            const kochValue = document.getElementById('koch-value');
+            const kochInfo = document.getElementById('koch-info');
+            const kochCanvas = document.getElementById('kochCanvas');
+            const kochCtx = kochCanvas.getContext('2d');
+
+            function drawKoch(p1, p2, level) {
+                if (level === 0) {
+                    kochCtx.lineTo(p2.x, p2.y);
+                    return;
+                }
+                const dx = p2.x - p1.x;
+                const dy = p2.y - p1.y;
+                const dist = Math.sqrt(dx*dx + dy*dy);
+                const angle = Math.atan2(dy, dx);
+                
+                const pa = { x: p1.x + dx/3, y: p1.y + dy/3 };
+                const pb = { x: p1.x + dx*2/3, y: p1.y + dy*2/3 };
+                const pc = { 
+                    x: pa.x + (dist/3) * Math.cos(angle - Math.PI/3),
+                    y: pa.y + (dist/3) * Math.sin(angle - Math.PI/3)
+                };
+
+                drawKoch(p1, pa, level - 1);
+                drawKoch(pa, pc, level - 1);
+                drawKoch(pc, pb, level - 1);
+                drawKoch(pb, p2, level - 1);
+            }
+
+            function updateKoch() {
+                const level = parseInt(kochSlider.value);
+                kochValue.textContent = level;
+
+                const w = kochCanvas.width;
+                const h = kochCanvas.height;
+                kochCtx.clearRect(0, 0, w, h);
+                kochCtx.fillStyle = "#f0f4f8";
+                kochCtx.fillRect(0, 0, w, h);
+                
+                const side = w * 0.7;
+                const h_tri = side * Math.sqrt(3) / 2;
+                const p1 = { x: (w - side) / 2, y: (h - h_tri) / 2 + h_tri };
+                const p2 = { x: p1.x + side, y: p1.y };
+                const p3 = { x: w / 2, y: (h - h_tri) / 2 };
+
+                kochCtx.beginPath();
+                kochCtx.moveTo(p1.x, p1.y);
+                drawKoch(p1, p2, level);
+                drawKoch(p2, p3, level);
+                drawKoch(p3, p1, level);
+                kochCtx.closePath();
+                
+                kochCtx.strokeStyle = '#0ea5e9';
+                kochCtx.lineWidth = 1.5;
+                kochCtx.stroke();
+                kochCtx.fillStyle = 'rgba(14, 165, 233, 0.2)';
+                kochCtx.fill();
+
+                const p0 = 3 * side;
+                const a0 = (Math.sqrt(3)/4) * side * side;
+                const perimeter = p0 * ((4/3)**level);
+                const area = a0 * (1 - (3/5) * (1 - (4/9)**level)); // Simplified formula
+                
+                kochInfo.innerHTML = `Perimeter: <span class="font-mono">${(perimeter/p0).toFixed(2)} P₀</span><br>Area: <span class="font-mono">${(area/a0).toFixed(3)} A₀</span>`;
+            }
+            kochSlider.addEventListener('input', updateKoch);
+
+            // --- Initial State ---
+            function initializeSlides() {
+                updateDerivative();
+                updateIntegral();
+                updateCurvature();
+                updateTaylor();
+                updateLogistic();
+                updateKoch();
+                updateSlideView();
+            }
+
+            // A small delay to ensure chart area is calculated for the first render
+            setTimeout(initializeSlides, 10);
+        });
+    </script>
+</body>
+</html>
