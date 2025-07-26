@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Calculus Review: Limits & Continuity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            processEscapes: true
+          },
+          svg: {
+            fontCache: 'global'
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for better aesthetics */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #64748b;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569;
+        }
+        /* Styles for the interactive unit circle */
+        .unit-circle-point {
+            cursor: pointer;
+        }
+        /* The .selected class is now only used by JavaScript to track the active point. 
+           It has no visual styles associated with it to prevent rendering issues. */
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="w-1/4 bg-white border-r border-slate-200 p-8 sticky top-0 h-screen overflow-y-auto">
+            <h1 class="text-2xl font-bold text-slate-900 mb-8">Unit 1 Review</h1>
+            <nav>
+                <ul class="space-y-4">
+                    <li><a href="#topic-unit-circle" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">The Unit Circle</a></li>
+                    <li><a href="#topic-domains" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Function Domains</a></li>
+                    <li><a href="#topic-factoring" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Factoring & Cancelling</a></li>
+                    <li><a href="#topic-infinity" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Limits & Infinity</a></li>
+                    <li><a href="#topic-one-sided" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">One-Sided Limits</a></li>
+                    <li><a href="#topic-conjugate" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">The Conjugate Method</a></li>
+                    <li><a href="#topic-ivt" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Intermediate Value Theorem</a></li>
+                    <li><a href="#topic-exponents" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Exponent Rules</a></li>
+                    <li><a href="#topic-trig-limits" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Trig Identities in Limits</a></li>
+                    <li><a href="#topic-absolute-value" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Limits with Absolute Value</a></li>
+                    <li><a href="#topic-tables" class="font-medium text-slate-600 hover:text-indigo-600 transition-colors duration-200">Limits from Tables</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="w-3/4 p-12">
+            <div class="max-w-4xl mx-auto space-y-16">
+
+                <!-- Introduction -->
+                <section id="intro">
+                    <h2 class="text-4xl font-bold text-slate-900 mb-4">Mastering Limits: A Prior Knowledge Tune-Up</h2>
+                    <p class="text-lg text-slate-600">Welcome! This guide is designed to refresh key concepts you've learned in previous math classes. Mastering these skills is the key to unlocking the concepts of limits and continuity in Calculus. Let's dive in!</p>
+                </section>
+
+                <!-- Topic: Unit Circle -->
+                <section id="topic-unit-circle">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">The Unit Circle: Your Trigonometric Compass</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">The unit circle is your best friend for quickly evaluating trigonometric functions. It's a circle with a radius of 1 centered at the origin. For any angle $\theta$, the point $(x, y)$ where the angle's terminal side intersects the circle gives you the cosine and sine values:</p>
+                            <ul class="list-disc list-inside mt-2 text-slate-600 space-y-1">
+                                <li>$\cos(\theta) = x$-coordinate</li>
+                                <li>$\sin(\theta) = y$-coordinate</li>
+                            </ul>
+                            <p class="mt-2 text-slate-600">Knowing the coordinates for key angles (like $\pi/6, \pi/4, \pi/3$ and their multiples) is essential for evaluating limits and understanding trig function behavior without a calculator.</p>
+                        </div>
+                        <div class="flex flex-col md:flex-row items-center gap-8 bg-slate-50 p-6 rounded-lg">
+                            <div id="unit-circle-container" class="w-full md:w-1/2">
+                                <svg id="unit-circle-svg" viewBox="-1.2 -1.2 2.4 2.4" class="w-full h-auto"></svg>
+                            </div>
+                            <div id="unit-circle-info" class="w-full md:w-1/2 p-4 bg-white rounded-lg shadow-inner h-48 flex flex-col justify-center">
+                                <p class="text-center text-slate-500">Click a point on the circle to see its details.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topic: Function Domains -->
+                <section id="topic-domains">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Function Domains & Continuity</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">A function is continuous on its domain. If a question asks where a function is continuous, it's often a disguised question about its domain. Remember the domain restrictions for common functions:</p>
+                            <ul class="list-disc list-inside mt-2 text-slate-600 space-y-1">
+                                <li><strong>Logarithms:</strong> $log(x)$ is only defined for $x > 0$.</li>
+                                <li><strong>Trigonometry:</strong> Functions like $tan(x)$ and $cot(x)$ have vertical asymptotes where their denominators are zero. For $cot(x) = \frac{cos(x)}{sin(x)}$, the domain excludes values where $sin(x) = 0$ (i.e., multiples of $\pi$).</li>
+                                <li><strong>Square Roots:</strong> $\sqrt{x}$ is only defined for $x \ge 0$.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Which of the following functions are continuous for all real numbers? <br> I. $h(x) = log(x)$ <br> II. $g(x) = cot(x)$</p>
+                            <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. Analyze $h(x) = log(x)$. The domain of the natural logarithm is $(0, \infty)$. Since this is not all real numbers, $h(x)$ is not continuous for all real numbers.</p>
+                                <p class="mt-2 text-slate-600">2. Analyze $g(x) = cot(x)$. The function $cot(x)$ has vertical asymptotes at $x = k\pi$ for any integer $k$ (e.g., at $x=0, \pi, 2\pi, ...$). Since it has discontinuities, it is not continuous for all real numbers.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: Neither h nor g.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topic: Factoring & Cancelling -->
+                <section id="topic-factoring">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Factoring & Cancelling</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">Direct substitution into a limit often yields the indeterminate form $\frac{0}{0}$. This is a huge clue that you should try to factor the numerator and denominator to find a common factor that can be cancelled. A classic pattern to watch for is the **Difference of Squares**: $a^2 - b^2 = (a-b)(a+b)$.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Find $\lim_{x\rightarrow -4}\frac{x^{2}-16}{x+4}$.</p>
+                            <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. Try direct substitution: $\frac{(-4)^2 - 16}{-4+4} = \frac{16-16}{0} = \frac{0}{0}$. Indeterminate form! Time to factor.</p>
+                                <p class="mt-2 text-slate-600">2. Factor the numerator using difference of squares: $x^2 - 16 = (x-4)(x+4)$.</p>
+                                <p class="mt-2 text-slate-600">3. Rewrite the limit and cancel: $\lim_{x\rightarrow -4}\frac{(x-4)(x+4)}{x+4} = \lim_{x\rightarrow -4}(x-4)$.</p>
+                                <p class="mt-2 text-slate-600">4. Now, use direct substitution on the simplified expression: $-4 - 4 = -8$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: -8.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topic: Limits & Infinity -->
+                <section id="topic-infinity">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Limits & Infinity</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">Understanding how fractions behave with very large or very small numbers is crucial. Think about these concepts:</p>
+                            <ul class="list-disc list-inside mt-2 text-slate-600 space-y-1">
+                                <li>$\frac{\text{Number}}{\text{Huge Number}} \rightarrow 0$ (e.g., $\lim_{x\rightarrow\infty} \frac{1}{x} = 0$)</li>
+                                <li>$\frac{\text{Number}}{\text{Tiny Positive Number}} \rightarrow +\infty$ (e.g., $\lim_{x\rightarrow 1^+} \frac{1}{x-1}$)</li>
+                                <li>$\frac{\text{Number}}{\text{Tiny Negative Number}} \rightarrow -\infty$ (e.g., $\lim_{x\rightarrow 1^-} \frac{1}{x-1}$)</li>
+                            </ul>
+                            <p class="mt-2 text-slate-600">For limits at infinity of rational functions, compare the degrees of the numerator and denominator. If the degree of the numerator is higher, the limit is unbounded ($\pm\infty$).</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Find $\lim_{x\rightarrow\infty}\frac{x^{2}-4}{x+4}$.</p>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. Identify the highest power of $x$ in the numerator (2) and the denominator (1).</p>
+                                <p class="mt-2 text-slate-600">2. Since the degree of the numerator is greater than the degree of the denominator, the function grows without bound as $x$ approaches infinity.</p>
+                                <p class="mt-2 text-slate-600">3. To be more formal, divide every term by the highest power in the denominator ($x$): $\lim_{x\rightarrow\infty}\frac{x - \frac{4}{x}}{1 + \frac{4}{x}}$. As $x \rightarrow \infty$, the terms $\frac{4}{x}$ go to 0, leaving $\frac{x}{1}$, which goes to $\infty$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: The limit is unbounded.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Topic: One-Sided Limits -->
+                <section id="topic-one-sided">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">One-Sided Limits</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">A one-sided limit asks what value a function is approaching as $x$ gets closer to a number from a specific direction.</p>
+                            <ul class="list-disc list-inside mt-2 text-slate-600 space-y-1">
+                                <li><strong>From the right ($x \rightarrow c^+$):</strong> Use values slightly greater than $c$. For $x \rightarrow 1^+$, think $x=1.1$ or $x=1.001$.</li>
+                                <li><strong>From the left ($x \rightarrow c^-$):</strong> Use values slightly less than $c$. For $x \rightarrow 1^-$, think $x=0.9$ or $x=0.999$.</li>
+                            </ul>
+                             <p class="mt-2 text-slate-600">This is especially important for vertical asymptotes and for understanding tables of values.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem 1: From a Formula</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Let $f(x) = -\frac{4}{x-1}$. Describe the one-sided limits at $x=1$.</p>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. **Limit from the right ($x \rightarrow 1^+$):** Let's plug in a number just bigger than 1, like $x=1.001$. The denominator is $1.001 - 1 = 0.001$, which is a tiny positive number. So we have $-\frac{4}{\text{tiny positive}} \rightarrow -\infty$.</p>
+                                <p class="mt-2 text-slate-600">2. **Limit from the left ($x \rightarrow 1^-$):** Let's plug in a number just smaller than 1, like $x=0.999$. The denominator is $0.999 - 1 = -0.001$, which is a tiny negative number. So we have $-\frac{4}{\text{tiny negative}} \rightarrow +\infty$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: $\lim_{x\rightarrow 1^+}f(x) = -\infty$ and $\lim_{x\rightarrow 1^-}f(x) = +\infty$.</p>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem 2: From a Table</h4>
+                            <p class="mt-2 text-slate-700 font-medium">The table gives values of $g(x)$. What is a reasonable estimate for $\lim_{x\rightarrow -8^+} g(x)$?</p>
+                            <table class="w-full text-left mt-2 border-collapse">
+                                <thead>
+                                    <tr>
+                                        <th class="border-b-2 p-2 bg-slate-100">x</th>
+                                        <th class="border-b-2 p-2 bg-slate-100">g(x)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="border-b p-2">-8.025</td><td class="border-b p-2">-5.2</td></tr>
+                                    <tr><td class="border-b p-2">-8.005</td><td class="border-b p-2">-5.04</td></tr>
+                                    <tr><td class="border-b p-2">-8.001</td><td class="border-b p-2">-5.008</td></tr>
+                                    <tr><td class="border-b p-2 bg-yellow-100 font-bold">-8</td><td class="border-b p-2 bg-yellow-100 font-bold">?</td></tr>
+                                    <tr><td class="border-b p-2">-7.999</td><td class="border-b p-2">0.008</td></tr>
+                                    <tr><td class="border-b p-2">-7.995</td><td class="border-b p-2">0.04</td></tr>
+                                    <tr><td class="border-b p-2">-7.975</td><td class="border-b p-2">0.2</td></tr>
+                                </tbody>
+                            </table>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. "From the right" ($x \rightarrow -8^+$) means we look at x-values that are slightly *greater* than -8. On a number line, these are numbers like -7.999, -7.995, etc.</p>
+                                <p class="mt-2 text-slate-600">2. Look at the corresponding $g(x)$ values for $x > -8$: As $x$ gets closer to -8 (from -7.975 to -7.999), $g(x)$ gets closer to 0 (from 0.2 to 0.008).</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: 0.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Topic: The Conjugate Method -->
+                <section id="topic-conjugate">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">The Conjugate Method</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">When you see a limit with a square root that gives $\frac{0}{0}$, think "conjugate." This is just a fancy application of the difference of squares formula. The conjugate of $\sqrt{a} - b$ is $\sqrt{a} + b$. Multiplying them together gets rid of the square root: $(\sqrt{a}-b)(\sqrt{a}+b) = (\sqrt{a})^2 - b^2 = a - b^2$.</p>
+                            <p class="mt-2 text-slate-600">Remember to multiply both the numerator AND the denominator by the conjugate to keep the expression's value the same.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Find $\lim_{x\rightarrow 4}\frac{2-\sqrt{4x-12}}{x-4}$.</p>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. Direct substitution gives $\frac{2-\sqrt{16-12}}{4-4} = \frac{2-\sqrt{4}}{0} = \frac{2-2}{0} = \frac{0}{0}$. Time for the conjugate.</p>
+                                <p class="mt-2 text-slate-600">2. The conjugate of the numerator is $2+\sqrt{4x-12}$. Multiply the top and bottom by it.</p>
+                                <p class="mt-2 text-slate-600">3. $\lim_{x\rightarrow 4}\frac{2-\sqrt{4x-12}}{x-4} \cdot \frac{2+\sqrt{4x-12}}{2+\sqrt{4x-12}} = \lim_{x\rightarrow 4}\frac{4 - (4x-12)}{(x-4)(2+\sqrt{4x-12})}$</p>
+                                <p class="mt-2 text-slate-600">4. Simplify the numerator: $4 - 4x + 12 = 16 - 4x = -4(x-4)$.</p>
+                                <p class="mt-2 text-slate-600">5. Cancel the $(x-4)$ term: $\lim_{x\rightarrow 4}\frac{-4(x-4)}{(x-4)(2+\sqrt{4x-12})} = \lim_{x\rightarrow 4}\frac{-4}{2+\sqrt{4x-12}}$</p>
+                                <p class="mt-2 text-slate-600">6. Now substitute $x=4$: $\frac{-4}{2+\sqrt{16-12}} = \frac{-4}{2+\sqrt{4}} = \frac{-4}{2+2} = \frac{-4}{4} = -1$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: -1.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Topic: IVT -->
+                <section id="topic-ivt">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Intermediate Value Theorem</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">The Intermediate Value Theorem (IVT) states that if a function $g$ is continuous on a closed interval $[a, b]$, then it must take on every y-value between $g(a)$ and $g(b)$.</p>
+                            <p class="mt-2 text-slate-600">The key is to distinguish between domain values (the x-values, or inputs) and range values (the y-values, or outputs). The theorem guarantees a y-value exists, and the corresponding x-value (c) is in the domain interval.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Let $g$ be a continuous function on the closed interval $[-1, 3]$, where $g(-1)=2$ and $g(3)=-5$. Which of the following is guaranteed by the Intermediate Value Theorem?</p>
+                            <ul class="list-disc list-inside mt-4 space-y-2 text-slate-600">
+                                <li>$g(c) = -7$ for at least one c between -1 and 3</li>
+                                <li>$g(c) = 0$ for at least one c between -1 and 3</li>
+                                <li>$g(c) = -3$ for at least one c between -5 and -2</li>
+                                <li>$g(c) = 0$ for at least one c between -5 and 2</li>
+                            </ul>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. Identify the domain interval (the x-values): $[-1, 3]$.</p>
+                                <p class="mt-2 text-slate-600">2. Identify the range of y-values at the endpoints: from $g(-1)=2$ to $g(3)=-5$. This means the function must hit every y-value between -5 and 2.</p>
+                                <p class="mt-2 text-slate-600">3. The IVT guarantees that for any y-value $k$ in the interval $[-5, 2]$, there is an x-value $c$ in the interval $[-1, 3]$ such that $g(c)=k$.</p>
+                                <p class="mt-2 text-slate-600">4. Let's check the options:</p>
+                                <ul class="list-decimal list-inside mt-2 space-y-1 text-slate-600">
+                                    <li>Is $g(c)=-7$ guaranteed? No, -7 is not between -5 and 2.</li>
+                                    <li>Is $g(c)=0$ guaranteed? Yes, 0 is between -5 and 2, and the theorem says the c-value will be between -1 and 3. This fits perfectly.</li>
+                                    <li>The last two options confuse the domain and range intervals. The c-value must be in the domain interval $[-1, 3]$.</li>
+                                </ul>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: $g(c)=0$ for at least one c between -1 and 3.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topic: Exponent Rules -->
+                <section id="topic-exponents">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Exponent Rules</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">Exponent rules are essential for simplifying expressions, especially with the number $e$. Key rules include:</p>
+                            <ul class="list-disc list-inside mt-2 text-slate-600 space-y-1">
+                                <li><strong>Negative Exponent:</strong> $x^{-a} = \frac{1}{x^a}$. For example, $e^{-1} = \frac{1}{e}$.</li>
+                                <li><strong>Product Rule:</strong> $x^a \cdot x^b = x^{a+b}$.</li>
+                                <li><strong>Quotient Rule:</strong> $\frac{x^a}{x^b} = x^{a-b}$.</li>
+                            </ul>
+                            <div class="mt-4 p-4 bg-amber-50 rounded-lg">
+                                <p class="font-semibold text-amber-800">Gut Check!</p>
+                                <p class="text-amber-700">If you forget a rule, test it with simple numbers. Is $2^5 / 2^3$ equal to $2^{5-3}=2^2=4$ or $2^{5/3}$? The first one is correct ($32/8=4$). This can save you from a mistake!</p>
+                            </div>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Let $f(x)=\frac{x+1}{xe^{x}+e^{x}}$ when $x\ne-1$. If $f$ is continuous, find $f(-1)$.</p>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. For $f$ to be continuous, $f(-1)$ must be equal to $\lim_{x\rightarrow -1} f(x)$. We need to find this limit.</p>
+                                <p class="mt-2 text-slate-600">2. Direct substitution gives $\frac{0}{0}$. We need to simplify. Factor the denominator: $xe^x + e^x = e^x(x+1)$.</p>
+                                <p class="mt-2 text-slate-600">3. Rewrite and cancel: $\lim_{x\rightarrow -1} \frac{x+1}{e^x(x+1)} = \lim_{x\rightarrow -1} \frac{1}{e^x}$.</p>
+                                <p class="mt-2 text-slate-600">4. Now substitute $x=-1$: $\frac{1}{e^{-1}}$.</p>
+                                <p class="mt-2 text-slate-600">5. Use the negative exponent rule: $\frac{1}{e^{-1}} = e^1 = e$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: $e$.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Topic: Trig Identities -->
+                <section id="topic-trig-limits">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Trig Identities in Limits</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">Just like with factoring, if you get $\frac{0}{0}$ in a trig limit, look for an identity to simplify the expression. A common one is the **double angle formula for sine**: $sin(2x) = 2sin(x)cos(x)$.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Find $\lim_{x\rightarrow \frac{\pi}{2}}\frac{sin(2x)}{cos(x)}$.</p>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. Direct substitution: $\frac{sin(\pi)}{cos(\pi/2)} = \frac{0}{0}$. Time for an identity.</p>
+                                <p class="mt-2 text-slate-600">2. Apply the double angle formula to the numerator: $sin(2x) = 2sin(x)cos(x)$.</p>
+                                <p class="mt-2 text-slate-600">3. Rewrite the limit and cancel: $\lim_{x\rightarrow \frac{\pi}{2}}\frac{2sin(x)cos(x)}{cos(x)} = \lim_{x\rightarrow \frac{\pi}{2}} 2sin(x)$.</p>
+                                <p class="mt-2 text-slate-600">4. Now substitute $x=\frac{\pi}{2}$: $2sin(\frac{\pi}{2}) = 2(1) = 2$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: 2.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topic: Absolute Value -->
+                <section id="topic-absolute-value">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Limits with Absolute Value</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">The key to limits involving $\sqrt{x^2}$ is to remember that $\sqrt{x^2} = |x|$. The absolute value function is piecewise:</p>
+                            <p class="mt-4 text-center text-lg font-mono bg-slate-100 p-4 rounded-md">$|x| = \begin{cases} x & \text{if } x \ge 0 \\ -x & \text{if } x < 0 \end{cases}$</p>
+                            <p class="mt-4 text-slate-600">This is CRITICAL for limits to $-\infty$. When $x$ is a large negative number, $|x| = -x$.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Find $\lim_{x\rightarrow -\infty}\frac{\sqrt{9x^{2}+2}}{2x-9}$.</p>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. We are finding a limit at infinity, so we care about the terms with the highest power of $x$ (the dominant terms).</p>
+                                <p class="mt-2 text-slate-600">2. In the numerator, for very large negative values of $x$, the $+2$ is insignificant. So, $\sqrt{9x^2+2}$ behaves like $\sqrt{9x^2}$.</p>
+                                <p class="mt-2 text-slate-600">3. Here's the key step: $\sqrt{9x^2} = \sqrt{9}\sqrt{x^2} = 3|x|$.</p>
+                                <p class="mt-2 text-slate-600">4. Since the limit is to $-\infty$, $x$ is a negative number. By the definition of absolute value, if $x < 0$, then $|x| = -x$. So, the numerator behaves like $3(-x) = -3x$.</p>
+                                <p class="mt-2 text-slate-600">5. In the denominator, the $-9$ is insignificant, so $2x-9$ behaves like $2x$.</p>
+                                <p class="mt-2 text-slate-600">6. Now we can evaluate the limit of the dominant terms: $\lim_{x\rightarrow -\infty}\frac{-3x}{2x} = -\frac{3}{2}$.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: -3/2.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Topic: Limits from Tables -->
+                <section id="topic-tables">
+                    <h3 class="text-3xl font-bold text-slate-900 mb-4 border-b pb-2">Approximating Limits from Tables</h3>
+                    <div class="bg-white p-8 rounded-xl shadow-md space-y-6">
+                        <div>
+                            <h4 class="font-semibold text-xl text-slate-800">The Key Idea</h4>
+                            <p class="mt-2 text-slate-600">To estimate a limit $\lim_{x\rightarrow c} g(x)$, you need to see what happens to $g(x)$ as $x$ gets *arbitrarily close* to $c$ from *both sides*. A good table will show x-values that "pinch" or "squeeze" in on $c$.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-6 rounded-lg">
+                            <h4 class="font-semibold text-lg text-indigo-800">Sample Problem</h4>
+                            <p class="mt-2 text-slate-700 font-medium">Given the function $g$ and asked to estimate $\lim_{x\rightarrow 4} g(x)$, three students created tables. Which one is the best for approximating the limit?</p>
+                            <!-- Visual representation of the tables -->
+                            <div class="mt-4 space-y-4">
+                                <div class="p-4 border rounded-lg bg-green-100 border-green-300">
+                                    <p class="font-semibold">Table A (Best): 3.9, 3.99, 3.999, 4.001, 4.01, 4.1</p>
+                                    <p class="text-sm text-green-800">This table correctly "squeezes" the value 4 from both sides.</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-red-100 border-red-300">
+                                    <p class="font-semibold">Table B (Incorrect): -5, -4.5, -4.1, -4.01, -4, -3.99</p>
+                                    <p class="text-sm text-red-800">This table is centered around -4, not 4.</p>
+                                </div>
+                                <div class="p-4 border rounded-lg bg-orange-100 border-orange-300">
+                                    <p class="font-semibold">Table C (Incomplete): 3, 3.5, 3.75, 3.85, 3.999</p>
+                                    <p class="text-sm text-orange-800">This table only approaches 4 from the left side. It's only good for a one-sided limit.</p>
+                                </div>
+                            </div>
+                             <div class="mt-4 bg-white p-4 rounded-md">
+                                <p class="font-semibold">Solution Walkthrough:</p>
+                                <p class="mt-2 text-slate-600">1. The goal is to find the two-sided limit as $x \rightarrow 4$. This requires us to check values just below 4 (from the left) and just above 4 (from the right).</p>
+                                <p class="mt-2 text-slate-600">2. Table A shows x-values like 3.9, 3.99, 3.999 (approaching from the left) and 4.001, 4.01, 4.1 (approaching from the right). This is exactly what we need to see if the function is approaching the same y-value from both directions.</p>
+                                <p class="mt-2 text-slate-600">3. Table B is centered around -4, so it's irrelevant. Table C only shows values approaching from the left, so it can't be used to determine the two-sided limit.</p>
+                                <p class="mt-2 font-bold text-indigo-700">Answer: The first table (Table A in the original problem) is the best because it shows values approaching 4 from both the left and the right.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const svgNS = "http://www.w3.org/2000/svg";
+            const svg = document.getElementById('unit-circle-svg');
+            const infoPanel = document.getElementById('unit-circle-info');
+
+            // Helper to create SVG elements
+            function createSVGElement(tag, attributes) {
+                const el = document.createElementNS(svgNS, tag);
+                for (const key in attributes) {
+                    el.setAttribute(key, attributes[key]);
+                }
+                return el;
+            }
+
+            // Draw axes and circle
+            svg.appendChild(createSVGElement('line', { x1: -1.2, y1: 0, x2: 1.2, y2: 0, stroke: '#cbd5e1', 'stroke-width': 0.02 }));
+            svg.appendChild(createSVGElement('line', { x1: 0, y1: -1.2, x2: 0, y2: 1.2, stroke: '#cbd5e1', 'stroke-width': 0.02 }));
+            svg.appendChild(createSVGElement('circle', { cx: 0, cy: 0, r: 1, fill: 'none', stroke: '#94a3b8', 'stroke-width': 0.03 }));
+
+            // Define key points on the unit circle
+            const points = [
+                { angle: 0, label: '0' },
+                { angle: Math.PI / 6, label: 'π/6' },
+                { angle: Math.PI / 4, label: 'π/4' },
+                { angle: Math.PI / 3, label: 'π/3' },
+                { angle: Math.PI / 2, label: 'π/2' },
+                { angle: 2 * Math.PI / 3, label: '2π/3' },
+                { angle: 3 * Math.PI / 4, label: '3π/4' },
+                { angle: 5 * Math.PI / 6, label: '5π/6' },
+                { angle: Math.PI, label: 'π' },
+                { angle: 7 * Math.PI / 6, label: '7π/6' },
+                { angle: 5 * Math.PI / 4, label: '5π/4' },
+                { angle: 4 * Math.PI / 3, label: '4π/3' },
+                { angle: 3 * Math.PI / 2, label: '3π/2' },
+                { angle: 5 * Math.PI / 3, label: '5π/3' },
+                { angle: 7 * Math.PI / 4, label: '7π/4' },
+                { angle: 11 * Math.PI / 6, label: '11π/6' }
+            ];
+
+            // Function to format coordinates with plain text
+            function formatCoordPlainText(value) {
+                if (Math.abs(value) < 1e-9) return '0';
+                if (Math.abs(value - 1) < 1e-9) return '1';
+                if (Math.abs(value + 1) < 1e-9) return '-1';
+                if (Math.abs(value - 0.5) < 1e-9) return '1/2';
+                if (Math.abs(value + 0.5) < 1e-9) return '-1/2';
+                if (Math.abs(value - Math.sqrt(2)/2) < 1e-9) return 'sqrt(2)/2';
+                if (Math.abs(value + Math.sqrt(2)/2) < 1e-9) return '-sqrt(2)/2';
+                if (Math.abs(value - Math.sqrt(3)/2) < 1e-9) return 'sqrt(3)/2';
+                if (Math.abs(value + Math.sqrt(3)/2) < 1e-9) return '-sqrt(3)/2';
+                return value.toFixed(3);
+            }
+
+            // Draw points and labels
+            points.forEach(p => {
+                const x = Math.cos(p.angle);
+                const y = Math.sin(p.angle);
+
+                // Draw the point
+                const point = createSVGElement('circle', {
+                    cx: x,
+                    cy: -y, // Use -y because SVG y-axis is inverted
+                    r: 0.05,
+                    fill: '#4f46e5',
+                    class: 'unit-circle-point'
+                });
+                
+                // Store data on the element
+                point.dataset.angleRad = p.label;
+                point.dataset.angleDeg = (p.angle * 180 / Math.PI).toFixed(0);
+                point.dataset.cos = formatCoordPlainText(x);
+                point.dataset.sin = formatCoordPlainText(y);
+
+                point.addEventListener('click', () => {
+                    // This class is now only for tracking, not styling.
+                    // It's not strictly necessary with the simplified version, but doesn't hurt.
+                    document.querySelectorAll('.unit-circle-point.selected').forEach(pt => pt.classList.remove('selected'));
+                    point.classList.add('selected');
+
+                    // Update the info panel with plain text
+                    infoPanel.innerHTML = `
+                        <div class="text-center">
+                            <p class="text-lg font-semibold text-slate-700">Angle</p>
+                            <p class="text-2xl font-bold text-indigo-600">${point.dataset.angleRad} <span class="text-lg text-slate-500 font-medium">(${point.dataset.angleDeg}°)</span></p>
+                        </div>
+                        <div class="mt-4 text-center">
+                            <p class="text-lg font-semibold text-slate-700">Coordinates (cos(θ), sin(θ))</p>
+                            <p class="text-xl font-mono font-bold text-indigo-600">(${point.dataset.cos}, ${point.dataset.sin})</p>
+                        </div>
+                    `;
+                });
+
+                svg.appendChild(point);
+            });
+        });
+    </script>
+</body>
+</html>
