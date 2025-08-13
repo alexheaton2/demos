@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math 140: Calculus</title>
+    <!-- This script includes Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- This links to the Inter font family for a clean, modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* A little custom style to use the Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
 
+    <div class="container mx-auto px-4 py-8 md:py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <!-- Course code and title -->
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Math 140: Calculus</h1>
+            <!-- Semester/year and professor's name -->
+            <p class="text-lg text-gray-600 mt-2">Fall 2025 | Professor Alexander Heaton</p>
+        </header>
+
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+
+            <!-- Presentations Section -->
+            <section class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Presentations</h2>
+                <ul class="space-y-3">
+                    <!-- 
+                        NOTE: The links below point to filenames with spaces. 
+                        While this works, it's generally better practice to use hyphens or underscores 
+                        instead of spaces in URLs (e.g., "Presentation-Unit-1.html").
+                    -->
+                    <li><a href="Lang-Chapter1-Overview.html" class="text-blue-600 hover:text-blue-800 hover:underline">Overview of Chapter 1: Vectors</a></li>
+                </ul>
+            </section>
+
+            <!-- Interactive Demonstrations Section -->
+            <section class="bg-white p-6 rounded-lg shadow-md">
+                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Interactive Demonstrations</h2>
+                <ul class="space-y-3">
+                    <li><a href="LimitExamples.html" class="text-blue-600 hover:text-blue-800 hover:underline">Several Examples of Limits</a></li>
+                    <li><a href="Limit of Three Points.html" class="text-blue-600 hover:text-blue-800 hover:underline">A Limit of Three Points</a></li>
+                    <li><a href="dAlembert Wave Demo.html" class="text-blue-600 hover:text-blue-800 hover:underline">d'Alembert Waves and the Chain Rule</a></li>
+                    <li><a href="Heat Equation.html" class="text-blue-600 hover:text-blue-800 hover:underline">The Heat Equation</a></li>
+                    <li><a href="Separable Functions.html" class="text-blue-600 hover:text-blue-800 hover:underline">Separable Functions</a></li>
+                    <!-- Add more links to demonstrations here as you create them -->
+                </ul>
+            </section>
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 text-gray-500">
+            <p>&copy; 2025 Lawrence University. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>
