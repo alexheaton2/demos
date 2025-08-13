@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Math 140: Calculus</title>
+    <title>Alex Heaton | Lawrence University</title>
     <!-- This script includes Tailwind CSS for styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- This links to the Inter font family for a clean, modern look -->
@@ -15,6 +15,11 @@
         body {
             font-family: 'Inter', sans-serif;
         }
+        /* Custom style for a subtle hover effect on the course cards */
+        .course-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
@@ -22,56 +27,56 @@
     <div class="container mx-auto px-4 py-8 md:py-12">
 
         <!-- Header Section -->
-        <header class="text-center mb-10">
-            <!-- Course code and title -->
-            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Math 140: Calculus</h1>
-            <!-- Semester/year and professor's name -->
-            <p class="text-lg text-gray-600 mt-2">Fall 2025 | Professor Alexander Heaton</p>
+        <header class="text-center mb-12">
+            <!-- Professor's name -->
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Professor Alexander Heaton</h1>
+            <!-- University affiliation -->
+            <p class="text-lg text-gray-600 mt-2">Department of Mathematics | Lawrence University</p>
         </header>
 
+        <!-- Main Content: Course Selection -->
+        <main>
+            <div class="max-w-4xl mx-auto">
+                <h2 class="text-2xl font-semibold mb-6 text-center">Course Pages</h2>
+                
+                <!-- Grid for Course Links -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-        <!-- Main Content Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Active Course: Math 140 -->
+                    <a href="math140/index.html" class="block p-6 bg-white rounded-lg shadow-md transition-all duration-300 course-card">
+                        <h3 class="text-xl font-bold text-blue-700">Math 140</h3>
+                        <p class="text-gray-600 mt-1">Calculus</p>
+                    </a>
 
-            <!-- Presentations Section -->
-            <section class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Presentations</h2>
-                <ul class="space-y-3">
+                    <!-- Placeholder for a future course -->
+                    <div class="block p-6 bg-white rounded-lg shadow-md transition-all duration-300 course-card opacity-50 cursor-not-allowed">
+                        <h3 class="text-xl font-bold text-gray-700">Math 220</h3>
+                        <p class="text-gray-600 mt-1">Linear Algebra</p>
+                        <span class="text-xs text-gray-500 italic mt-2 block">(Coming Soon)</span>
+                    </div>
+
+                    <!-- Placeholder for another future course -->
+                    <div class="block p-6 bg-white rounded-lg shadow-md transition-all duration-300 course-card opacity-50 cursor-not-allowed">
+                        <h3 class="text-xl font-bold text-gray-700">COSC 150</h3>
+                        <p class="text-gray-600 mt-1">Intro to Programming</p>
+                        <span class="text-xs text-gray-500 italic mt-2 block">(Coming Soon)</span>
+                    </div>
+
+                    <!-- You can add more course cards here as you create them -->
                     <!-- 
-                        NOTE: The links below point to filenames with spaces. 
-                        While this works, it's generally better practice to use hyphens or underscores 
-                        instead of spaces in URLs (e.g., "Presentation-Unit-1.html").
+                    Example of another course card to add:
+                    <a href="your-course-folder/index.html" class="block p-6 bg-white rounded-lg shadow-md transition-all duration-300 course-card">
+                        <h3 class="text-xl font-bold text-blue-700">Math XXX</h3>
+                        <p class="text-gray-600 mt-1">Course Title</p>
+                    </a>
                     -->
-                    <li><a href="Presentation Unit 1.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 1</a></li>
-                    <li><a href="Presentation Unit 2.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 2</a></li>
-                    <li><a href="Presentation Unit 3.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 3</a></li>
-                    <li><a href="Presentation Unit 4.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 4</a></li>
-                    <li><a href="Presentation Unit 5.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 5</a></li>
-                    <li><a href="Presentation Unit 6.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 6</a></li>
-                    <li><a href="Presentation Unit 7.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 7</a></li>
-                    <li><a href="Presentation Unit 8.html" class="text-blue-600 hover:text-blue-800 hover:underline">Presentation Unit 8</a></li>
-                    <li><a href="Key Calculus Examples.html" class="text-blue-600 hover:text-blue-800 hover:underline">Key Calculus Examples</a></li>
-                    <li><a href="Unit1PriorKnowledge.html" class="text-blue-600 hover:text-blue-800 hover:underline">Prior Knowledge for Unit 1</a></li>
-                </ul>
-            </section>
 
-            <!-- Interactive Demonstrations Section -->
-            <section class="bg-white p-6 rounded-lg shadow-md">
-                <h2 class="text-2xl font-semibold mb-4 border-b pb-2">Interactive Demonstrations</h2>
-                <ul class="space-y-3">
-                    <li><a href="LimitExamples.html" class="text-blue-600 hover:text-blue-800 hover:underline">Several Examples of Limits</a></li>
-                    <li><a href="Limit of Three Points.html" class="text-blue-600 hover:text-blue-800 hover:underline">A Limit of Three Points</a></li>
-                    <li><a href="dAlembert Wave Demo.html" class="text-blue-600 hover:text-blue-800 hover:underline">d'Alembert Waves and the Chain Rule</a></li>
-                    <li><a href="Heat Equation.html" class="text-blue-600 hover:text-blue-800 hover:underline">The Heat Equation</a></li>
-                    <li><a href="Separable Functions.html" class="text-blue-600 hover:text-blue-800 hover:underline">Separable Functions</a></li>
-                    <!-- Add more links to demonstrations here as you create them -->
-                </ul>
-            </section>
-
-        </div>
+                </div>
+            </div>
+        </main>
 
         <!-- Footer -->
-        <footer class="text-center mt-12 text-gray-500">
+        <footer class="text-center mt-16 text-gray-500">
             <p>&copy; 2025 Lawrence University. All rights reserved.</p>
         </footer>
 
