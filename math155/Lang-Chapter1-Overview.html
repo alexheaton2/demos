@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Presentation: Chapter 1 - Vectors</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overscroll-behavior: none;
+        }
+        .slide {
+            display: none;
+        }
+        .slide.active {
+            display: block;
+        }
+        .question-slide {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            height: 80vh;
+        }
+        .visualization-slide {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 90vh;
+        }
+        canvas {
+            background-color: #f7fafc;
+            border-radius: 0.5rem;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+        }
+        .three-canvas-container {
+             width: 100%;
+             height: 100%;
+             max-width: 600px;
+             max-height: 500px;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800 antialiased">
+
+    <div id="presentation-container" class="container mx-auto p-4 md:p-8">
+
+        <!-- Slide 1: Title -->
+        <div id="slide-1" class="slide active">
+            <div class="question-slide">
+                <h1 class="text-4xl md:text-6xl font-bold text-blue-600 mb-4">Calculus of Several Variables</h1>
+                <h2 class="text-2xl md:text-4xl font-semibold text-gray-700">Chapter 1: Vectors</h2>
+                <p class="mt-8 text-lg text-gray-500">An Intuitive Introduction</p>
+            </div>
+        </div>
+
+        <!-- Slide 2: Question 1 -->
+        <div id="slide-2" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">What is a vector...</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">...and how is it different from a regular number (a scalar)?</p>
+            </div>
+        </div>
+
+        <!-- Slide 3: Visualization 1 - What is a Vector? -->
+        <div id="slide-3" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Visualizing a Vector</h3>
+                <canvas id="vector-canvas" width="500" height="400"></canvas>
+                <div id="vector-info" class="mt-4 text-lg font-mono bg-white p-4 rounded-lg shadow-md"></div>
+                <p class="mt-2 text-sm text-gray-500">Click and drag inside the canvas to change the vector.</p>
+            </div>
+        </div>
+
+        <!-- Slide 4: Question 2 -->
+        <div id="slide-4" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How do we combine vectors?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">What does it mean to add or subtract them?</p>
+            </div>
+        </div>
+
+        <!-- Slide 5: Visualization 2 - Vector Operations -->
+        <div id="slide-5" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Vector Operations</h3>
+                 <div class="flex items-center space-x-4 mb-4">
+                    <button id="add-btn" class="px-4 py-2 bg-blue-500 text-white rounded-md shadow-sm hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">Addition (A + B)</button>
+                    <button id="sub-btn" class="px-4 py-2 bg-red-500 text-white rounded-md shadow-sm hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">Subtraction (A - B)</button>
+                    <div class="flex items-center space-x-2 border-l pl-4">
+                        <input type="checkbox" id="parallelogram-toggle" class="h-4 w-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500">
+                        <label for="parallelogram-toggle" class="text-sm font-medium text-gray-700">Show Parallelogram</label>
+                    </div>
+                </div>
+                <canvas id="ops-canvas" width="500" height="400"></canvas>
+                <p class="mt-2 text-sm text-gray-500">Drag the <span class="text-blue-500 font-bold">blue (A)</span> and <span class="text-red-500 font-bold">red (B)</span> vectors.</p>
+            </div>
+        </div>
+        
+        <!-- Slide 6: Question 3 -->
+        <div id="slide-6" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">What happens when you multiply a vector by a number?</h2>
+                 <p class="mt-4 text-xl md:text-2xl text-gray-500">This is called "scalar multiplication".</p>
+            </div>
+        </div>
+
+        <!-- Slide 7: Visualization 3 - Scalar Multiplication -->
+        <div id="slide-7" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Scalar Multiplication</h3>
+                <canvas id="scalar-canvas" width="500" height="400"></canvas>
+                <div class="mt-4 w-full max-w-md">
+                    <label for="scalar-slider" class="block text-center text-lg">Scalar (c): <span id="scalar-value" class="font-bold">1.0</span></label>
+                    <input id="scalar-slider" type="range" min="-2" max="2" value="1" step="0.1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+                 <p class="mt-2 text-sm text-gray-500">Adjust the slider to scale the vector.</p>
+            </div>
+        </div>
+
+        <!-- Slide 8: Question 4 -->
+        <div id="slide-8" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How can we describe a vector's direction, regardless of its length?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">This leads to the idea of a "unit vector".</p>
+            </div>
+        </div>
+
+        <!-- Slide 9: Visualization 4 - Unit Vectors -->
+        <div id="slide-9" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Unit Vectors</h3>
+                <canvas id="unit-vector-canvas" width="500" height="400"></canvas>
+                <div id="unit-vector-info" class="mt-4 text-sm font-mono bg-white p-4 rounded-lg shadow-md"></div>
+                <p class="mt-2 text-sm text-gray-500">Drag the <span class="text-blue-500 font-bold">blue vector</span>. The <span class="text-yellow-500 font-bold">orange vector</span> is its unit vector.</p>
+            </div>
+        </div>
+
+        <!-- Slide 10: Question 5 -->
+        <div id="slide-10" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">What is a "dot product"?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">What does this special type of multiplication tell us about two vectors?</p>
+            </div>
+        </div>
+
+        <!-- Slide 11: Visualization 5 - The Dot Product -->
+        <div id="slide-11" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">The Dot Product</h3>
+                <canvas id="dot-canvas" width="500" height="400"></canvas>
+                 <div id="dot-info" class="mt-4 text-lg font-mono bg-white p-4 rounded-lg shadow-md text-center"></div>
+                <p class="mt-2 text-sm text-gray-500">Drag the <span class="text-blue-500 font-bold">blue</span> and <span class="text-red-500 font-bold">red</span> vectors and observe.</p>
+            </div>
+        </div>
+
+        <!-- Slide 12: Question 6 -->
+        <div id="slide-12" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How can we find the "shadow" that one vector casts onto another?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">This is the concept of vector projection.</p>
+            </div>
+        </div>
+
+        <!-- Slide 13: Visualization 6 - Vector Projection -->
+        <div id="slide-13" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Vector Projection</h3>
+                <canvas id="projection-canvas" width="500" height="400"></canvas>
+                <div id="projection-info" class="mt-4 text-lg font-mono bg-white p-4 rounded-lg shadow-md text-center">
+                    Projection of A onto B: <br> P = (A &sdot; B / B &sdot; B) * B
+                </div>
+                <p class="mt-2 text-sm text-gray-500">Drag the <span class="text-blue-500 font-bold">blue (A)</span> and <span class="text-red-500 font-bold">red (B)</span> vectors.</p>
+            </div>
+        </div>
+
+        <!-- Slide 14: Question 7 -->
+        <div id="slide-14" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How can we use vectors to trace out a line in the plane?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">This is called a "parametric line".</p>
+            </div>
+        </div>
+
+        <!-- Slide 15: Visualization 7 - Parametric Lines in 2D -->
+        <div id="slide-15" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-2">Parametric Line in the Plane</h3>
+                <p class="text-lg font-mono mb-2">X(t) = P + tA</p>
+                <canvas id="parametric-2d-canvas" width="500" height="350"></canvas>
+                <div class="mt-4 w-full max-w-md">
+                    <label for="t-slider-2d" class="block text-center text-lg">Parameter (t): <span id="t-value-2d" class="font-bold">1.0</span></label>
+                    <input id="t-slider-2d" type="range" min="-2" max="2" value="1" step="0.1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                </div>
+                <p class="mt-2 text-sm text-gray-500">Drag the <span class="text-green-500 font-bold">position vector (P)</span> and the <span class="text-orange-500 font-bold">direction vector (A)</span>.</p>
+            </div>
+        </div>
+
+        <!-- Slide 16: Question 8 -->
+        <div id="slide-16" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How can we describe points and lines in space?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">Let's extend the idea to 3D.</p>
+            </div>
+        </div>
+
+        <!-- Slide 17: Visualization 8 - Parametric Lines in 3D -->
+        <div id="slide-17" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Parametric Lines in 3D</h3>
+                <div class="three-canvas-container bg-white rounded-lg shadow-md mb-4" id="three-container-parametric">
+                    <canvas id="three-canvas-parametric"></canvas>
+                </div>
+                 <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 w-full max-w-2xl">
+                    <div class="flex-1 w-full">
+                        <label for="line-select" class="block text-sm font-medium text-gray-700">Choose an Example Line:</label>
+                        <select id="line-select" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                            <option value="0">Line 1: P=(1,2,1), v=&lt;-2,-1,1&gt;</option>
+                            <option value="1">Line 2: P=(-2,1,3), v=&lt;3,1,-2&gt;</option>
+                            <option value="2">Line 3: P=(3,-1,-1), v=&lt;-1,2,2&gt;</option>
+                        </select>
+                    </div>
+                    <div class="flex-1 w-full">
+                         <label for="t-slider-3d" class="block text-center text-lg">Parameter (t): <span id="t-value-3d" class="font-bold">0.0</span></label>
+                         <input id="t-slider-3d" type="range" min="-2" max="2" value="0" step="0.1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slide 18: Question 9 -->
+        <div id="slide-18" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How else can we define a line, using perpendicularity?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">This gives an "implicit" equation of a line.</p>
+            </div>
+        </div>
+
+        <!-- Slide 19: Visualization 9 - Implicitly Defined Lines -->
+        <div id="slide-19" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-2">Implicitly Defined Line</h3>
+                <canvas id="implicit-line-canvas" width="500" height="350"></canvas>
+                <div id="implicit-line-info" class="mt-4 text-lg font-mono bg-white p-4 rounded-lg shadow-md text-center"></div>
+                <p class="mt-2 text-sm text-gray-500">Drag the <span class="text-purple-600 font-bold">normal vector (N)</span> and the <span class="text-green-500 font-bold">point on the line (P)</span>.</p>
+            </div>
+        </div>
+
+        <!-- Slide 20: Question 10 -->
+        <div id="slide-20" class="slide">
+            <div class="question-slide">
+                <h2 class="text-3xl md:text-5xl font-semibold text-gray-700">How does this extend to defining a plane in 3-space?</h2>
+                <p class="mt-4 text-xl md:text-2xl text-gray-500">A plane is the set of all points perpendicular to a normal vector.</p>
+            </div>
+        </div>
+
+        <!-- Slide 21: Visualization 10 - Implicitly Defined Planes -->
+        <div id="slide-21" class="slide">
+            <div class="visualization-slide">
+                <h3 class="text-2xl font-bold mb-4">Implicitly Defined Plane</h3>
+                <div class="three-canvas-container bg-white rounded-lg shadow-md mb-4" id="three-container-implicit">
+                    <canvas id="three-canvas-implicit"></canvas>
+                </div>
+                <div class="flex flex-col md:flex-row items-center space-y-2 md:space-y-0 md:space-x-4 w-full max-w-2xl">
+                    <select id="plane-select" class="block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md">
+                        <option value="0">Plane 1: N=&lt;1,1,1&gt;, P=(1,1,1)</option>
+                        <option value="1">Plane 2: N=&lt;2,-1,3&gt;, P=(1,2,0)</option>
+                        <option value="2">Plane 3: N=&lt;0,1,0&gt;, P=(0,-2,0)</option>
+                    </select>
+                </div>
+                <div id="implicit-plane-info" class="mt-4 text-lg font-mono bg-white p-4 rounded-lg shadow-md text-center"></div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <div class="fixed bottom-0 left-0 right-0 bg-white border-t p-4 shadow-md">
+            <div class="container mx-auto flex justify-between items-center">
+                <button id="prev-btn" class="px-6 py-2 bg-gray-300 text-gray-700 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed" disabled>Previous</button>
+                <div id="slide-counter" class="text-gray-600"></div>
+                <button id="next-btn" class="px-6 py-2 bg-blue-600 text-white rounded-md shadow-sm hover:bg-blue-700 focus:outline-none">Next</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Presentation Logic ---
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const slideCounter = document.getElementById('slide-counter');
+            let currentSlide = 0;
+
+            function updateSlide() {
+                slides.forEach((slide, index) => {
+                    slide.classList.toggle('active', index === currentSlide);
+                });
+                prevBtn.disabled = currentSlide === 0;
+                nextBtn.disabled = currentSlide === slides.length - 1;
+                slideCounter.textContent = `Slide ${currentSlide + 1} of ${slides.length}`;
+                
+                // Trigger animations/initialization for specific slides
+                if (slides[currentSlide].id === 'slide-3') initVectorVis();
+                if (slides[currentSlide].id === 'slide-5') initOpsVis();
+                if (slides[currentSlide].id === 'slide-7') initScalarVis();
+                if (slides[currentSlide].id === 'slide-9') initUnitVectorVis();
+                if (slides[currentSlide].id === 'slide-11') initDotVis();
+                if (slides[currentSlide].id === 'slide-13') initProjectionVis();
+                if (slides[currentSlide].id === 'slide-15') initParametric2DVis();
+                if (slides[currentSlide].id === 'slide-17') initThreeParametricVis();
+                if (slides[currentSlide].id === 'slide-19') initImplicitLineVis();
+                if (slides[currentSlide].id === 'slide-21') initImplicitPlaneVis();
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < slides.length - 1) {
+                    currentSlide++;
+                    updateSlide();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    updateSlide();
+                }
+            });
+            
+            updateSlide();
+
+            // --- Visualization Helper Functions ---
+            function drawArrow(ctx, fromx, fromy, tox, toy, color) {
+                const headlen = 10;
+                const dx = tox - fromx;
+                const dy = toy - fromy;
+                const angle = Math.atan2(dy, dx);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                ctx.moveTo(fromx, fromy);
+                ctx.lineTo(tox, toy);
+                ctx.lineTo(tox - headlen * Math.cos(angle - Math.PI / 6), toy - headlen * Math.sin(angle - Math.PI / 6));
+                ctx.moveTo(tox, toy);
+                ctx.lineTo(tox - headlen * Math.cos(angle + Math.PI / 6), toy - headlen * Math.sin(angle + Math.PI / 6));
+                ctx.stroke();
+            }
+            
+            function drawGrid(ctx, w, h, step) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#e2e8f0';
+                ctx.lineWidth = 1;
+                for (let x = 0; x <= w; x += step) {
+                    ctx.moveTo(x, 0);
+                    ctx.lineTo(x, h);
+                }
+                for (let y = 0; y <= h; y += step) {
+                    ctx.moveTo(0, y);
+                    ctx.lineTo(w, y);
+                }
+                ctx.stroke();
+            }
+
+            // --- All visualization init functions ---
+            
+            function initVectorVis() {
+                const canvas = document.getElementById('vector-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const info = document.getElementById('vector-info');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                let vector = { x: 100, y: -80 };
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, 20);
+                    ctx.strokeStyle = '#9ca3af';
+                    ctx.lineWidth = 2;
+                    ctx.beginPath();
+                    ctx.moveTo(0, origin.y);
+                    ctx.lineTo(canvas.width, origin.y);
+                    ctx.moveTo(origin.x, 0);
+                    ctx.lineTo(origin.x, canvas.height);
+                    ctx.stroke();
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vector.x, origin.y + vector.y, '#3b82f6');
+                    const magnitude = Math.sqrt(vector.x**2 + vector.y**2).toFixed(1);
+                    info.innerHTML = `Vector: &lt;${vector.x.toFixed(0)}, ${-vector.y.toFixed(0)}&gt; <br> Magnitude: ${magnitude}`;
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const onMouseMove = (e) => {
+                         const mouseX = e.clientX - rect.left;
+                         const mouseY = e.clientY - rect.top;
+                         vector.x = mouseX - origin.x;
+                         vector.y = mouseY - origin.y;
+                         draw();
+                    };
+                    const onMouseUp = () => {
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                    };
+                    onMouseMove(e);
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
+                draw();
+            }
+
+            function initOpsVis() {
+                const canvas = document.getElementById('ops-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                const parallelogramToggle = document.getElementById('parallelogram-toggle');
+                let vecA = { x: 100, y: -50 };
+                let vecB = { x: 60, y: 80 };
+                let mode = 'add';
+                let dragging = null;
+                document.getElementById('add-btn').addEventListener('click', () => { mode = 'add'; draw(); });
+                document.getElementById('sub-btn').addEventListener('click', () => { mode = 'sub'; draw(); });
+                parallelogramToggle.addEventListener('change', draw);
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, 20);
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecA.x, origin.y + vecA.y, '#3b82f6');
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecB.x, origin.y + vecB.y, '#ef4444');
+                    if (parallelogramToggle.checked) {
+                        ctx.setLineDash([5, 5]);
+                        ctx.strokeStyle = '#9ca3af';
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(origin.x + vecA.x, origin.y + vecA.y);
+                        ctx.lineTo(origin.x + vecA.x + vecB.x, origin.y + vecA.y + vecB.y);
+                        ctx.moveTo(origin.x + vecB.x, origin.y + vecB.y);
+                        ctx.lineTo(origin.x + vecA.x + vecB.x, origin.y + vecA.y + vecB.y);
+                        ctx.stroke();
+                        ctx.setLineDash([]);
+                    }
+                    if (mode === 'add') {
+                        drawArrow(ctx, origin.x, origin.y, origin.x + vecA.x + vecB.x, origin.y + vecA.y + vecB.y, '#10b981');
+                    } else {
+                        drawArrow(ctx, origin.x + vecB.x, origin.y + vecB.y, origin.x + vecA.x, origin.y + vecA.y, '#10b981');
+                    }
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const distA = Math.hypot(mouseX - (origin.x + vecA.x), mouseY - (origin.y + vecA.y));
+                    const distB = Math.hypot(mouseX - (origin.x + vecB.x), mouseY - (origin.y + vecB.y));
+                    if (distA < 15) dragging = 'A';
+                    else if (distB < 15) dragging = 'B';
+                    else dragging = null;
+                    if (dragging) {
+                        const onMouseMove = (e) => {
+                             const mouseX = e.clientX - rect.left;
+                             const mouseY = e.clientY - rect.top;
+                             if (dragging === 'A') {
+                                 vecA.x = mouseX - origin.x;
+                                 vecA.y = mouseY - origin.y;
+                             } else {
+                                 vecB.x = mouseX - origin.x;
+                                 vecB.y = mouseY - origin.y;
+                             }
+                             draw();
+                        };
+                        const onMouseUp = () => {
+                            document.removeEventListener('mousemove', onMouseMove);
+                            document.removeEventListener('mouseup', onMouseUp);
+                        };
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp);
+                    }
+                });
+                draw();
+            }
+            
+            function initScalarVis() {
+                const canvas = document.getElementById('scalar-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const slider = document.getElementById('scalar-slider');
+                const valueLabel = document.getElementById('scalar-value');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                const baseVector = { x: 100, y: -80 };
+                function draw() {
+                    const scalar = parseFloat(slider.value);
+                    valueLabel.textContent = scalar.toFixed(1);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, 20);
+                    ctx.setLineDash([5, 5]);
+                    drawArrow(ctx, origin.x, origin.y, origin.x + baseVector.x, origin.y + baseVector.y, '#9ca3af');
+                    ctx.setLineDash([]);
+                    const scaledVector = { x: baseVector.x * scalar, y: baseVector.y * scalar };
+                    drawArrow(ctx, origin.x, origin.y, origin.x + scaledVector.x, origin.y + scaledVector.y, '#f59e0b');
+                }
+                slider.addEventListener('input', draw);
+                draw();
+            }
+
+            function initUnitVectorVis() {
+                const canvas = document.getElementById('unit-vector-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const info = document.getElementById('unit-vector-info');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                const unitCircleRadius = 50;
+                let vector = { x: 120, y: -90 };
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, 20);
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#d1d5db';
+                    ctx.lineWidth = 1;
+                    ctx.arc(origin.x, origin.y, unitCircleRadius, 0, 2 * Math.PI);
+                    ctx.stroke();
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vector.x, origin.y + vector.y, '#3b82f6');
+                    const magnitude = Math.hypot(vector.x, vector.y);
+                    let unitVector = {x: 0, y: 0};
+                    if (magnitude > 1e-6) {
+                        unitVector.x = vector.x / magnitude;
+                        unitVector.y = vector.y / magnitude;
+                    }
+                    drawArrow(ctx, origin.x, origin.y, origin.x + unitVector.x * unitCircleRadius, origin.y + unitVector.y * unitCircleRadius, '#f59e0b');
+                    info.innerHTML = `Vector A: &lt;${(vector.x/unitCircleRadius).toFixed(2)}, ${(-vector.y/unitCircleRadius).toFixed(2)}&gt;, ||A|| = ${(magnitude/unitCircleRadius).toFixed(2)}<br>` +
+                                     `Unit Vector u: &lt;${unitVector.x.toFixed(2)}, ${-unitVector.y.toFixed(2)}&gt;, ||u|| = ${Math.hypot(unitVector.x, unitVector.y).toFixed(2)}`;
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const onMouseMove = (e) => {
+                         const mouseX = e.clientX - rect.left;
+                         const mouseY = e.clientY - rect.top;
+                         vector.x = mouseX - origin.x;
+                         vector.y = mouseY - origin.y;
+                         draw();
+                    };
+                    const onMouseUp = () => {
+                        document.removeEventListener('mousemove', onMouseMove);
+                        document.removeEventListener('mouseup', onMouseUp);
+                    };
+                    onMouseMove(e);
+                    document.addEventListener('mousemove', onMouseMove);
+                    document.addEventListener('mouseup', onMouseUp);
+                });
+                draw();
+            }
+
+            function initDotVis() {
+                const canvas = document.getElementById('dot-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const info = document.getElementById('dot-info');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                const scale = 20;
+                let vecA = { x: 6, y: -2 };
+                let vecB = { x: 2, y: 6 };
+                let dragging = null;
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, scale);
+                    const ax = origin.x + vecA.x * scale;
+                    const ay = origin.y - vecA.y * scale;
+                    const bx = origin.x + vecB.x * scale;
+                    const by = origin.y - vecB.y * scale;
+                    drawArrow(ctx, origin.x, origin.y, ax, ay, '#3b82f6');
+                    drawArrow(ctx, origin.x, origin.y, bx, by, '#ef4444');
+                    const dotProduct = vecA.x * vecB.x + vecA.y * vecB.y;
+                    const magA = Math.hypot(vecA.x, vecA.y);
+                    const magB = Math.hypot(vecB.x, vecB.y);
+                    const cosTheta = (magA * magB === 0) ? 0 : dotProduct / (magA * magB);
+                    const angleRad = Math.acos(Math.max(-1, Math.min(1, cosTheta)));
+                    const angleDeg = angleRad * 180 / Math.PI;
+                    info.innerHTML = `A &sdot; B = ${dotProduct.toFixed(2)} <br> Angle: ${angleDeg.toFixed(1)}&deg;`;
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const onMouseMove = (e) => {
+                         const mouseX = e.clientX - rect.left;
+                         const mouseY = e.clientY - rect.top;
+                         const targetX = (mouseX - origin.x) / scale;
+                         const targetY = -(mouseY - origin.y) / scale;
+                         if (dragging === 'A') { vecA.x = targetX; vecA.y = targetY; }
+                         else if (dragging === 'B') { vecB.x = targetX; vecB.y = targetY; }
+                         draw();
+                    };
+                    const onMouseUp = () => document.removeEventListener('mousemove', onMouseMove);
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const ax = origin.x + vecA.x * scale;
+                    const ay = origin.y - vecA.y * scale;
+                    const bx = origin.x + vecB.x * scale;
+                    const by = origin.y - vecB.y * scale;
+                    const distA = Math.hypot(mouseX - ax, mouseY - ay);
+                    const distB = Math.hypot(mouseX - bx, mouseY - by);
+                    if (distA < 15) dragging = 'A';
+                    else if (distB < 15) dragging = 'B';
+                    else dragging = null;
+                    if(dragging) {
+                        onMouseMove(e);
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp, { once: true });
+                    }
+                });
+                draw();
+            }
+
+            function initProjectionVis() {
+                const canvas = document.getElementById('projection-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                let vecA = { x: 120, y: -50 };
+                let vecB = { x: 150, y: 80 };
+                let dragging = null;
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, 20);
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecA.x, origin.y + vecA.y, '#3b82f6'); // A
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecB.x, origin.y + vecB.y, '#ef4444'); // B
+                    const dotProduct = vecA.x * vecB.x + vecA.y * vecB.y;
+                    const bSquared = vecB.x * vecB.x + vecB.y * vecB.y;
+                    let projVec = {x: 0, y: 0};
+                    if (bSquared > 1e-6) {
+                        const scalar = dotProduct / bSquared;
+                        projVec = { x: scalar * vecB.x, y: scalar * vecB.y };
+                    }
+                    drawArrow(ctx, origin.x, origin.y, origin.x + projVec.x, origin.y + projVec.y, '#8b5cf6');
+                    ctx.beginPath();
+                    ctx.setLineDash([5, 5]);
+                    ctx.strokeStyle = '#6b7280';
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(origin.x + vecA.x, origin.y + vecA.y);
+                    ctx.lineTo(origin.x + projVec.x, origin.y + projVec.y);
+                    ctx.stroke();
+                    ctx.setLineDash([]);
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const distA = Math.hypot(mouseX - (origin.x + vecA.x), mouseY - (origin.y + vecA.y));
+                    const distB = Math.hypot(mouseX - (origin.x + vecB.x), mouseY - (origin.y + vecB.y));
+                    if (distA < 15) dragging = 'A';
+                    else if (distB < 15) dragging = 'B';
+                    else dragging = null;
+                    if (dragging) {
+                        const onMouseMove = (e) => {
+                             const mouseX = e.clientX - rect.left;
+                             const mouseY = e.clientY - rect.top;
+                             if (dragging === 'A') { vecA.x = mouseX - origin.x; vecA.y = mouseY - origin.y; }
+                             else { vecB.x = mouseX - origin.x; vecB.y = mouseY - origin.y; }
+                             draw();
+                        };
+                        const onMouseUp = () => document.removeEventListener('mousemove', onMouseMove);
+                        onMouseMove(e);
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp, { once: true });
+                    }
+                });
+                draw();
+            }
+
+            function initParametric2DVis() {
+                const canvas = document.getElementById('parametric-2d-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const tSlider = document.getElementById('t-slider-2d');
+                const tValue = document.getElementById('t-value-2d');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                let vecP = { x: -80, y: 60 };
+                let vecA = { x: 120, y: -40 };
+                let dragging = null;
+                function draw() {
+                    const t = parseFloat(tSlider.value);
+                    tValue.textContent = t.toFixed(1);
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, 20);
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#d1d5db';
+                    ctx.lineWidth = 1;
+                    ctx.moveTo(origin.x + vecP.x - 100 * vecA.x, origin.y + vecP.y - 100 * vecA.y);
+                    ctx.lineTo(origin.x + vecP.x + 100 * vecA.x, origin.y + vecP.y + 100 * vecA.y);
+                    ctx.stroke();
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecP.x, origin.y + vecP.y, '#10b981');
+                    drawArrow(ctx, origin.x + vecP.x, origin.y + vecP.y, origin.x + vecP.x + vecA.x, origin.y + vecP.y + vecA.y, '#f97316');
+                    const vecX = { x: vecP.x + t * vecA.x, y: vecP.y + t * vecA.y };
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecX.x, origin.y + vecX.y, '#3b82f6');
+                    ctx.beginPath();
+                    ctx.fillStyle = '#3b82f6';
+                    ctx.arc(origin.x + vecX.x, origin.y + vecX.y, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+                }
+                tSlider.addEventListener('input', draw);
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const distP = Math.hypot(mouseX - (origin.x + vecP.x), mouseY - (origin.y + vecP.y));
+                    const distA = Math.hypot(mouseX - (origin.x + vecP.x + vecA.x), mouseY - (origin.y + vecP.y + vecA.y));
+                    if (distP < 15) dragging = 'P';
+                    else if (distA < 15) dragging = 'A';
+                    else dragging = null;
+                    if (dragging) {
+                        const onMouseMove = (e) => {
+                             const mouseX = e.clientX - rect.left;
+                             const mouseY = e.clientY - rect.top;
+                             if (dragging === 'P') {
+                                 vecP.x = mouseX - origin.x;
+                                 vecP.y = mouseY - origin.y;
+                             } else {
+                                 vecA.x = (mouseX - origin.x) - vecP.x;
+                                 vecA.y = (mouseY - origin.y) - vecP.y;
+                             }
+                             draw();
+                        };
+                        const onMouseUp = () => {
+                            document.removeEventListener('mousemove', onMouseMove);
+                            document.removeEventListener('mouseup', onMouseUp);
+                        };
+                        onMouseMove(e);
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp);
+                    }
+                });
+                draw();
+            }
+
+            let threeParaScene, threeParaCamera, threeParaRenderer, paraLineObj, paraPointOnLine, paraBasePointVec, paraDirectionVec;
+            function initThreeParametricVis() {
+                const container = document.getElementById('three-container-parametric');
+                if (!container || container.dataset.initialized) {
+                    if (threeParaRenderer) animateThreeParametric();
+                    return;
+                }
+                container.dataset.initialized = true;
+                const canvas = document.getElementById('three-canvas-parametric');
+                const select = document.getElementById('line-select');
+                const tSlider = document.getElementById('t-slider-3d');
+                const tValue = document.getElementById('t-value-3d');
+                const lines = [
+                    { p: new THREE.Vector3(1, 2, 1), v: new THREE.Vector3(-2, -1, 1) },
+                    { p: new THREE.Vector3(-2, 1, 3), v: new THREE.Vector3(3, 1, -2) },
+                    { p: new THREE.Vector3(3, -1, -1), v: new THREE.Vector3(-1, 2, 2) }
+                ];
+                threeParaScene = new THREE.Scene();
+                threeParaScene.background = new THREE.Color(0xffffff);
+                threeParaCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                threeParaCamera.position.set(5, 5, 5);
+                threeParaCamera.lookAt(0, 0, 0);
+                threeParaRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+                threeParaRenderer.setSize(container.clientWidth, container.clientHeight);
+                threeParaScene.add(new THREE.AxesHelper(5));
+                threeParaScene.add(new THREE.GridHelper(10, 10));
+                function updateLine() {
+                    if (paraLineObj) threeParaScene.remove(paraLineObj);
+                    if (paraPointOnLine) threeParaScene.remove(paraPointOnLine);
+                    if (paraBasePointVec) threeParaScene.remove(paraBasePointVec);
+                    if (paraDirectionVec) threeParaScene.remove(paraDirectionVec);
+                    const lineData = lines[select.value];
+                    const p = lineData.p;
+                    const v = lineData.v;
+                    const startPoint = new THREE.Vector3().copy(p).addScaledVector(v, -10);
+                    const endPoint = new THREE.Vector3().copy(p).addScaledVector(v, 10);
+                    paraLineObj = new THREE.Line(new THREE.BufferGeometry().setFromPoints([startPoint, endPoint]), new THREE.LineBasicMaterial({ color: 0x0000ff }));
+                    threeParaScene.add(paraLineObj);
+                    paraBasePointVec = new THREE.Line(new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0,0,0), p]), new THREE.LineBasicMaterial({ color: 0xef4444, linewidth: 2 }));
+                    threeParaScene.add(paraBasePointVec);
+                    paraDirectionVec = new THREE.ArrowHelper(v.clone().normalize(), p, v.length(), 0x10b981);
+                    threeParaScene.add(paraDirectionVec);
+                    paraPointOnLine = new THREE.Mesh(new THREE.SphereGeometry(0.15, 16, 16), new THREE.MeshBasicMaterial({ color: 0xf59e0b }));
+                    threeParaScene.add(paraPointOnLine);
+                    updatePointPosition();
+                }
+                function updatePointPosition() {
+                    const t = parseFloat(tSlider.value);
+                    tValue.textContent = t.toFixed(1);
+                    const lineData = lines[select.value];
+                    const newPos = new THREE.Vector3().copy(lineData.p).addScaledVector(lineData.v, t);
+                    paraPointOnLine.position.copy(newPos);
+                }
+                select.addEventListener('change', updateLine);
+                tSlider.addEventListener('input', updatePointPosition);
+                updateLine();
+                animateThreeParametric();
+            }
+            function animateThreeParametric() {
+                if (!document.getElementById('slide-17').classList.contains('active')) return;
+                requestAnimationFrame(animateThreeParametric);
+                threeParaRenderer.render(threeParaScene, threeParaCamera);
+            }
+
+            function initImplicitLineVis() {
+                const canvas = document.getElementById('implicit-line-canvas');
+                if (!canvas || canvas.dataset.initialized) return;
+                canvas.dataset.initialized = true;
+                const ctx = canvas.getContext('2d');
+                const info = document.getElementById('implicit-line-info');
+                const origin = { x: canvas.width / 2, y: canvas.height / 2 };
+                const scale = 20;
+                let vecN = { x: 2, y: 3 };
+                let vecP = { x: 4, y: -2 };
+                let dragging = null;
+                function draw() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    drawGrid(ctx, canvas.width, canvas.height, scale);
+                    
+                    const pX = origin.x + vecP.x * scale;
+                    const pY = origin.y - vecP.y * scale;
+                    
+                    // Draw line
+                    const direction = { x: -vecN.y, y: vecN.x }; // Direction vector is perpendicular to normal
+                    ctx.beginPath();
+                    ctx.strokeStyle = '#3b82f6';
+                    ctx.lineWidth = 2;
+                    // We use canvas coordinates, so the y-component of the direction needs to be flipped
+                    ctx.moveTo(pX - 100 * direction.x, pY - 100 * (-direction.y));
+                    ctx.lineTo(pX + 100 * direction.x, pY + 100 * (-direction.y));
+                    ctx.stroke();
+
+                    // Draw vectors
+                    drawArrow(ctx, origin.x, origin.y, origin.x + vecN.x * scale, origin.y - vecN.y * scale, '#8b5cf6'); // N
+                    drawArrow(ctx, origin.x, origin.y, pX, pY, '#10b981'); // P
+                    
+                    // Draw point P on the line
+                    ctx.beginPath();
+                    ctx.fillStyle = '#10b981';
+                    ctx.arc(pX, pY, 5, 0, 2 * Math.PI);
+                    ctx.fill();
+
+                    // Update formula
+                    const c = vecN.x * vecP.x + vecN.y * vecP.y;
+                    info.innerHTML = `N &sdot; X = N &sdot; P <br> ${vecN.x.toFixed(1)}x + ${vecN.y.toFixed(1)}y = ${c.toFixed(1)}`;
+                }
+                canvas.addEventListener('mousedown', (e) => {
+                    const rect = canvas.getBoundingClientRect();
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    const nEnd = { x: origin.x + vecN.x * scale, y: origin.y - vecN.y * scale };
+                    const pEnd = { x: origin.x + vecP.x * scale, y: origin.y - vecP.y * scale };
+                    if (Math.hypot(mouseX - nEnd.x, mouseY - nEnd.y) < 15) dragging = 'N';
+                    else if (Math.hypot(mouseX - pEnd.x, mouseY - pEnd.y) < 15) dragging = 'P';
+                    else dragging = null;
+                    if (dragging) {
+                        const onMouseMove = (e) => {
+                            const mX = e.clientX - rect.left;
+                            const mY = e.clientY - rect.top;
+                            const targetX = (mX - origin.x) / scale;
+                            const targetY = -(mY - origin.y) / scale;
+                            if (dragging === 'N') {
+                                vecN.x = targetX;
+                                vecN.y = targetY;
+                            } else {
+                                vecP.x = targetX;
+                                vecP.y = targetY;
+                            }
+                            draw();
+                        };
+                        const onMouseUp = () => document.removeEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mousemove', onMouseMove);
+                        document.addEventListener('mouseup', onMouseUp, { once: true });
+                    }
+                });
+                draw();
+            }
+
+            let threeImplicitScene, threeImplicitCamera, threeImplicitRenderer, planeHelper, normalArrow, pointArrow;
+            function initImplicitPlaneVis() {
+                const container = document.getElementById('three-container-implicit');
+                if (!container || container.dataset.initialized) {
+                    if (threeImplicitRenderer) animateThreeImplicit();
+                    return;
+                }
+                container.dataset.initialized = true;
+                const canvas = document.getElementById('three-canvas-implicit');
+                const select = document.getElementById('plane-select');
+                const info = document.getElementById('implicit-plane-info');
+                const planes = [
+                    { n: new THREE.Vector3(1, 1, 1), p: new THREE.Vector3(1, 1, 1) },
+                    { n: new THREE.Vector3(2, -1, 3), p: new THREE.Vector3(1, 2, 0) },
+                    { n: new THREE.Vector3(0, 1, 0), p: new THREE.Vector3(0, -2, 0) }
+                ];
+                threeImplicitScene = new THREE.Scene();
+                threeImplicitScene.background = new THREE.Color(0xffffff);
+                threeImplicitCamera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+                threeImplicitCamera.position.set(4, 4, 5);
+                threeImplicitCamera.lookAt(0, 0, 0);
+                threeImplicitRenderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true });
+                threeImplicitRenderer.setSize(container.clientWidth, container.clientHeight);
+                threeImplicitScene.add(new THREE.AxesHelper(5));
+                threeImplicitScene.add(new THREE.GridHelper(10, 10));
+                function updatePlane() {
+                    if (planeHelper) threeImplicitScene.remove(planeHelper);
+                    if (normalArrow) threeImplicitScene.remove(normalArrow);
+                    if (pointArrow) threeImplicitScene.remove(pointArrow);
+                    const data = planes[select.value];
+                    const n = data.n.clone().normalize();
+                    const d = data.p.dot(data.n);
+                    const plane = new THREE.Plane(n, -d/data.n.length());
+                    planeHelper = new THREE.PlaneHelper(plane, 5, 0xaaaaaa);
+                    threeImplicitScene.add(planeHelper);
+                    normalArrow = new THREE.ArrowHelper(data.n.clone().normalize(), data.p, data.n.length(), 0x8b5cf6);
+                    threeImplicitScene.add(normalArrow);
+                    pointArrow = new THREE.ArrowHelper(data.p.clone().normalize(), new THREE.Vector3(0,0,0), data.p.length(), 0x10b981);
+                    threeImplicitScene.add(pointArrow);
+                    info.innerHTML = `N &sdot; X = d <br> ${data.n.x.toFixed(1)}x + ${data.n.y.toFixed(1)}y + ${data.n.z.toFixed(1)}z = ${d.toFixed(1)}`;
+                }
+                select.addEventListener('change', updatePlane);
+                updatePlane();
+                animateThreeImplicit();
+            }
+            function animateThreeImplicit() {
+                if (!document.getElementById('slide-21').classList.contains('active')) return;
+                requestAnimationFrame(animateThreeImplicit);
+                threeImplicitRenderer.render(threeImplicitScene, threeImplicitCamera);
+            }
+        });
+    </script>
+</body>
+</html>
