@@ -112,8 +112,6 @@
             </div>
         </div>
 
-        <!-- NEW SLIDES START HERE -->
-
         <!-- Slide 8: Continuity Algebraic Intuition -->
         <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
             <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity at a Point (Algebraic)</h2>
@@ -180,7 +178,148 @@
             </div>
         </div>
 
-        <!-- Slide 14: End -->
+        <!-- Slide 14: Infinite Limits Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Infinite Limits</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> An infinite limit occurs when the value of a function grows without bound as it approaches a certain x-value. This typically happens at a vertical asymptote. The limit can be positive infinity, negative infinity, or it might be different from the left and the right.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Imagine a powerful magnet located at the asymptote. As you get closer, your car (the function's value) is either powerfully repelled towards the sky (positive infinity) or powerfully attracted towards the ground (negative infinity).
+            </p>
+        </div>
+
+        <!-- Slide 15: Infinite Limits Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Infinite Limits</h3>
+            <img id="infinite-main" src="figures/KA_infinite_limits_graphical_1.png" alt="Infinite Limits Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_infinite_limits_graphical_1.png" data-gallery="infinite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_infinite_limits_graphical_2.png" data-gallery="infinite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_infinite_limits_algebraic_1.png" data-gallery="infinite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_infinite_limits_algebraic_2.png" data-gallery="infinite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 16: Removable Discontinuity Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Making a Function Continuous</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> Sometimes a function has a removable discontinuity (a hole) because it's undefined at a single point. We can "fix" or "patch" this hole by defining a value for the function at that point that equals the limit. This makes the function continuous.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> The function is a bridge with a single missing plank. To make it continuous (and safe to cross), you just need to find the right size plank (the limit) and put it in place (define the function's value).
+            </p>
+        </div>
+
+        <!-- Slide 17: Removable Discontinuity Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Fixing Removable Discontinuities</h3>
+            <img id="removable-main" src="figures/KA_removable_discontinuity_1.png" alt="Removable Discontinuity Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_removable_discontinuity_1.png" data-gallery="removable" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_removable_discontinuity_2.png" data-gallery="removable" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 18: Limits at Infinity (Graphical) Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits at Infinity (Graphical)</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> We're looking at the end behavior of a function. What value does the function get closer and closer to as x gets infinitely large (or infinitely negative)? On a graph, this value is represented by a horizontal asymptote.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Imagine you're flying in a plane that just took off from the ground. As time passes and passes, your elevation above ground settles to a certain limiting value.
+            </p>
+        </div>
+
+        <!-- Slide 19: Limits at Infinity (Graphical) Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Graphical Limits at Infinity</h3>
+            <img id="infinity-graphical-main" src="figures/KA_limits_at_infinity_graphical_1.png" alt="Graphical Limits at Infinity Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_limits_at_infinity_graphical_1.png" data-gallery="infinity-graphical" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_limits_at_infinity_graphical_2.png" data-gallery="infinity-graphical" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 20: Limits at Infinity (Algebraic) Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits at Infinity (Algebraic)</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> For rational functions, the limit at infinity is a battle between the highest power term in the numerator and the highest power term in the denominator. The "stronger" term dictates the end behavior. If they're equally strong, the limit is the ratio of their coefficients.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's a tug-of-war. If the top team (numerator) is stronger, they pull the rope to infinity. If the bottom team (denominator) is stronger, they pull the rope to zero. If they're equally matched, they settle at a specific point (the ratio of coefficients).
+            </p>
+        </div>
+
+        <!-- Slide 21: Limits at Infinity (Algebraic) Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Algebraic Limits at Infinity</h3>
+            <img id="infinity-algebraic-main" src="figures/KA_limits_at_infinity_quotients_1.png" alt="Algebraic Limits at Infinity Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_limits_at_infinity_quotients_1.png" data-gallery="infinity-algebraic" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_limits_at_infinity_quotients_2.png" data-gallery="infinity-algebraic" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_limits_at_infinity_quotients_3.png" data-gallery="infinity-algebraic" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 22: Limits at Infinity (Square Roots) Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits at Infinity with Square Roots</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> This is a special case of algebraic limits at infinity. The key is to be careful when dealing with $\sqrt{x^2}$, which is $|x|$. This means it equals $x$ when $x \to \infty$, but becomes $-x$ when $x \to -\infty$. This sign change is crucial for finding the correct limit.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like the tug-of-war, but a key player on one team is wearing a disguise (the square root). You have to figure out their true identity, which might change depending on which direction they're pulling (positive or negative infinity).
+            </p>
+        </div>
+
+        <!-- Slide 23: Limits at Infinity (Square Roots) Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Limits at Infinity with Square Roots</h3>
+            <img id="infinity-sqrt-main" src="figures/KA_limits_at_infinity_quotients_with_square_roots_1.png" alt="Limits at Infinity with Square Roots Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_limits_at_infinity_quotients_with_square_roots_1.png" data-gallery="infinity-sqrt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_limits_at_infinity_quotients_with_square_roots_2.png" data-gallery="infinity-sqrt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_limits_at_infinity_quotients_with_square_roots_3.png" data-gallery="infinity-sqrt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 24: Intermediate Value Theorem Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">The Intermediate Value Theorem (IVT)</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> If a function is continuous on a closed interval [a, b], it is guaranteed to take on every single y-value between f(a) and f(b). It cannot skip any values within that range. This is useful for proving that a solution or a root exists within an interval.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> If you are driving from a town at 100 feet elevation to a town at 500 feet elevation, and you never leave the road (continuity), you must have passed through every single elevation in between (200 ft, 350 ft, 499 ft, etc.) at some point in your journey.
+            </p>
+        </div>
+
+        <!-- Slide 25: Using the IVT Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Using the Intermediate Value Theorem</h3>
+            <img id="using-ivt-main" src="figures/KA_using_interemediate_value_theorem_1.png" alt="Using IVT Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_using_interemediate_value_theorem_1.png" data-gallery="using-ivt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_using_interemediate_value_theorem_2.png" data-gallery="using-ivt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+        
+        <!-- Slide 26: Justifying with the IVT Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Justifying with the Intermediate Value Theorem</h3>
+            <img id="justifying-ivt-main" src="figures/KA_justification_with_intermediate_value_theorem_1.png" alt="Justifying with IVT Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_justification_with_intermediate_value_theorem_1.png" data-gallery="justifying-ivt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_justification_with_intermediate_value_theorem_2.png" data-gallery="justifying-ivt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_justification_with_intermediate_value_theorem_3.png" data-gallery="justifying-ivt" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 27: End -->
         <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
             <h1 class="text-4xl md:text-5xl font-bold text-gray-900">End of Examples</h1>
             <p class="mt-4 text-xl md:text-2xl text-indigo-600">Good luck!</p>
@@ -195,7 +334,7 @@
                 Previous
             </button>
             <div id="slideCounter" class="text-gray-600 font-medium">
-                Slide 1 / 14
+                Slide 1 / 27
             </div>
             <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
                 Next
@@ -268,6 +407,14 @@
             setupGallery('algebraic');
             setupGallery('interval');
             setupGallery('common');
+            setupGallery('infinite');
+            setupGallery('removable');
+            setupGallery('infinity-graphical');
+            setupGallery('infinity-algebraic');
+            setupGallery('infinity-sqrt');
+            setupGallery('using-ivt');
+            setupGallery('justifying-ivt');
+
 
             // Initialize the first slide
             showSlide(currentSlide);
