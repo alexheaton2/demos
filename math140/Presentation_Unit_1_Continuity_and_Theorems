@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Calculus AB: Continuity & Squeeze Theorem</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the presentation */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+        }
+        .slide.active {
+            display: flex; /* Show the active slide */
+        }
+        .gallery-thumb {
+            transition: border-color 0.2s ease-in-out;
+        }
+    </style>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col h-screen">
+
+    <!-- Presentation Container -->
+    <div id="presentation" class="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
+
+        <!-- Slide 1: Title -->
+        <div class="slide active w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-900">AP Calculus AB</h1>
+            <p class="mt-4 text-2xl md:text-3xl text-indigo-600">Squeeze Theorem & Continuity</p>
+            <p class="mt-8 text-lg text-gray-500">A presentation of examples.</p>
+        </div>
+
+        <!-- Slide 2: Squeeze Theorem Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">The Squeeze Theorem</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> If we have a tricky function whose limit is hard to find, we can "squeeze" it between two other, simpler functions. If both of those outer functions approach the same limit at a certain point, the function squeezed between them must also approach that same limit.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Imagine you're walking between two friends who are holding your hands. If both of your friends walk through a doorway, you have no choice but to walk through that same doorway with them.
+            </p>
+        </div>
+
+        <!-- Slide 3: Squeeze Theorem Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Example: Squeeze Theorem</h3>
+            <!-- Main Image Display -->
+            <img id="squeeze-main" src="figures/KA_squeeze_theorem_question.png" alt="Squeeze Theorem Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <!-- Thumbnails -->
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_squeeze_theorem_question.png" data-gallery="squeeze" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_squeeze_theorem_answer1.png" data-gallery="squeeze" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_squeeze_theorem_answer2.png" data-gallery="squeeze" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_squeeze_theorem_answer3.png" data-gallery="squeeze" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+        
+        <!-- Slide 4: Discontinuities Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Types of Discontinuities</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> A discontinuity is any place where a function has a break in its graph. We classify these breaks based on how the function behaves around them. The main types are removable (a hole), jump (a sudden leap), and infinite (a vertical asymptote).
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Think of the function as a road. A **removable** discontinuity is a small pothole you can easily patch. A **jump** is like a drawbridge that's open, forcing you to teleport to the other side. An **infinite** discontinuity is a cliff where the road goes off to the sky or down into a canyon.
+            </p>
+        </div>
+        
+        <!-- Slide 5: Discontinuities Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Types of Discontinuities</h3>
+            <!-- Main Image Display -->
+            <img id="discontinuity-main" src="figures/KA_discontinuity_1.png" alt="Discontinuity Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <!-- Thumbnails -->
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_discontinuity_1.png" data-gallery="discontinuity" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_discontinuity_2.png" data-gallery="discontinuity" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_discontinuity_3.png" data-gallery="discontinuity" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 6: Continuity at a Point Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity at a Point</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> For a function to be continuous at a specific point, three things must be true: 1) The point must exist (the function is defined there), 2) The limit must exist as you approach the point, and 3) The point's value must equal the limit's value.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> The function's graph is a path. To be continuous at a point, the path leading to a location (the limit) must take you to an actual, existing landmark (the defined point). You can't arrive at an empty lot.
+            </p>
+        </div>
+
+        <!-- Slide 7: Continuity at a Point Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Continuity at a Point</h3>
+             <!-- Main Image Display -->
+            <img id="continuity-main" src="figures/KA_continuity_graphical_1.png" alt="Continuity Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <!-- Thumbnails -->
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_continuity_graphical_1.png" data-gallery="continuity" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_continuity_graphical_2.png" data-gallery="continuity" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 8: End -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">End of Examples</h1>
+            <p class="mt-4 text-xl md:text-2xl text-indigo-600">Good luck!</p>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="flex-shrink-0 w-full bg-white shadow-md p-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <button id="prevBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+            </button>
+            <div id="slideCounter" class="text-gray-600 font-medium">
+                Slide 1 / 8
+            </div>
+            <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Next
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Slide Navigation Logic ---
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                slides.forEach((slide) => slide.classList.remove('active'));
+                slides[index].classList.add('active');
+                slideCounter.textContent = `Slide ${index + 1} / ${totalSlides}`;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === totalSlides - 1;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                    nextBtn.click();
+                } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                    prevBtn.click();
+                }
+            });
+
+            // --- Image Gallery Logic ---
+            function setupGallery(galleryName) {
+                const mainImage = document.getElementById(`${galleryName}-main`);
+                const thumbnails = document.querySelectorAll(`[data-gallery="${galleryName}"]`);
+
+                thumbnails.forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        // Update main image src
+                        mainImage.src = thumb.src;
+                        
+                        // Update thumbnail borders
+                        thumbnails.forEach(t => t.classList.replace('border-indigo-500', 'border-transparent'));
+                        thumb.classList.replace('border-transparent', 'border-indigo-500');
+                    });
+                });
+            }
+
+            setupGallery('squeeze');
+            setupGallery('discontinuity');
+            setupGallery('continuity');
+
+            // Initialize the first slide
+            showSlide(currentSlide);
+        });
+    </script>
+
+</body>
+</html>
