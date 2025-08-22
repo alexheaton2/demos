@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Calculus AB: Derivatives</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for the presentation */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+        }
+        .slide.active {
+            display: flex; /* Show the active slide */
+        }
+        .gallery-thumb {
+            transition: border-color 0.2s ease-in-out;
+        }
+    </style>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col h-screen">
+
+    <!-- Presentation Container -->
+    <div id="presentation" class="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
+
+        <!-- Slide 1: Title -->
+        <div class="slide active w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-900">AP Calculus AB</h1>
+            <p class="mt-4 text-2xl md:text-3xl text-indigo-600">Unit 3: Derivatives of Composite, Implicit, and Inverse Functions</p>
+            <p class="mt-8 text-lg text-gray-500">A presentation of examples.</p>
+        </div>
+
+        <!-- Slide 2: Identifying Composite Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Identifying Composite Functions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> A composite function is a "function inside of a function." To work with them, we need to identify the "inner" function (the first operation performed on x) and the "outer" function (the operation performed on the result of the inner function).
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Think of Russian nesting dolls. The smallest doll is the "inner" function, and each larger doll you place it in is another "outer" function.
+            </p>
+        </div>
+
+        <!-- Slide 3: Identifying Composite Functions Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Identifying Composite Functions</h3>
+            <img id="composite-main" src="figures/KA_identify_composite_functions_1.png" alt="Identifying Composite Functions Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_identify_composite_functions_1.png" data-gallery="composite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_identify_composite_functions_2.png" data-gallery="composite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_identify_composite_functions_3.png" data-gallery="composite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_identify_composite_functions_4.png" data-gallery="composite" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 4: Chain Rule Intro Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">The Chain Rule</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> The chain rule is how we find the derivative of a composite function. The process is: take the derivative of the "outer" function (leaving the inside function alone), then multiply by the derivative of the "inner" function.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Imagine riding a bike. Your feet move the small gear, but the small gear moves the big gear, and so the wheel moves much faster!  In the chain rule we *multiply* the inner derivative, times the outer derivative, to get the final rate of change.
+            </p>
+        </div>
+
+        <!-- Slide 5: Chain Rule Intro Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Basic Chain Rule</h3>
+            <img id="chain-rule-main" src="figures/KA_chain_rule_intro_1.png" alt="Basic Chain Rule Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_chain_rule_intro_1.png" data-gallery="chain-rule" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_intro_2.png" data-gallery="chain-rule" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_intro_3.png" data-gallery="chain-rule" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_intro_4.png" data-gallery="chain-rule" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 6: Chain Rule with Tables Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Chain Rule with Tables</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> We apply the exact same chain rule formula, but instead of finding derivatives of functions, we look up the required function and derivative values from a table at a specific point.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like assembling furniture using instructions. The chain rule is your set of instructions, and the table is your box of parts. You just need to find the right part (value) from the box at each step of the instructions.
+            </p>
+        </div>
+
+        <!-- Slide 7: Chain Rule with Tables Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Chain Rule with Tables</h3>
+            <img id="chain-table-main" src="figures/KA_chain_rule_tables_1.png" alt="Chain Rule with Tables Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_chain_rule_tables_1.png" data-gallery="chain-table" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_tables_2.png" data-gallery="chain-table" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+        
+        <!-- Slide 8: Chain Rule Capstone Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Chain Rule Capstone</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> This is about putting it all together. Problems might require using the chain rule multiple times (for functions within functions within functions) or combining it with other rules like the product or quotient rule. The key is to work methodically from the outside in.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Think of it as a multi-stage rocket. To find the overall rate of change, you have to account for the thrust from each stage, one after the other. You work through the derivative of each layer before moving to the next one inside.
+            </p>
+        </div>
+
+        <!-- Slide 9: Chain Rule Capstone Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Chain Rule Capstone</h3>
+            <img id="chain-capstone-main" src="figures/KA_chain_rule_capstone_1.png" alt="Chain Rule Capstone Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_chain_rule_capstone_1.png" data-gallery="chain-capstone" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_capstone_2.png" data-gallery="chain-capstone" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_capstone_3.png" data-gallery="chain-capstone" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_chain_rule_capstone_4.png" data-gallery="chain-capstone" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 10: Other Bases Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Derivatives of $a^x$ and $\log_a(x)$</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> The derivatives of exponential and log functions with bases other than *e* are very similar to the natural versions, but they include an extra factor of $\ln(a)$ to account for the different base. For $a^x$, you multiply by $\ln(a)$. For $\log_a(x)$, you divide by $\ln(a)$.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Think of it as a currency conversion. The derivative of $e^x$ is the base currency. To get the derivative of $5^x$, you need to multiply by the exchange rate, which is $\ln(5)$.
+            </p>
+        </div>
+
+        <!-- Slide 11: Other Bases Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Derivatives with Other Bases</h3>
+            <img id="other-bases-main" src="figures/KA_derivative_log_exp_other_bases_1.png" alt="Derivatives with Other Bases Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_derivative_log_exp_other_bases_1.png" data-gallery="other-bases" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_derivative_log_exp_other_bases_2.png" data-gallery="other-bases" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivative_log_exp_other_bases_3.png" data-gallery="other-bases" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivative_log_exp_other_bases_4.png" data-gallery="other-bases" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 12: Implicit Differentiation Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Implicit Differentiation</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> We use this technique when we can't easily solve an equation for *y*. We differentiate both sides of the equation with respect to *x*, remembering to treat *y* as a function of *x*. This means every time we differentiate a term with *y*, the chain rule requires us to multiply by $dy/dx$. Then, we solve for $dy/dx$.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's a detective story. $dy/dx$ is the mystery you're trying to solve. You gather clues by differentiating every term in the equation, and then you use algebra to isolate the $dy/dx$ suspect and find its identity.
+            </p>
+        </div>
+
+        <!-- Slide 13: Implicit Differentiation Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Implicit Differentiation</h3>
+            <img id="implicit-main" src="figures/KA_implicit_differentiation_1.png" alt="Implicit Differentiation Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_implicit_differentiation_1.png" data-gallery="implicit" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_implicit_differentiation_2.png" data-gallery="implicit" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+        
+        <!-- Slide 14: Derivatives of Inverse Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Derivatives of Inverse Functions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> The slope of a function at a point $(a, b)$ is the reciprocal of the slope of its inverse function at point $(b, a)$. This powerful shortcut allows us to find the derivative of an inverse function without even knowing what the inverse function is!
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Think of a function and its inverse as reflections across a mirror. The steepness of the reflection at a certain point is just the flipped version (the reciprocal) of the steepness of the original object at its corresponding point.
+            </p>
+        </div>
+
+        <!-- Slide 15: Derivatives of Inverse Functions Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Derivatives of Inverse Functions</h3>
+            <img id="inverse-main" src="figures/KA_derivatives_inverse_functions_1.png" alt="Derivatives of Inverse Functions Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_derivatives_inverse_functions_1.png" data-gallery="inverse" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_inverse_functions_2.png" data-gallery="inverse" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_inverse_functions_3.png" data-gallery="inverse" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_inverse_functions_4.png" data-gallery="inverse" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 16: Derivatives of Inverse Trig Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Derivatives of Inverse Trig Functions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> The derivatives of inverse trigonometric functions (like arcsin, arccos, arctan) are specific formulas that you should memorize. They often involve algebraic expressions with square roots. Don't forget to apply the chain rule if the input to the inverse trig function is anything other than just 'x'.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> These derivative formulas are like special tools in your calculus toolbox. You don't need to know how they were made (their proofs), but you need to know which tool to use for which job (which formula for which function) and how to use it correctly (apply the chain rule).
+            </p>
+        </div>
+
+        <!-- Slide 17: Derivatives of Inverse Trig Functions Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Derivatives of Inverse Trig Functions</h3>
+            <img id="inverse-trig-main" src="figures/KA_derivatives_inverse_trig_1.png" alt="Derivatives of Inverse Trig Functions Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_derivatives_inverse_trig_1.png" data-gallery="inverse-trig" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_inverse_trig_2.png" data-gallery="inverse-trig" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_inverse_trig_3.png" data-gallery="inverse-trig" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 18: Finding Errors Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Finding Errors in Solutions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Task:</strong> In the following problems, you'll be shown a step-by-step solution to a derivative problem. Your job is to act as a proofreader. Carefully analyze each step of the work shown. Then, evaluate the multiple-choice options to identify if there is a mistake, and if so, where it occurred.
+            </p>
+        </div>
+
+        <!-- Slide 19: Find Error Question 1 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Error Analysis #1</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <img src="figures/KA_find_error_question_1.png" alt="Find Error Question 1" class="max-w-full md:w-1/2 h-auto rounded-lg">
+                <img src="figures/KA_find_error_answers_1.png" alt="Find Error Answers 1" class="max-w-full md:w-1/2 h-auto rounded-lg">
+            </div>
+        </div>
+
+        <!-- Slide 20: Find Error Question 2 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Error Analysis #2</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <img src="figures/KA_find_error_question_2.png" alt="Find Error Question 2" class="max-w-full md:w-1/2 h-auto rounded-lg">
+                <img src="figures/KA_find_error_answers_2.png" alt="Find Error Answers 2" class="max-w-full md:w-1/2 h-auto rounded-lg">
+            </div>
+        </div>
+
+        <!-- Slide 21: Find Error Question 3 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Error Analysis #3</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <img src="figures/KA_find_error_question_3.png" alt="Find Error Question 3" class="max-w-full md:w-1/2 h-auto rounded-lg">
+                <img src="figures/KA_find_error_answers_3.png" alt="Find Error Answers 3" class="max-w-full md:w-1/2 h-auto rounded-lg">
+            </div>
+        </div>
+
+        <!-- Slide 22: Find Error Question 4 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Error Analysis #4</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <img src="figures/KA_find_error_question_4.png" alt="Find Error Question 4" class="max-w-full md:w-1/2 h-auto rounded-lg">
+                <img src="figures/KA_find_error_answers_4.png" alt="Find Error Answers 4" class="max-w-full md:w-1/2 h-auto rounded-lg">
+            </div>
+        </div>
+        
+        <!-- Slide 23: Manipulating Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Manipulating Functions First</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> Sometimes, the easiest way to find a derivative is to simplify the function *before* you differentiate. Using algebra or trigonometric identities to rewrite a function can often turn a complicated problem that needs the quotient or product rule into a much simpler one.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like untangling a knotted rope before trying to measure its length. If you take a moment to straighten it out first (simplify the function), the job of measuring (differentiating) becomes much easier.
+            </p>
+        </div>
+
+        <!-- Slide 24: Manipulating Functions Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Manipulating Before Differentiation</h3>
+            <img id="manipulate-main" src="figures/KA_manipulating_before_differentiation_1.png" alt="Manipulating Functions Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_manipulating_before_differentiation_1.png" data-gallery="manipulate" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_manipulating_before_differentiation_2.png" data-gallery="manipulate" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_manipulating_before_differentiation_3.png" data-gallery="manipulate" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 25: Derivative Rules Strategy Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Strategy for Differentiation</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> Complex functions often require multiple derivative rules. The key is to identify the main structure of the function first. Is it primarily a product? A quotient? A composition? That determines your first step, and then you apply other rules as needed for the smaller pieces.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like parsing a sentence. You first identify the main subject and verb (the main derivative rule) before you analyze the smaller clauses and phrases (the other rules you'll need along the way).
+            </p>
+        </div>
+
+        <!-- Slide 26: Derivative Rules Strategy Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Choosing a Strategy</h3>
+            <img id="strategy-main" src="figures/KA_derivative_rules_strategy_1.png" alt="Differentiation Strategy Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_derivative_rules_strategy_1.png" data-gallery="strategy" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_derivative_rules_strategy_2.png" data-gallery="strategy" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivative_rules_strategy_3.png" data-gallery="strategy" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivative_rules_strategy_4.png" data-gallery="strategy" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+        
+        <!-- Slide 27: Multiple Rules Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Derivatives Using Multiple Rules</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> This is where your skills combine. Many functions require you to apply a sequence of rules. For example, you might use the Quotient Rule, and one of the terms in the numerator requires the Chain Rule. The key is to stay organized and work from the "biggest" rule inward.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like a detailed recipe. The main instruction might be "make the cake batter" (Quotient Rule), but one of the steps is "cream the butter and sugar" (Product Rule) and another is "mix in the vanilla-infused milk" (Chain Rule). You follow the main recipe, performing the smaller sub-recipes as you go.
+            </p>
+        </div>
+
+        <!-- Slide 28: Multiple Rules Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Using Multiple Rules</h3>
+            <img id="multiple-rules-main" src="figures/KA_derivatives_using_multiple_rules_1.png" alt="Multiple Rules Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_derivatives_using_multiple_rules_1.png" data-gallery="multiple-rules" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_using_multiple_rules_2.png" data-gallery="multiple-rules" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_using_multiple_rules_3.png" data-gallery="multiple-rules" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_derivatives_using_multiple_rules_4.png" data-gallery="multiple-rules" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 29: Second Derivatives Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Second Derivatives</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> The second derivative is simply the derivative of the first derivative. It tells us the rate of change of the slope. In physics, if the original function is position, the first derivative is velocity, and the second derivative is acceleration.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> If your car's speed is the first derivative, then the second derivative is how hard you're pushing the gas pedal or the brake. It's not how fast you're going, but how quickly your speed is changing.
+            </p>
+        </div>
+
+        <!-- Slide 30: Second Derivatives Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Finding the Second Derivative</h3>
+            <img id="second-derivative-main" src="figures/KA_second_derivative_1.png" alt="Second Derivative Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_second_derivative_1.png" data-gallery="second-derivative" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_second_derivative_2.png" data-gallery="second-derivative" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_second_derivative_3.png" data-gallery="second-derivative" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+        
+        <!-- Slide 31: Second Derivatives Implicit Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Second Derivatives via Implicit Differentiation</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> To find the second derivative implicitly, you first find the first derivative ($dy/dx$) as usual. Then, you differentiate that expression again with respect to x. This will create a new $dy/dx$ term, which you must substitute with the expression for the first derivative you already found.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> You've already solved the first detective case to find the identity of $dy/dx$. Now, for the second case, you differentiate again, and the first suspect ($dy/dx$) shows up at the new crime scene. You have to use what you know about them from the first case to finally solve the second one.
+            </p>
+        </div>
+
+        <!-- Slide 32: Second Derivatives Implicit Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Implicit Second Derivatives</h3>
+            <img id="second-implicit-main" src="figures/KA_second_derivative_implicit_1.png" alt="Implicit Second Derivative Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_second_derivative_implicit_1.png" data-gallery="second-implicit" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_second_derivative_implicit_2.png" data-gallery="second-implicit" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_second_derivative_implicit_3.png" data-gallery="second-implicit" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- NEW SLIDES START HERE -->
+        
+        <!-- Slide 33: Disguised Derivatives Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Disguised Derivatives</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> Some limits are actually derivatives in disguise! If you see a limit in the form $\lim_{h \to 0} \frac{f(a+h) - f(a)}{h}$, you're looking at the formal limit definition of the derivative of $f(x)$ at the point $x=a$. Instead of calculating the limit, you can simply identify the function $f(x)$ and the point $a$, find the derivative $f'(x)$, and then evaluate $f'(a)$.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like seeing a complex code and realizing it's just a secret message. Once you recognize the pattern (the limit definition of a derivative), you can use your decoder ring (your differentiation rules) to find the answer quickly, instead of trying to solve the complex limit directly.
+            </p>
+        </div>
+
+        <!-- Slide 34: Disguised Derivatives Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Disguised Derivatives</h3>
+            <img id="disguised-main" src="figures/KA_disguised_derivatives_1.png" alt="Disguised Derivatives Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_disguised_derivatives_1.png" data-gallery="disguised" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_disguised_derivatives_2.png" data-gallery="disguised" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_disguised_derivatives_3.png" data-gallery="disguised" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 35: End -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">End of Examples</h1>
+            <p class="mt-4 text-xl md:text-2xl text-indigo-600">Good luck!</p>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="flex-shrink-0 w-full bg-white shadow-md p-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <button id="prevBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+            </button>
+            <div id="slideCounter" class="text-gray-600 font-medium">
+                Slide 1 / 35
+            </div>
+            <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Next
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Slide Navigation Logic ---
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                slides.forEach((slide) => slide.classList.remove('active'));
+                slides[index].classList.add('active');
+                slideCounter.textContent = `Slide ${index + 1} / ${totalSlides}`;
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === totalSlides - 1;
+            }
+
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                    nextBtn.click();
+                } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                    prevBtn.click();
+                }
+            });
+
+            // --- Image Gallery Logic ---
+            function setupGallery(galleryName) {
+                const mainImage = document.getElementById(`${galleryName}-main`);
+                if (!mainImage) return; // Guard against missing galleries
+                const thumbnails = document.querySelectorAll(`[data-gallery="${galleryName}"]`);
+
+                thumbnails.forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        // Update main image src
+                        mainImage.src = thumb.src;
+                        
+                        // Update thumbnail borders
+                        thumbnails.forEach(t => t.classList.replace('border-indigo-500', 'border-transparent'));
+                        thumb.classList.replace('border-transparent', 'border-indigo-500');
+                    });
+                });
+            }
+
+            // Setup all galleries
+            setupGallery('composite');
+            setupGallery('chain-rule');
+            setupGallery('chain-table');
+            setupGallery('chain-capstone');
+            setupGallery('other-bases');
+            setupGallery('implicit');
+            setupGallery('inverse');
+            setupGallery('inverse-trig');
+            setupGallery('manipulate');
+            setupGallery('strategy');
+            setupGallery('multiple-rules');
+            setupGallery('second-derivative');
+            setupGallery('second-implicit');
+            setupGallery('disguised');
+
+            // Initialize the first slide
+            showSlide(currentSlide);
+        });
+    </script>
+
+</body>
+</html>
