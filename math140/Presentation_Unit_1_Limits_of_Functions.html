@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Calculus AB: Computing Limits</title>
+    <!-- Tailwind CSS for styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- MathJax for rendering LaTeX -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+    </script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        /* Custom styles for the presentation */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+        }
+        .slide.active {
+            display: flex; /* Show the active slide */
+        }
+    </style>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 text-gray-800 flex flex-col h-screen">
+
+    <!-- Presentation Container -->
+    <div id="presentation" class="flex-grow flex flex-col items-center justify-center p-4 md:p-8">
+
+        <!-- Slide 1: Title -->
+        <div class="slide active w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-900">AP Calculus AB</h1>
+            <p class="mt-4 text-2xl md:text-3xl text-indigo-600">Unit 1: Computing Limits</p>
+            <p class="mt-8 text-lg text-gray-500">A presentation of examples.</p>
+        </div>
+
+        <!-- Slide 2: Direct Substitution Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits by Direct Substitution</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> The simplest way to find a limit! If a function is "well-behaved" (continuous) at a certain point, the limit as you approach that point is simply the function's value *at* that point. Just plug in the number and see what you get.
+            </p>
+        </div>
+        
+        <!-- Slide 3: Direct Substitution Example -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example: Direct Substitution</h3>
+            <img src="figures/KA_limits_by_direct_substitution.png" alt="Limit by Direct Substitution Example" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 4: Direct Substitution DNE Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">When Direct Substitution Fails</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Problem:</strong> Sometimes, plugging in the value gives you an undefined result, like division by zero. If you get a non-zero number divided by zero, the limit does not exist (it might be heading towards $\infty$ or $-\infty$).
+            </p>
+        </div>
+
+        <!-- Slide 5: Direct Substitution DNE Example -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example: Limit Does Not Exist</h3>
+            <img src="figures/KA_direct_substitution_with_limits_that_do_not_exist.png" alt="Limit by Direct Substitution Does Not Exist" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 6: Piecewise Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits of Piecewise Functions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> A piecewise function follows different rules for different parts of its domain. To find the limit at the point where the rule changes, you must check the limit from both the left and the right. If they are the same, the limit exists!
+            </p>
+        </div>
+
+        <!-- Slide 7: Piecewise Functions Example -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example: Piecewise Function</h3>
+            <img src="figures/KA_limits_of_piecewise_functions.png" alt="Limits of Piecewise Functions Example" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 8: Factoring Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits by Factoring</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> If direct substitution gives you the indeterminate form $\frac{0}{0}$, it's a clue that there's a "hole" in the graph. Often, you can factor the numerator and denominator to cancel out the term causing the zero, effectively "plugging" the hole so you can then use direct substitution.
+            </p>
+        </div>
+
+        <!-- Slide 9: Factoring Example 1 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 1: Factoring</h3>
+            <img src="figures/KA_limits_by_factoring_1.png" alt="Limits by Factoring Example 1" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 10: Factoring Example 2 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 2: Factoring</h3>
+            <img src="figures/KA_limits_by_factoring_2.png" alt="Limits by Factoring Example 2" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 11: Conjugates Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits Using Conjugates</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> When you get $\frac{0}{0}$ and there's a square root involved, factoring might not work. The trick is to multiply the numerator and denominator by the conjugate of the expression with the root. This often cleans up the expression, allowing you to cancel a term and find the limit.
+            </p>
+        </div>
+
+        <!-- Slide 12: Conjugates Example -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example: Using Conjugates</h3>
+            <img src="figures/KA_limits_using_conjugates.png" alt="Limits using Conjugates Example" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+        
+        <!-- Slide 13: Conjugates Graph -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Visualizing the "Hole"</h3>
+            <p class="text-lg text-gray-600 mb-4">This is the graph of the function. Notice the hole at x=3.</p>
+            <img src="figures/KA_limits_using_conjugates_accompanying_picture.png" alt="Graph for Limits using Conjugates Example" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 14: Trig Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits of Trig Functions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> For most points, finding the limit of a trigonometric function is as simple as direct substitution. Sine, cosine, tangent, etc., are all continuous everywhere they are defined. Just plug in the angle (in radians!) and evaluate.
+            </p>
+        </div>
+
+        <!-- Slide 15: Trig Functions Example 1 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 1: Basic Trig Limit</h3>
+            <img src="figures/KA_limits_of_trig_functions_1.png" alt="Limits of Trig Functions Example 1" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 16: Trig Functions Example 2 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 2: Basic Trig Limit</h3>
+            <img src="figures/KA_limits_of_trig_functions_2.png" alt="Limits of Trig Functions Example 2" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 17: Trig Identities Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Limits Using Trig Identities</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> What if direct substitution on a trig function gives you $\frac{0}{0}$? It's time to use your knowledge of trigonometric identities! Rewrite the expression using identities (like $\sin^2(x) + \cos^2(x) = 1$) to simplify it, cancel terms, and find the limit.
+            </p>
+        </div>
+        
+        <!-- Slide 18: Trig Identities Example -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example: Using Trig Identities</h3>
+            <img src="figures/KA_limits_using_trig_identities.png" alt="Limits using Trig Identities Example" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+        
+        <!-- NEW SLIDES START HERE -->
+
+        <!-- Slide 19: Drawing Conclusions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Drawing Conclusions from Direct Substitution</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> The result of direct substitution tells you what to do next. If you get a number, you're done! If you get a non-zero number over zero, the limit doesn't exist. If you get $\frac{0}{0}$, you have more work to do.
+            </p>
+        </div>
+
+        <!-- Slide 20: Drawing Conclusions Example 1 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 1: What Happens?</h3>
+            <img src="figures/KA_conclusions_from_direct_substitution_1.png" alt="Drawing Conclusions Example 1" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 21: Drawing Conclusions Example 2 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 2: What Happens?</h3>
+            <img src="figures/KA_conclusions_from_direct_substitution_2.png" alt="Drawing Conclusions Example 2" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 22: Next Steps Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Next Steps for Indeterminate Forms</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> Getting $\frac{0}{0}$ means "keep going"! Look at the function's form to decide your strategy. Is it a rational function? Try factoring. Does it have a square root? Try conjugates. Is it trigonometric? Use identities.
+            </p>
+        </div>
+
+        <!-- Slide 23: Next Steps Example 1 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 1: What's the Next Step?</h3>
+            <img src="figures/KA_next_steps_after_indeterminate_limit_1.png" alt="Next Steps after Indeterminate Example 1" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 24: Next Steps Example 2 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 2: What's the Next Step?</h3>
+            <img src="figures/KA_next_steps_after_indeterminate_limit_2.png" alt="Next Steps after Indeterminate Example 2" class="max-w-full h-auto rounded-lg shadow-md">
+        </div>
+
+        <!-- Slide 25: Strategy Flow Chart Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Strategy for Finding Limits</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl">
+                <strong>The Idea:</strong> Think of finding limits as a path. You always start with direct substitution. The result of that first step tells you which path to take next, leading you through different algebraic techniques until you finally arrive at the answer.
+            </p>
+        </div>
+
+        <!-- Slide 26: Strategy Flow Chart Example 1 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 1: Follow the Flow Chart</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <img src="figures/KA_strategy_flow_chart_example1.png" alt="Strategy Flow Chart Example 1" class="max-w-full md:w-1/2 h-auto rounded-lg">
+                <img src="figures/KA_strategy_flow_chart_example1_accompanying_picture.png" alt="Strategy Flow Chart Example 1 Accompanying" class="max-w-full md:w-1/2 h-auto rounded-lg">
+            </div>
+        </div>
+        
+        <!-- Slide 27: Strategy Flow Chart Example 2 -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-6">Example 2: Follow the Flow Chart</h3>
+            <div class="flex flex-col md:flex-row gap-4 items-center">
+                <img src="figures/KA_strategy_flow_chart_example2.png" alt="Strategy Flow Chart Example 2" class="max-w-full md:w-1/2 h-auto rounded-lg">
+                <img src="figures/KA_strategy_flow_chart_example2_accompanying_picture.png" alt="Strategy Flow Chart Example 2 Accompanying" class="max-w-full md:w-1/2 h-auto rounded-lg">
+            </div>
+        </div>
+
+        <!-- Slide 28: End -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">End of Examples</h1>
+            <p class="mt-4 text-xl md:text-2xl text-indigo-600">Good luck!</p>
+        </div>
+
+    </div>
+
+    <!-- Navigation Controls -->
+    <div class="flex-shrink-0 w-full bg-white shadow-md p-4">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <button id="prevBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                Previous
+            </button>
+            <div id="slideCounter" class="text-gray-600 font-medium">
+                Slide 1 / 28
+            </div>
+            <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
+                Next
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for presentation logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            function showSlide(index) {
+                // Hide all slides
+                slides.forEach((slide) => {
+                    slide.classList.remove('active');
+                });
+
+                // Show the correct slide
+                slides[index].classList.add('active');
+
+                // Update the slide counter
+                slideCounter.textContent = `Slide ${index + 1} / ${totalSlides}`;
+
+                // Update button states
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === totalSlides - 1;
+            }
+
+            // Event Listeners for buttons
+            nextBtn.addEventListener('click', () => {
+                if (currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                    showSlide(currentSlide);
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (currentSlide > 0) {
+                    currentSlide--;
+                    showSlide(currentSlide);
+                }
+            });
+            
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' && currentSlide < totalSlides - 1) {
+                    nextBtn.click();
+                } else if (e.key === 'ArrowLeft' && currentSlide > 0) {
+                    prevBtn.click();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(currentSlide);
+        });
+    </script>
+
+</body>
+</html>
