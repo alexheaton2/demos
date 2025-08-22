@@ -91,7 +91,7 @@
 
         <!-- Slide 6: Continuity at a Point Intuition -->
         <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
-            <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity at a Point</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity at a Point (Graphical)</h2>
             <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
                 <strong>The Idea:</strong> For a function to be continuous at a specific point, three things must be true: 1) The point must exist (the function is defined there), 2) The limit must exist as you approach the point, and 3) The point's value must equal the limit's value.
             </p>
@@ -112,7 +112,75 @@
             </div>
         </div>
 
-        <!-- Slide 8: End -->
+        <!-- NEW SLIDES START HERE -->
+
+        <!-- Slide 8: Continuity Algebraic Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity at a Point (Algebraic)</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> We apply the same three-part definition of continuity, but with equations instead of graphs. For piecewise functions, this means checking if the limit from the left equals the limit from the right, and if that value equals the function's value at that exact point.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Two roads are merging. For the merge to be smooth (continuous), the cars from the left road and the right road must be heading to the exact same spot on the new road, and that spot must actually exist.
+            </p>
+        </div>
+
+        <!-- Slide 9: Continuity Algebraic Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Algebraic Continuity</h3>
+            <img id="algebraic-main" src="figures/KA_continuity_algebraic_1.png" alt="Algebraic Continuity Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_continuity_algebraic_1.png" data-gallery="algebraic" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_continuity_algebraic_2.png" data-gallery="algebraic" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 10: Continuity over an Interval Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity over an Interval</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> A function is continuous over an interval if you can draw its graph over that entire stretch without lifting your pencil. This means there are no holes, jumps, or vertical asymptotes anywhere in that section of the graph.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> It's like checking a section of a highway for drivability. The road is "continuous" over a 10-mile stretch if there are no potholes, open drawbridges, or cliffs anywhere in those 10 miles.
+            </p>
+        </div>
+
+        <!-- Slide 11: Continuity over an Interval Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Continuity over an Interval</h3>
+            <img id="interval-main" src="figures/KA_continuous_interval_1.png" alt="Continuity over an Interval Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_continuous_interval_1.png" data-gallery="interval" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_continuous_interval_2.png" data-gallery="interval" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_continuous_interval_3.png" data-gallery="interval" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 12: Continuity of Common Functions Intuition -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Continuity of Common Functions</h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl mb-6">
+                <strong>The Idea:</strong> Many functions you're familiar with (like polynomials, sine, cosine, and exponential functions) are continuous everywhere. Others (like rational functions, logarithms, and tangent) are continuous everywhere they are defined, but you have to watch out for specific points where they are not.
+            </p>
+            <p class="text-lg md:text-xl text-gray-600 max-w-2xl italic">
+                <strong>Metaphor:</strong> Think of different types of transportation. A car (polynomial) can go on almost any road. A boat (logarithm) can only travel on water. A train (tangent) can only go where there are tracks. Each is "continuous" in its own valid environment.
+            </p>
+        </div>
+
+        <!-- Slide 13: Continuity of Common Functions Gallery -->
+        <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center bg-white rounded-xl shadow-lg p-8">
+            <h3 class="text-2xl font-semibold mb-4">Examples: Continuity of Common Functions</h3>
+            <img id="common-main" src="figures/KA_continuous_common_functions_1.png" alt="Continuity of Common Functions Example" class="max-w-full h-auto rounded-lg shadow-md mb-4" style="max-height: 400px;">
+            <div class="flex gap-2 md:gap-4">
+                <img src="figures/KA_continuous_common_functions_1.png" data-gallery="common" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-indigo-500 rounded-md">
+                <img src="figures/KA_continuous_common_functions_2.png" data-gallery="common" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_continuous_common_functions_3.png" data-gallery="common" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+                <img src="figures/KA_continuous_common_functions_4.png" data-gallery="common" class="gallery-thumb h-16 md:h-20 cursor-pointer border-4 border-transparent hover:border-indigo-500 rounded-md">
+            </div>
+        </div>
+
+        <!-- Slide 14: End -->
         <div class="slide w-full max-w-4xl h-full flex-col items-center justify-center text-center bg-white rounded-xl shadow-lg p-8">
             <h1 class="text-4xl md:text-5xl font-bold text-gray-900">End of Examples</h1>
             <p class="mt-4 text-xl md:text-2xl text-indigo-600">Good luck!</p>
@@ -127,7 +195,7 @@
                 Previous
             </button>
             <div id="slideCounter" class="text-gray-600 font-medium">
-                Slide 1 / 8
+                Slide 1 / 14
             </div>
             <button id="nextBtn" class="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-lg transition duration-300">
                 Next
@@ -178,6 +246,7 @@
             // --- Image Gallery Logic ---
             function setupGallery(galleryName) {
                 const mainImage = document.getElementById(`${galleryName}-main`);
+                if (!mainImage) return; // Guard against missing galleries
                 const thumbnails = document.querySelectorAll(`[data-gallery="${galleryName}"]`);
 
                 thumbnails.forEach(thumb => {
@@ -192,9 +261,13 @@
                 });
             }
 
+            // Setup all galleries
             setupGallery('squeeze');
             setupGallery('discontinuity');
             setupGallery('continuity');
+            setupGallery('algebraic');
+            setupGallery('interval');
+            setupGallery('common');
 
             // Initialize the first slide
             showSlide(currentSlide);
