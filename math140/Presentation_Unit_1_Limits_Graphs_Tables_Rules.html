@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Presentation: Limits from Tables & Graphs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- MathJax Configuration and Slideshow Logic -->
+    <script>
+        /**
+         * This function contains all the logic for controlling the slideshow.
+         * It will be called by MathJax once the library is fully loaded and ready.
+         */
+        function initializeSlideshow() {
+            const slides = document.querySelectorAll('.slide');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const slideCounter = document.getElementById('slideCounter');
+            let currentSlide = 0;
+
+            // Initialize all image galleries on the page
+            initializeImageGalleries();
+
+            function updateSlideCounter() {
+                slideCounter.textContent = `${currentSlide + 1} / ${slides.length}`;
+            }
+
+            function showSlide(index) {
+                // Hide the currently active slide
+                const activeSlide = document.querySelector('.slide.active');
+                if (activeSlide) {
+                    activeSlide.classList.remove('active');
+                }
+                
+                // Show the new slide
+                currentSlide = index;
+                if (slides[currentSlide]) {
+                    slides[currentSlide].classList.add('active');
+                }
+                
+                updateSlideCounter();
+            }
+
+            function revealNextOnSlide() {
+                const revealables = slides[currentSlide].querySelectorAll('.revealable:not(.revealed)');
+                if (revealables.length > 0) {
+                    revealables[0].classList.add('revealed');
+                    return true; // An item was revealed
+                }
+                return false; // No more items to reveal
+            }
+            
+            function hideAllOnSlide(slideIndex) {
+                 const revealables = slides[slideIndex].querySelectorAll('.revealable.revealed');
+                 revealables.forEach(el => el.classList.remove('revealed'));
+            }
+
+            function nextStep() {
+                if (!revealNextOnSlide()) {
+                    if (currentSlide < slides.length - 1) {
+                        showSlide(currentSlide + 1);
+                    }
+                }
+            }
+
+            function prevStep() {
+                if (currentSlide > 0) {
+                    hideAllOnSlide(currentSlide);
+                    showSlide(currentSlide - 1);
+                    const revealables = slides[currentSlide].querySelectorAll('.revealable');
+                    revealables.forEach(el => el.classList.add('revealed'));
+                }
+            }
+            
+            nextBtn.addEventListener('click', nextStep);
+            prevBtn.addEventListener('click', prevStep);
+            
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowRight' || e.key === ' ') {
+                    e.preventDefault();
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    prevStep();
+                }
+            });
+
+            // Initialize the first slide
+            showSlide(0);
+        }
+
+        /**
+         * This function finds all image galleries on the page and sets them up.
+         */
+        function initializeImageGalleries() {
+            const galleries = document.querySelectorAll('.image-gallery');
+            
+            galleries.forEach(gallery => {
+                const mainImage = gallery.querySelector('.main-image');
+                const thumbnails = gallery.querySelectorAll('.gallery-thumb');
+
+                if (!mainImage || thumbnails.length === 0) {
+                    return;
+                }
+
+                thumbnails.forEach(thumb => {
+                    thumb.addEventListener('click', function() {
+                        // Use a fade effect for the main image change
+                        mainImage.style.opacity = '0';
+                        
+                        setTimeout(() => {
+                            mainImage.src = this.src;
+                            mainImage.style.opacity = '1';
+                        }, 300); // Match timeout with CSS transition duration
+
+                        // Update the active state on thumbnails within this specific gallery
+                        thumbnails.forEach(t => t.classList.remove('active-thumb'));
+                        this.classList.add('active-thumb');
+                    });
+                });
+            });
+        }
+
+        // Configure MathJax
+        window.MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']]
+          },
+          svg: {
+            fontCache: 'global'
+          },
+          startup: {
+            // This function runs when MathJax is ready.
+            ready: () => {
+              // This performs the initial typesetting of the page.
+              MathJax.startup.defaultReady();
+              // This starts our slideshow logic AFTER typesetting is done.
+              initializeSlideshow();
+            }
+          }
+        };
+    </script>
+    <script type="text/javascript" id="MathJax-script" async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js">
+    </script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+        .slide {
+            display: none; /* Hide all slides by default */
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+            position: absolute; /* Position slides on top of each other */
+            width: 100%;
+            height: 100%;
+        }
+        .slide.active {
+            display: flex; /* Show active slide */
+            opacity: 1;
+            z-index: 10;
+        }
+        .revealable {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .slide h1 { font-size: 2.8rem; font-weight: 700; }
+        .slide h2 { font-size: 1.8rem; font-weight: 700; margin-bottom: 0.8rem; }
+        .slide h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 1.5rem; }
+        .slide p, .slide li {
+            font-size: 1.1rem; 
+            line-height: 1.6;
+            overflow-wrap: break-word;
+        }
+        .slide ul { list-style-position: inside; }
+        .slide ul li { margin-bottom: 0.8rem; }
+        .slide-container {
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            text-align: center;
+        }
+        .slide-content {
+            max-width: 900px;
+            width: 90%;
+        }
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 20;
+        }
+        .controls button {
+            padding: 10px 20px;
+            background-color: #1f2937;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 1rem;
+            color: #4b5563;
+            z-index: 20;
+        }
+        /* FIX for MathJax inline display */
+        mjx-container {
+            display: inline-block;
+        }
+
+        /* --- STYLES FOR IMAGE GALLERIES --- */
+        .main-image {
+            transition: opacity 0.3s ease-in-out;
+        }
+        .gallery-thumb {
+            transition: all 0.3s ease;
+            opacity: 0.4;
+            border: 3px solid transparent;
+            cursor: pointer;
+        }
+        .gallery-thumb:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+        .gallery-thumb.active-thumb {
+            opacity: 1;
+            border-color: #3b82f6; /* Tailwind's blue-500 */
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <!-- Slide 1: Title -->
+    <div class="slide active slide-container bg-gray-800 text-white">
+        <div class="slide-content">
+            <h1>Finding Limits</h1>
+            <h3 class="mt-4 text-gray-300">Estimating from Tables & Graphs</h3>
+        </div>
+    </div>
+
+    <!-- Slide 2: Intuition -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>The Core Idea: The Journey, Not the Destination</h2>
+            <ul>
+                <li class="revealable">A limit describes what a function's value <strong>approaches</strong> as the input gets infinitely close to a point.</li>
+                <li class="revealable">The limit might be different from the function's actual value <strong>at</strong> that point.</li>
+                <li class="revealable">When the "journey's end" (the limit) matches the "destination" (the function's value), we call the function <strong>continuous</strong> at that point.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 3: Limits from Tables -->
+    <div class="slide slide-container">
+        <div class="slide-content w-full max-w-5xl">
+            <h2>Topic 1: Estimating Limits from Tables</h2>
+            <div class="image-gallery mt-4">
+                <!-- Main Display Image -->
+                <div class="mb-4 h-[50vh] flex items-center justify-center bg-gray-200 rounded-lg">
+                    <img src="figures/KA_limits_from_tables_and_graphs_1.png" alt="Enlarged example of a limit problem from a table" class="main-image max-h-full max-w-full object-contain rounded-lg shadow-lg">
+                </div>
+                <!-- Thumbnails -->
+                <div class="flex justify-center items-center gap-4 h-28">
+                    <img src="figures/KA_limits_from_tables_and_graphs_1.png" alt="Table limit example 1" class="gallery-thumb active-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_from_tables_and_graphs_2.png" alt="Table limit example 2" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_from_tables_and_graphs_3.png" alt="Table limit example 3" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_from_tables_and_graphs_4.png" alt="Table limit example 4" class="gallery-thumb h-full rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Limits from Graphs -->
+    <div class="slide slide-container">
+        <div class="slide-content w-full max-w-5xl">
+            <h2>Topic 2: Finding Limits from Graphs</h2>
+            <div class="image-gallery mt-4">
+                <!-- Main Display Image -->
+                <div class="mb-4 h-[50vh] flex items-center justify-center bg-gray-200 rounded-lg">
+                    <img src="figures/KA_one_sided_limits_from_graphs_1.png" alt="Enlarged example of a limit problem from a graph" class="main-image max-h-full max-w-full object-contain rounded-lg shadow-lg">
+                </div>
+                <!-- Thumbnails -->
+                <div class="flex justify-center items-center gap-x-4 gap-y-2 h-28 flex-wrap">
+                    <img src="figures/KA_one_sided_limits_from_graphs_1.png" alt="Graph limit example 1" class="gallery-thumb active-thumb h-full rounded-md">
+                    <img src="figures/KA_one_sided_limits_from_graphs_2.png" alt="Graph limit example 2" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_one_sided_limits_from_graphs_3.png" alt="Graph limit example 3" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_connecting_limits_and_graphs_1.png" alt="Graph limit example 4" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_connecting_limits_and_graphs_2.png" alt="Graph limit example 5" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_connecting_limits_and_graphs_3.png" alt="Graph limit example 6" class="gallery-thumb h-full rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: One-Sided Limits Intuition -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Deeper Dive: One-Sided Limits</h2>
+            <ul>
+                <li class="revealable">Sometimes, the journey depends on the direction you're coming from. We can look at the limit from just the left or just the right.</li>
+                <li class="revealable"><strong>Limit from the right:</strong> $\lim_{x \to c^+} f(x)$ means "what value does $f(x)$ approach as $x$ gets close to $c$ from values greater than $c$?"</li>
+                <li class="revealable"><strong>Limit from the left:</strong> $\lim_{x \to c^-} f(x)$ means "what value does $f(x)$ approach as $x$ gets close to $c$ from values less than $c$?"</li>
+                <li class="revealable text-lg font-bold mt-4">A (two-sided) limit $\lim_{x \to c} f(x)$ exists only if the journey from both sides leads to the same place: <br>$\lim_{x \to c^-} f(x) = \lim_{x \to c^+} f(x)$</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 6: More Table Examples -->
+    <div class="slide slide-container">
+        <div class="slide-content w-full max-w-5xl">
+            <h2>Topic 3: One-Sided Limits & Table Analysis</h2>
+            <div class="image-gallery mt-4">
+                <!-- Main Display Image -->
+                <div class="mb-4 h-[50vh] flex items-center justify-center bg-gray-200 rounded-lg">
+                    <img src="figures/KA_estimating_limits_from_tables_1.png" alt="Enlarged example of a one-sided limit from a table" class="main-image max-h-full max-w-full object-contain rounded-lg shadow-lg">
+                </div>
+                <!-- Thumbnails -->
+                <div class="flex justify-center items-center gap-x-4 gap-y-2 h-28 flex-wrap">
+                    <img src="figures/KA_estimating_limits_from_tables_1.png" alt="Estimating limits from tables 1" class="gallery-thumb active-thumb h-full rounded-md">
+                    <img src="figures/KA_estimating_limits_from_tables_2.png" alt="Estimating limits from tables 2" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_onesided_limits_from_tables_1.png" alt="One-sided limits from tables 1" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_onesided_limits_from_tables_2.png" alt="One-sided limits from tables 2" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_creating_tables_for_limits_1.png" alt="Creating tables for limits 1" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_creating_tables_for_limits_2.png" alt="Creating tables for limits 2" class="gallery-thumb h-full rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === NEW SLIDES START HERE === -->
+
+    <!-- Slide 7: Limit Laws Intuition -->
+    <div class="slide slide-container">
+        <div class="slide-content text-left">
+            <h2>Working with Limits: The Limit Laws</h2>
+            <ul>
+                <li class="revealable">For most functions, limits behave nicely with arithmetic. The limit of a sum is the sum of the limits, and so on.</li>
+                <li class="revealable"><strong>Composite Functions $\lim_{x \to c} f(g(x))$:</strong> This is a two-step journey.
+                    <ol class="list-decimal list-inside pl-4 mt-2">
+                        <li><strong>Inner Journey:</strong> First, find the limit of the *inside* function. Where is $g(x)$ heading as $x \to c$? Let's call this destination $L$.</li>
+                        <li><strong>Outer Journey:</strong> Now, use that result $L$ as the new target for the *outside* function. Where is $f(u)$ heading as its input $u \to L$?</li>
+                    </ol>
+                </li>
+                 <li class="revealable text-sm mt-2">This is like a relay race: the first runner's finish line ($L$) is the second runner's starting point.</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Slide 8: Limits of Sums -->
+    <div class="slide slide-container">
+        <div class="slide-content w-full max-w-5xl">
+            <h2>Topic 4: Limits of Sums & Differences</h2>
+            <div class="image-gallery mt-4">
+                <!-- Main Display Image -->
+                <div class="mb-4 h-[50vh] flex items-center justify-center bg-gray-200 rounded-lg">
+                    <img src="figures/KA_limits_of_sums_1.png" alt="Enlarged example of limits of sums" class="main-image max-h-full max-w-full object-contain rounded-lg shadow-lg">
+                </div>
+                <!-- Thumbnails -->
+                <div class="flex justify-center items-center gap-x-4 h-28">
+                    <img src="figures/KA_limits_of_sums_1.png" alt="Limits of sums example 1" class="gallery-thumb active-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_of_sums_2.png" alt="Limits of sums example 2" class="gallery-thumb h-full rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 9: Limits of Products & Quotients -->
+    <div class="slide slide-container">
+        <div class="slide-content w-full max-w-5xl">
+            <h2>Topic 5: Limits of Products & Quotients</h2>
+            <div class="image-gallery mt-4">
+                <!-- Main Display Image -->
+                <div class="mb-4 h-[50vh] flex items-center justify-center bg-gray-200 rounded-lg">
+                    <img src="figures/KA_limits_products_quotients_1.png" alt="Enlarged example of limits of products and quotients" class="main-image max-h-full max-w-full object-contain rounded-lg shadow-lg">
+                </div>
+                <!-- Thumbnails -->
+                <div class="flex justify-center items-center gap-x-4 h-28">
+                    <img src="figures/KA_limits_products_quotients_1.png" alt="Limits of products example 1" class="gallery-thumb active-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_products_quotients_2.png" alt="Limits of products example 2" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_products_quotients_3.png" alt="Limits of products example 3" class="gallery-thumb h-full rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 10: Limits of Composite Functions -->
+    <div class="slide slide-container">
+        <div class="slide-content w-full max-w-5xl">
+            <h2>Topic 6: Limits of Composite Functions</h2>
+            <div class="image-gallery mt-4">
+                <!-- Main Display Image -->
+                <div class="mb-4 h-[50vh] flex items-center justify-center bg-gray-200 rounded-lg">
+                    <img src="figures/KA_limits_composite_functions_1.png" alt="Enlarged example of limits of composite functions" class="main-image max-h-full max-w-full object-contain rounded-lg shadow-lg">
+                </div>
+                <!-- Thumbnails -->
+                <div class="flex justify-center items-center gap-x-4 h-28">
+                    <img src="figures/KA_limits_composite_functions_1.png" alt="Composite functions example 1" class="gallery-thumb active-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_composite_functions_2.png" alt="Composite functions example 2" class="gallery-thumb h-full rounded-md">
+                    <img src="figures/KA_limits_composite_functions_3.png" alt="Composite functions example 3" class="gallery-thumb h-full rounded-md">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 11: Questions -->
+    <div class="slide slide-container">
+        <div class="slide-content">
+            <h1>Questions?</h1>
+        </div>
+    </div>
+
+    <!-- Controls -->
+    <div class="controls">
+        <button id="prevBtn">Prev</button>
+        <button id="nextBtn">Next</button>
+    </div>
+    <div id="slideCounter" class="slide-counter"></div>
+
+</body>
+</html>
