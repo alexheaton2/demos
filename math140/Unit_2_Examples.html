@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AP Calculus AB - Unit 2: Derivatives</title>
+    <style>
+        /* Basic Setup */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #1a1a1a; /* Dark background */
+            color: #f0f0f0; /* Light text */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden; /* Prevent scrollbars */
+        }
+
+        /* Presentation Container */
+        #presentation {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Slide Styling */
+        .slide {
+            display: none; /* Hide all slides by default */
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-sizing: border-box;
+            padding: 5vw;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            text-align: center;
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+
+        /* Active Slide */
+        .slide.active {
+            display: flex; /* Show the active slide */
+            opacity: 1;
+        }
+
+        /* Slide Content */
+        .slide h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            color: #4dd0e1; /* A nice cyan color for titles */
+        }
+
+        .slide h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 3px solid #4dd0e1;
+            padding-bottom: 1rem;
+        }
+
+        .slide p {
+            font-size: 1.5rem;
+            line-height: 1.6;
+            max-width: 800px;
+        }
+        
+        .slide .metaphor {
+            margin-top: 2rem;
+            font-style: italic;
+            color: #bdbdbd;
+            border-left: 4px solid #4dd0e1;
+            padding-left: 2rem;
+            text-align: left;
+        }
+
+        /* Styles for revealable content */
+        .revealable {
+            opacity: 0;
+            transform: translateY(15px);
+            transition: opacity 0.4s ease-out, transform 0.4s ease-out;
+        }
+
+        .revealable.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* CTA Button for Khan Academy Links */
+        .cta-button {
+            display: inline-block;
+            padding: 15px 35px;
+            margin-top: 2rem; /* Add space between image and button */
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #1a1a1a;
+            background-color: #4dd0e1;
+            border-radius: 50px;
+            text-decoration: none;
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
+            box-shadow: 0 4px 15px rgba(77, 208, 225, 0.4);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(77, 208, 225, 0.6);
+        }
+
+        /* Styling for exercise images */
+        .exercise-image {
+            max-width: 80%;
+            max-height: 60vh;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+        }
+        
+        .image-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 2rem;
+        }
+        
+        .image-row .exercise-image {
+            max-width: 45%;
+            max-height: 55vh;
+        }
+
+
+        /* Navigation Arrows */
+        .nav-arrow {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 50px;
+            height: 50px;
+            background-color: rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.2s;
+        }
+
+        .nav-arrow:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+
+        #prev {
+            left: 20px;
+        }
+
+        #next {
+            right: 20px;
+        }
+        
+        /* Footer for slide numbers */
+        .slide-number {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-size: 1rem;
+            color: #888;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div id="presentation">
+
+        <!-- Slide 0: Title Slide -->
+        <div class="slide active">
+            <div class="content">
+                <h1>AP Calculus AB</h1>
+                <p>Unit 2: An Introduction to Derivatives</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Skill 1: Secants and Average Rate of Change -->
+        <div class="slide">
+            <div class="content">
+                <h2>Secants & Average Rate of Change</h2>
+                <p class="revealable">The average rate of change is the slope of the secant line between two points on a curve. It tells us the function's average "speed" over an interval.</p>
+                <p class="metaphor revealable"><strong>Metaphor:</strong> Think of a road trip. Your <strong>average speed</strong> is the total distance divided by the total time. This doesn't tell you your speed at any specific moment, but it gives you the overall rate of change for the entire trip.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+        <div class="slide">
+            <img src="KA_secant_average_rate_of_change_1.png" alt="Example of average rate of change problem" class="exercise-image">
+            <a href="https://www.khanacademy.org/math/ap-calculus-ab/ab-differentiation-1-new/ab-2-1/e/secants-and-average-rate-of-change" target="_blank" rel="noopener noreferrer" class="cta-button">
+                Open Exercise in New Tab
+            </a>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Skill 2: Graphs of Functions and Their Derivatives -->
+        <div class="slide">
+            <div class="content">
+                <h2>Graphs of Functions & Their Derivatives</h2>
+                <p class="revealable">The derivative graph, f'(x), tells you the <strong>slope</strong> of the original function, f(x), at every point. Where f(x) goes up, f'(x) is positive. Where f(x) has a peak or valley, f'(x) is zero.</p>
+                <p class="metaphor revealable"><strong>Metaphor:</strong> Imagine hiking on a mountain, f(x). The derivative, f'(x), is a device that tells you the <strong>steepness of the trail</strong>. It shows a positive number going uphill, zero at the peak, and a negative number going downhill.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+        <div class="slide">
+            <img src="KA_derivative_as_slope_1.png" alt="Example of estimating a derivative from a graph" class="exercise-image">
+            <a href="https://www.khanacademy.org/math/ap-calculus-ab/ab-differentiation-1-new/ab-2-1/e/graphs-of-functions-and-their-derivatives" target="_blank" rel="noopener noreferrer" class="cta-button">
+                Open Exercise in New Tab
+            </a>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Skill 3: Derivative at a Point as Slope of Tangent Line -->
+        <div class="slide">
+            <div class="content">
+                <h2>Derivative as Slope of Tangent Line</h2>
+                <p class="revealable">The derivative at a single point gives us the <strong>instantaneous rate of change</strong>. This is the slope of the tangent line—the line that just "touches" the curve at that one point.</p>
+                <p class="metaphor revealable"><strong>Metaphor:</strong> Back to the road trip. The instantaneous rate of change is what your <strong>speedometer</strong> reads at a specific moment. It's the "slope" of your journey at that exact instant.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+        <div class="slide">
+            <img src="KA_derivative_tangent_line_equation_1.png" alt="Example of finding a tangent line equation" class="exercise-image">
+            <a href="https://www.khanacademy.org/math/ap-calculus-ab/ab-differentiation-1-new/ab-2-1/e/derivative-at-a-point-as-slope-of-tangent-line" target="_blank" rel="noopener noreferrer" class="cta-button">
+                Open Exercise in New Tab
+            </a>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Skill 4: The Formal and Alternate Form of the Derivative -->
+        <div class="slide">
+            <div class="content">
+                <h2>The Limit Definition of the Derivative</h2>
+                <p class="revealable">This is the mathematical machine we use to find the exact slope of the tangent line. We find the slope of a secant line over an interval 'h', then shrink 'h' to zero.</p>
+                <p class="metaphor revealable"><strong>Metaphor:</strong> Think of a high-resolution camera zooming in on a curve. As you zoom in infinitely close (letting h → 0), any small piece of the curve starts to look like a straight line. The limit definition is the <strong>lens of our camera</strong>.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+        <div class="slide">
+            <div class="image-row">
+                <img src="KA_derivative_as_limit_1.png" alt="Example of limit definition of a derivative" class="exercise-image">
+                <img src="KA_derivative_as_limit_2.png" alt="Another example of limit definition of a derivative" class="exercise-image">
+            </div>
+            <a href="https://www.khanacademy.org/math/ap-calculus-ab/ab-differentiation-1-new/ab-2-2/e/the-formal-and-alternate-form-of-the-derivative" target="_blank" rel="noopener noreferrer" class="cta-button">
+                Open Exercise in New Tab
+            </a>
+            <div class="slide-number"></div>
+        </div>
+
+        <!-- Skill 5: Estimate Derivatives from Tables -->
+        <div class="slide">
+            <div class="content">
+                <h2>Estimating Derivatives from Tables</h2>
+                <p class="revealable">When we only have a table of values, we can't find the exact derivative. Instead, we get a good estimate by calculating the average rate of change between the two closest points.</p>
+                <p class="metaphor revealable"><strong>Metaphor:</strong> Imagine you only have photos of a car's location at 1:59 PM and 2:01 PM. You can't know its exact speed at 2:00, but you can calculate its <strong>average speed</strong> between those two times to get the best estimate.</p>
+            </div>
+            <div class="slide-number"></div>
+        </div>
+        <div class="slide">
+            <img src="KA_estimate_derivative_1.png" alt="Example of estimating a derivative from a table" class="exercise-image">
+            <a href="https://www.khanacademy.org/math/ap-calculus-ab/ab-differentiation-1-new/ab-2-3/e/estimate-derivatives-from-tables" target="_blank" rel="noopener noreferrer" class="cta-button">
+                Open Exercise in New Tab
+            </a>
+            <div class="slide-number"></div>
+        </div>
+
+    </div>
+
+    <!-- Navigation Elements -->
+    <div id="prev" class="nav-arrow">&lt;</div>
+    <div id="next" class="nav-arrow">&gt;</div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const slides = document.querySelectorAll('.slide');
+            const prevButton = document.getElementById('prev');
+            const nextButton = document.getElementById('next');
+            let currentSlide = 0;
+            const totalSlides = slides.length;
+
+            // Function to advance the presentation
+            // It will either reveal the next piece of content or go to the next slide
+            function advance() {
+                const currentSlideElement = slides[currentSlide];
+                const revealableElements = currentSlideElement.querySelectorAll('.revealable');
+                
+                // Find the first element that hasn't been revealed yet
+                const hiddenElement = Array.from(revealableElements).find(el => !el.classList.contains('revealed'));
+
+                if (hiddenElement) {
+                    // If we found a hidden element, reveal it
+                    hiddenElement.classList.add('revealed');
+                } else {
+                    // Otherwise, all content is visible, so go to the next slide
+                    showSlide(currentSlide + 1);
+                }
+            }
+
+            // Function to show a specific slide
+            function showSlide(index) {
+                // Deactivate current slide
+                slides[currentSlide].classList.remove('active');
+
+                // Before showing the new slide, reset its revealable elements so they are hidden again
+                const nextSlideIndex = (index + totalSlides) % totalSlides;
+                const nextSlideElement = slides[nextSlideIndex];
+                const revealablesOnNext = nextSlideElement.querySelectorAll('.revealable');
+                revealablesOnNext.forEach(el => el.classList.remove('revealed'));
+
+                // Update current slide index
+                currentSlide = nextSlideIndex;
+
+                // Activate new slide
+                slides[currentSlide].classList.add('active');
+                
+                // Update all slide numbers
+                updateSlideNumbers();
+            }
+            
+            // Function to update the slide number display on all slides
+            function updateSlideNumbers() {
+                const slideNumbers = document.querySelectorAll('.slide-number');
+                slideNumbers.forEach((el, i) => {
+                    el.textContent = `${i + 1} / ${totalSlides}`;
+                });
+            }
+
+            // Event Listeners for navigation
+            nextButton.addEventListener('click', advance);
+            prevButton.addEventListener('click', () => showSlide(currentSlide - 1));
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'ArrowRight' || event.key === ' ') { // Spacebar also advances
+                    advance();
+                } else if (event.key === 'ArrowLeft') {
+                    showSlide(currentSlide - 1);
+                }
+            });
+            
+            // Initialize the presentation
+            showSlide(0);
+        });
+    </script>
+</body>
+</html>
