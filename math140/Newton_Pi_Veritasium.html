@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Activity: The Story of Pi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Script for Chart.js (a simpler, robust plotting library) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Scripts for MathJax (rendering LaTeX) -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .activity-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+        }
+        .activity-card:hover {
+            transform: translateY(-5px);
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6; /* blue-500 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">The Story of Pi</h1>
+            <p class="text-lg text-blue-600 mt-2">A Calculus Group Activity on Limits and Approximation</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="space-y-12">
+
+            <!-- Part 1: Before You Watch -->
+            <section id="pre-watch" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 1: Before You Watch (Individual Work)</h2>
+                <p class="mb-6 text-gray-600">Please take a few minutes to think about and write down your answers to the following questions on your own paper. This will help you engage with the video's concepts.</p>
+                <div class="space-y-4">
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 1: Defining Pi</h3>
+                        <p>In your own words, what is the definition of π (pi)? How does it relate a circle's circumference to its diameter?</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 2: Shapes and Curves</h3>
+                        <p>Imagine you have a circle. If you inscribe a square inside it, and then a pentagon, then a hexagon, and so on, with more and more sides, what does the polygon start to look like? How does this idea of using an infinite of sides relate to a curve?</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 3: The Area Problem</h3>
+                        <p>Why is it easy to find the area of a rectangle or a triangle, but much harder to find the *exact* area of a shape with a curved edge, like a circle?</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Part 2: Watch The Video -->
+            <section id="watch-video" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 2: Watch the Video (Individual)</h2>
+                <p class="mb-6 text-gray-600">Now, watch the following video from Veritasium. As you watch, think about your answers from Part 1 and see how they connect to the history and mathematics presented.</p>
+                <!-- YouTube Video Embed -->
+                <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
+                    <iframe 
+                        src="https://www.youtube.com/embed/gMlf1ELvRzc" 
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                        allowfullscreen
+                        class="w-full h-full">
+                    </iframe>
+                </div>
+            </section>
+
+            <!-- Part 3: Group Discussion -->
+            <section id="post-watch" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 3: Group Discussion & Written Output</h2>
+                <p class="mb-6 text-gray-600">Now, get together with your group of 3-4. Discuss the following questions. Designate one person to write down your group's collective answers. This will be your tangible output for the activity.</p>
+                <div class="space-y-6">
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 1: A Simple Estimate (Recall)</h3>
+                        <p>The video showed a simple way to estimate that π is between 3 and 4 using inscribed and circumscribed polygons. As a group, try to remember and explain this method in your own words without re-watching the video.</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 2: The Archimedes Method & Limits (Calculus Connection)</h3>
+                        <p>Archimedes used polygons with more and more sides to get better approximations for the area of a circle. How does this process of "closing in" on the true value relate to the concept of a <strong class="text-blue-600">limit</strong> in calculus? Explain how the area of the inscribed polygon approaches the area of the circle as the number of sides, <em class="italic">n</em>, approaches infinity.</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 3: Newton's Infinite Series & Convergence (Calculus Connection)</h3>
+                        <p class="mb-2">The video mentioned Isaac Newton's work on infinite series. He discovered that you could represent functions like \( \sqrt{1+x} \) as a polynomial with an infinite number of terms (a power series), derived from the binomial theorem:</p>
+                        <p class="text-center text-md md:text-lg my-4 bg-gray-100 p-4 rounded-md shadow-inner">
+                            \( \sqrt{1+x} = 1 + \frac{1}{2}x - \frac{1}{8}x^2 + \frac{1}{16}x^3 - \frac{5}{128}x^4 + \cdots \)
+                        </p>
+                        <p>This was a revolutionary idea! It allows us to approximate complex functions with simpler polynomials. Use the interactive plot below to see this in action. The slider controls the 'degree' of the polynomial approximation (how many terms from the series we use).</p>
+                        
+                        <div class="my-4 border rounded-lg p-2"><canvas id="convergenceChart"></canvas></div>
+
+                        <div class="flex items-center space-x-4 my-4">
+                            <label for="degree-slider" class="font-medium whitespace-nowrap">Polynomial Degree:</label>
+                            <input id="degree-slider" type="range" min="0" max="10" value="2" class="w-full cursor-pointer">
+                            <span id="degree-label" class="font-bold text-blue-600 w-8 text-center bg-blue-100 rounded-md py-1">2</span>
+                        </div>
+                        
+                        <div class="text-center text-sm md:text-base my-4 bg-gray-100 p-4 rounded-md shadow-inner">
+                            <p class="font-semibold mb-2">Current Approximation:</p>
+                            <p id="polynomial-display">\( 1 + 0.5x - 0.125x^2 \)</p>
+                        </div>
+
+                        <p class="mb-4"><strong>Part A:</strong> As a group, use the slider and discuss: For what range of <em class="italic">x</em>-values does the polynomial approximation appear to match the actual function \( \sqrt{1+x} \)? In other words, where does the series seem to <strong class="text-blue-600">converge</strong> to the function? What happens to the approximation for <em class="italic">x</em>-values outside of this range, especially as you increase the degree?</p>
+
+                        <p><strong>Part B:</strong> The video explains that to compute \( \sqrt{3} \), you can rewrite it as \( \sqrt{4(1 - 1/4)} = 2\sqrt{1 - 1/4} \). This means you can use the series above with \( x = -1/4 \). The narrator says this gives a "very rapidly converging series." Look at the plot near \( x = -0.25 \). What does "rapidly converging" mean in this context? How does the graph support this claim? (i.e., how quickly does the red dashed line get close to the blue line at that x-value as you increase the degree?)</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 4: Putting It All Together: Newton's Calculation of Pi</h3>
+                        <p class="mb-4">The climax of the video describes how Newton used his new tools—the binomial theorem and calculus—to calculate π to 15 digits. The video moves quickly, so your task is to work together as a group to fill in the mathematical details. Use the video clip below as your guide.</p>
+                        
+                        <!-- YouTube Video Embed at specific time -->
+                        <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg my-6">
+                            <iframe 
+                                src="https://www.youtube.com/embed/gMlf1ELvRzc?start=775" 
+                                title="YouTube video player" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen
+                                class="w-full h-full">
+                            </iframe>
+                        </div>
+
+                        <p class="mb-4">Work through the following steps on paper, explaining each one.</p>
+                        <p class="bg-gray-50 p-4 rounded-md">Write out the details of all the required steps on paper, explaining each one.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Footer -->
+        <footer class="text-center mt-12 text-gray-500">
+            <p>&copy; Calculus In-Class Activity</p>
+        </footer>
+
+    </div>
+
+    <script>
+        // This script powers the interactive plot for Question 3 using Chart.js
+        document.addEventListener('DOMContentLoaded', function () {
+            const slider = document.getElementById('degree-slider');
+            const degreeLabel = document.getElementById('degree-label');
+            const polyDisplay = document.getElementById('polynomial-display');
+            const ctx = document.getElementById('convergenceChart').getContext('2d');
+            let chart;
+
+            const coeffs = [1, 0.5, -0.125, 0.0625, -0.0390625, 0.02734375, -0.0205078125, 0.01611328125, -0.013092041015625, 0.010986328125, -0.0094146728515625];
+
+            function formatPolynomial(degree) {
+                let result = '';
+                if (coeffs[0] !== 0) {
+                    result += coeffs[0];
+                }
+                for (let i = 1; i <= degree; i++) {
+                    let coeff = coeffs[i];
+                    if (coeff === 0) continue;
+                    result += (coeff > 0) ? ' + ' : ' - ';
+                    let absCoeff = Math.abs(coeff);
+                    if (absCoeff !== 1 || i === 0) {
+                       result += absCoeff;
+                    }
+                    if (i === 1) {
+                        result += 'x';
+                    } else {
+                        result += `x^${i}`;
+                    }
+                }
+                return `\\( ${result} \\)`;
+            }
+
+            function evaluateTaylor(x, degree) {
+                let sum = 0;
+                for (let i = 0; i <= degree; i++) {
+                    sum += coeffs[i] * Math.pow(x, i);
+                }
+                return sum;
+            }
+
+            const xValues = [];
+            for (let i = -1; i <= 2; i += 0.05) {
+                xValues.push(Number(i.toFixed(2)));
+            }
+            const yTrue = xValues.map(x => x < -1 ? NaN : Math.sqrt(1 + x));
+
+            function createPlot() {
+                const initialDegree = parseInt(slider.value, 10);
+                const yTaylor = xValues.map(x => evaluateTaylor(x, initialDegree));
+                
+                polyDisplay.innerHTML = formatPolynomial(initialDegree);
+                if (window.MathJax) {
+                    MathJax.typesetPromise([polyDisplay]);
+                }
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: xValues,
+                        datasets: [
+                            {
+                                label: 'y = sqrt(1+x)',
+                                data: yTrue,
+                                borderColor: '#3b82f6',
+                                borderWidth: 3,
+                                pointRadius: 0,
+                                tension: 0.1
+                            },
+                            {
+                                label: 'Taylor Approximation',
+                                data: yTaylor,
+                                borderColor: '#ef4444',
+                                borderWidth: 2,
+                                borderDash: [5, 5],
+                                pointRadius: 0,
+                                tension: 0.1
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'x' } },
+                            y: { title: { display: true, text: 'y' }, min: -0.5, max: 2.0 }
+                        },
+                        plugins: {
+                            title: { display: true, text: 'Function vs. Taylor Series Approximation' }
+                        }
+                    }
+                });
+            }
+
+            function updatePlot() {
+                const degree = parseInt(slider.value, 10);
+                degreeLabel.textContent = degree;
+                const yTaylorUpdated = xValues.map(x => evaluateTaylor(x, degree));
+                
+                chart.data.datasets[1].data = yTaylorUpdated;
+                chart.update();
+
+                polyDisplay.innerHTML = formatPolynomial(degree);
+                if (window.MathJax) {
+                    MathJax.typesetPromise([polyDisplay]);
+                }
+            }
+
+            slider.addEventListener('input', updatePlot);
+            createPlot();
+        });
+    </script>
+
+</body>
+</html>
