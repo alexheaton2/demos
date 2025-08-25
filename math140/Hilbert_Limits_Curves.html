@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An Enrichment Activity: Exploring Limits in the Geometry of Curves</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+        .slider-thumb::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: #4f46e5;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        .slider-thumb::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: #4f46e5;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">An Enrichment Activity: <br> Exploring Limits in the Geometry of Curves</h1>
+            <p class="mt-4 text-lg text-slate-600">Calculus Enrichment</p>
+        </header>
+
+        <!-- Introduction -->
+        <section id="intro" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Introduction: What is this all about?</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700">
+                <p>Welcome! In your calculus class, you are beginning a study of <strong>limits</strong>. You will use limits to define the derivative (the slope of a curve) and, later, the integral (the area under a curve). The concept of a limit is one of the most powerful ideas in all of mathematics.</p>
+                <p>The goal of this activity is to give you a sneak peek into how this one idea—the limit—is used in a beautiful field of mathematics called <em>differential geometry</em>, which is the study of curves and surfaces. You will be reading a short excerpt from a famous book, <em>Geometry and the Imagination</em> by David Hilbert, one of the most influential mathematicians of the 20th century.</p>
+                <p class="p-4 bg-yellow-50 border-l-4 border-yellow-400 text-yellow-800"><strong>A VERY IMPORTANT NOTE:</strong> You are <strong>not</strong> expected to understand everything in the reading or in this guide. That is not the goal. This material is typically taught in an advanced, upper-level university math course. The purpose here is simply to <strong>see how the idea of a limit appears again and again</strong> to help us describe complex geometric properties. Your goal is to engage with the ideas, ask questions, and get a feel for the bigger picture.</p>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 1: The Tangent Line -->
+        <section id="part1" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: The Tangent Line (A Limit of Two Points)</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <p class="text-slate-700">In the first part of the reading (§26), Hilbert discusses the most fundamental property of a curve at a point P: its direction. He describes this by imagining a second point on the curve and the <strong>secant line</strong> connecting them. As the second point slides along the curve toward the fixed, first point, the line connecting the two points approaches a <em>limiting position</em>.</p>
+                <p class="mt-4 text-slate-700">This is a geometric description of a limit. It's the exact same idea as the limit definition of the derivative you will be learning! The first appearance of a limit is used to define the <strong>tangent line</strong>. It requires two points on the curve, with one approaching the other.</p>
+            </div>
+
+            <!-- Interactive Plot 1: Tangent Line -->
+            <div class="w-full bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <header class="mb-6">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800">Interactive Visualization: A Limit of Two Points</h3>
+                    <p class="text-gray-600 mt-2">The secant line through Y(s) and Y(s+z) (solid blue) converges to the true tangent line (dotted black) as z → 0.</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-4">Controls</h4>
+                        <div class="space-y-6">
+                            <div>
+                                <label for="curve-selector-tan" class="block text-sm font-medium text-gray-700">Curve Y(s)</label>
+                                <select id="curve-selector-tan" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"></select>
+                            </div>
+                            <div>
+                                <label for="s-slider" class="block text-sm font-medium text-gray-700">Point on Curve (s)</label>
+                                <div class="flex items-center space-x-3">
+                                    <input id="s-slider" type="range" min="0" max="1000" value="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                                    <span id="s-value" class="text-sm font-mono text-indigo-600 w-12 text-center">0.00</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="z-slider" class="block text-sm font-medium text-gray-700">Point Separation (z)</label>
+                                <div class="flex items-center space-x-3">
+                                    <input id="z-slider" type="range" min="0" max="1000" value="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                                    <span id="z-value" class="text-sm font-mono text-indigo-600 w-12 text-center">0.50</span>
+                                </div>
+                            </div>
+                        </div>
+                         <div id="info-box-tan" class="mt-6 p-3 bg-indigo-100 text-indigo-800 rounded-md text-sm hidden"></div>
+                    </div>
+                    <div class="md:col-span-2 bg-gray-200 rounded-lg overflow-hidden aspect-square">
+                        <canvas id="canvas-tan"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700">
+                    <li>In your own words, describe the relationship between a secant line and a tangent line. Draw a diagram for your words. How does the concept of a "limit" play a role?</li>
+                    <li>The reading describes the tangent as the "limiting position" of the secant line. How does this geometric idea relate to the algebraic formula for the derivative, <span class="math">f'(x) = lim<sub>h→0</sub> (f(x+h) - f(x))/h</span>?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 2: Curvature -->
+        <section id="part2" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: Curvature (Two New Kinds of Limits!)</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700 mb-8">
+                <p>Next, Hilbert asks a more detailed question: How much is the curve <em>bending</em> at point P₁? Curvature or bending is <strong>not</strong> captured by the tangent line. Then Hilbert gives us two different, but related, ways to think about curvature, and both involve limits.</p>
+                <div>
+                    <h4 class="font-semibold text-slate-800">Limit Definition 1: The Limit of a Ratio</h4>
+                    <p>First, he looks at the tangents lines t₁ and t₂ at two nearby points, P₁ and P₂. He defines curvature, <span class="math">k</span>, as the limit of a ratio: <span class="math">k = lim<sub>P₁P₂→0</sub> (∠(t₁, t₂))/(P₁P₂)</span></p>
+                    <p>In words, this is the limit of the ratio of the <strong>angle between the tangents</strong> to the <strong>length of the curve segment</strong> between the points, as the points get closer and closer together. This is a new type of limit you haven't seen in class!</p>
+                </div>
+                <div>
+                    <h4 class="font-semibold text-slate-800">Limit Definition 2: The Osculating Circle (A Limit of Three Points)</h4>
+                    <p>He then shows that this value <span class="math">k</span> is related to a geometric object. He asks you to imagine a circle that passes through three nearby points on the curve (P₁ and two neighbors). As the two neighboring points approach P₁, this circle approaches a "limiting position." This limiting circle is called the <strong>osculating circle</strong> (from the Latin <em>osculari</em>, "to kiss"). He states that the curvature <span class="math">k</span> is simply the reciprocal of the radius <span class="math">r</span> of this circle (<span class="math">k = 1/r</span>).</p>
+                </div>
+                <p>So, to define the <em>bending</em> of a curve, we can use either the limit of a ratio of angles to lengths, or the limit of a circle passing through three merging points.</p>
+                <p class="text-sm"><strong>Please remember:</strong> The formulas are not our focus. We are only interested in the idea that we need a limit to define curvature.</p>
+            </div>
+            
+            <!-- Interactive Plot 2: Osculating Circle -->
+            <div class="w-full bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <header class="mb-6">
+                    <h3 class="text-2xl md:text-3xl font-bold text-gray-800">Interactive Visualization: A Limit of Three Points</h3>
+                    <p class="text-gray-600 mt-2">The circle through X(t-h), X(t), and X(t+h) (solid red) converges to the true osculating circle (dotted black) as h → 0.</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-4">Controls</h4>
+                        <div class="space-y-6">
+                            <div>
+                                <label for="curve-selector-osc" class="block text-sm font-medium text-gray-700">Curve X(t)</label>
+                                <select id="curve-selector-osc" class="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm rounded-md"></select>
+                            </div>
+                            <div>
+                                <label for="t-slider" class="block text-sm font-medium text-gray-700">Point on Curve (t)</label>
+                                <div class="flex items-center space-x-3">
+                                    <input id="t-slider" type="range" min="0" max="1000" value="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                                    <span id="t-value" class="text-sm font-mono text-indigo-600 w-12 text-center">0.00</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="h-slider" class="block text-sm font-medium text-gray-700">Point Separation (h)</label>
+                                <div class="flex items-center space-x-3">
+                                    <input id="h-slider" type="range" min="0" max="1000" value="500" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-thumb">
+                                    <span id="h-value" class="text-sm font-mono text-indigo-600 w-12 text-center">0.50</span>
+                                </div>
+                            </div>
+                        </div>
+                         <div id="info-box-osc" class="mt-6 p-3 bg-indigo-100 text-indigo-800 rounded-md text-sm hidden"></div>
+                    </div>
+                    <div class="md:col-span-2 bg-gray-200 rounded-lg overflow-hidden aspect-square">
+                        <canvas id="canvas-osc"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700" start="3">
+                    <li>Draw three random points on a piece of paper (not all in a straight line). Try to sketch the unique circle that passes through all three of them. Does it seem like there could be more than one possible circle?</li>
+                    <li>Hilbert's first definition of curvature is <span class="math">k = lim<sub>P₁P₂→0</sub> (∠(t₁, t₂))/(P₁P₂)</span>. For a straight line, what is the angle between any two tangent lines? What does this imply about the curvature <span class="math">k</span> of a straight line?</li>
+                    <li>Contrast a very large circle with a very small circle. Which one has a larger curvature <span class="math">k</span>? How does the radius <span class="math">r</span> of the osculating circle relate to the intuitive idea of "how much a curve is bending"?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+        
+        <!-- Part 3: Space Curves -->
+        <section id="part3" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: Space Curves and the Osculating Plane</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <p class="text-slate-700">In §27, the reading moves from <em>plane curves</em> to <strong>space curves</strong> (curves that can twist and turn in 3D space, like a roller coaster track).</p>
+                <p class="mt-4 text-slate-700">Here, the idea of a single "best-fit" plane becomes important. Hilbert defines the <strong>osculating plane</strong> as the limiting position of a plane that passes through the tangent line and a nearby point on the curve, as that nearby point approaches the point of contact. This is another way of saying it's the plane defined by the limit of three merging points on the curve.</p>
+                <p class="mt-4 text-slate-700">You can think of the osculating plane as the flat plane that the curve is "most nearly lying in" at that specific point. The reading also introduces the <strong>moving trihedron</strong>: a set of three perpendicular axes that travel along the curve: the <strong>tangent</strong>, the <strong>principal normal</strong>, and the <strong>binormal</strong>. The osculating plane contains the tangent and the principal normal.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700" start="6">
+                    <li>Imagine a coiled spring (a helix). Try to visualize the osculating plane at a point on the helix. As you move along the spring, what does the osculating plane do? Does it stay fixed or does it turn?</li>
+                    <li>For a curve that is already flat (like a parabola drawn on a piece of paper), what is its osculating plane at any point?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 4: Torsion -->
+        <section id="part4" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 4: Torsion (Twisting out of the Plane)</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8 space-y-4 text-slate-700">
+                <p>Finally, the excerpt introduces a property that only space curves can have: <strong>torsion</strong>. Torsion measures how much a curve is <em>twisting out of its osculating plane</em>. A curve that lies completely flat has zero torsion. A helix, which is constantly twisting, has non-zero torsion.</p>
+                <p>Just like with curvature, Hilbert defines torsion (which he also calls <em>second curvature, t</em>) using the limit of a ratio: it's the limit of the angle between two nearby osculating planes divided by the arc length between the points.</p>
+                <p>And, just like before, he connects this to a limiting geometric object. He states that to get an analogous interpretation, we need <strong>four</strong> neighboring points. The sphere passing through four points on the curve approaches a limiting position called the <strong>osculating sphere</strong>. The torsion of the curve is related to this sphere.</p>
+                <p class="font-semibold text-slate-800">The pattern is complete:</p>
+                <ul class="list-disc list-inside ml-4 space-y-1">
+                    <li><strong>2 points</strong> → limit gives the <strong>tangent line</strong>.</li>
+                    <li><strong>3 points</strong> → limit gives the <strong>osculating circle/plane</strong> (defining curvature).</li>
+                    <li><strong>4 points</strong> → limit gives the <strong>osculating sphere</strong> (related to torsion).</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700" start="8">
+                    <li>Based on the descriptions, which of these curves do you think has zero torsion: a straight line, a flat circle, a parabola, a helix? Why?</li>
+                    <li>Summarize the pattern observed in this reading. How does the simple concept of a "limit" allow mathematicians to build up a sophisticated description of a curve, starting with a tangent line and moving to ideas like curvature and torsion?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+        
+        <!-- Deliverables -->
+        <section id="deliverables">
+             <h2 class="text-3xl font-bold text-slate-900 mb-6">Deliverables</h2>
+             <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="mb-4 text-slate-700">Your task is to submit written answers to the guiding questions from this document. Your answers do not need to be perfect or "correct" in a formal sense. The goal is to show that you have read the excerpt and this guide, and that you have made a good-faith effort to engage with these advanced and interesting ideas. Please write your answers to the following questions:</p>
+                <ol class="list-decimal list-inside space-y-3 text-slate-600">
+                    <li>In your own words, describe the relationship between a secant line and a tangent line. How does the concept of a "limit" connect them?</li>
+                    <li>The reading describes the tangent as the "limiting position" of the secant line. How does this geometric idea relate to the algebraic formula for the derivative, <span class="math">f'(x) = lim<sub>h→0</sub> (f(x+h) - f(x))/h</span>?</li>
+                    <li>Draw three random points on a piece of paper (not all in a straight line). Try to sketch the unique circle that passes through all three of them. Does it seem like there could be more than one possible circle?</li>
+                    <li>Hilbert's first definition of curvature is <span class="math">k = lim<sub>P₁P₂→0</sub> (∠(t₁, t₂))/(P₁P₂)</span>. For a straight line, what is the angle between any two tangent lines? What does this imply about the curvature <span class="math">k</span> of a straight line?</li>
+                    <li>Contrast a very large circle with a very small circle. Which one has a larger curvature <span class="math">k</span>? How does the radius <span class="math">r</span> of the osculating circle relate to the intuitive idea of "how much a curve is bending"?</li>
+                    <li>Imagine a coiled spring (a helix). Try to visualize the osculating plane at a point on the helix. As you move along the spring, what does the osculating plane do? Does it stay fixed or does it turn?</li>
+                    <li>For a curve that is already flat (like a parabola drawn on a piece of paper), what is its osculating plane at any point?</li>
+                    <li>Based on the descriptions, which of these curves do you think has zero torsion: a straight line, a flat circle, a parabola, a helix? Why?</li>
+                    <li>Summarize the pattern observed in this reading. How does the simple concept of a "limit" allow mathematicians to build up a sophisticated description of a curve, starting with a tangent line and moving to ideas like curvature and torsion?</li>
+                </ol>
+             </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- Curve Definitions with Derivatives ---
+        const curves = {
+            parabola: {
+                name: 'Parabola: (t, t²/2)',
+                x: t => t, y: t => t * t / 2,
+                xp: t => 1, yp: t => t,
+                xpp: t => 0, ypp: t => 1,
+                tMin: -4, tMax: 4, scale: 80,
+            },
+            ellipse: {
+                name: 'Ellipse: (3cos(t), 2sin(t))',
+                x: t => 3 * Math.cos(t), y: t => 2 * Math.sin(t),
+                xp: t => -3 * Math.sin(t), yp: t => 2 * Math.cos(t),
+                xpp: t => -3 * Math.cos(t), ypp: t => -2 * Math.sin(t),
+                tMin: 0, tMax: 2 * Math.PI, scale: 80,
+            },
+            sine_wave: {
+                name: 'Sine Wave: (t, sin(t))',
+                x: t => t, y: t => Math.sin(t),
+                xp: t => 1, yp: t => Math.cos(t),
+                xpp: t => 0, ypp: t => -Math.sin(t),
+                tMin: -2 * Math.PI, tMax: 2 * Math.PI, scale: 80,
+            },
+            lissajous: {
+                name: 'Lissajous: (sin(3t), cos(2t))',
+                x: t => Math.sin(3 * t), y: t => Math.cos(2 * t),
+                xp: t => 3 * Math.cos(3 * t), yp: t => -2 * Math.sin(2 * t),
+                xpp: t => -9 * Math.sin(3 * t), ypp: t => -4 * Math.cos(2 * t),
+                tMin: 0, tMax: 2 * Math.PI, scale: 180,
+            },
+            spiral: {
+                name: 'Spiral: (0.5t*cos(t), 0.5t*sin(t))',
+                x: t => 0.5 * t * Math.cos(t), y: t => 0.5 * t * Math.sin(t),
+                xp: t => 0.5 * (Math.cos(t) - t * Math.sin(t)), yp: t => 0.5 * (Math.sin(t) + t * Math.cos(t)),
+                xpp: t => -Math.sin(t) - 0.5 * t * Math.cos(t), ypp: t => Math.cos(t) - 0.5 * t * Math.sin(t),
+                tMin: 0.1, tMax: 5 * Math.PI, scale: 40,
+            },
+            cusp: {
+                name: 'Cusp: (t², t³)',
+                x: t => t*t, y: t => t*t*t,
+                xp: t => 2*t, yp: t => 3*t*t,
+                xpp: t => 2, ypp: t => 6*t,
+                tMin: -2.5, tMax: 2.5, scale: 80,
+            }
+        };
+
+        // --- Generic Drawing Functions ---
+        function drawAxes(ctx, origin) {
+            ctx.lineWidth = 1;
+            ctx.strokeStyle = '#d1d5db';
+            const gridSize = 50;
+            for (let x = origin.x % gridSize; x < ctx.canvas.width; x += gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ctx.canvas.height); ctx.stroke();
+            }
+            for (let x = origin.x % gridSize - gridSize; x > 0; x -= gridSize) {
+                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, ctx.canvas.height); ctx.stroke();
+            }
+            for (let y = origin.y % gridSize; y < ctx.canvas.height; y += gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(ctx.canvas.width, y); ctx.stroke();
+            }
+             for (let y = origin.y % gridSize - gridSize; y > 0; y -= gridSize) {
+                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(ctx.canvas.width, y); ctx.stroke();
+            }
+            ctx.strokeStyle = '#9ca3af';
+            ctx.beginPath(); ctx.moveTo(0, origin.y); ctx.lineTo(ctx.canvas.width, origin.y); ctx.stroke();
+            ctx.beginPath(); ctx.moveTo(origin.x, 0); ctx.lineTo(origin.x, ctx.canvas.height); ctx.stroke();
+        }
+
+        function drawCurve(ctx, curve, scale, origin) {
+            ctx.beginPath();
+            ctx.lineWidth = 2;
+            ctx.strokeStyle = '#6366f1';
+            const steps = 500;
+            const dt = (curve.tMax - curve.tMin) / steps;
+            for (let i = 0; i <= steps; i++) {
+                const t = curve.tMin + i * dt;
+                const x = origin.x + curve.x(t) * scale;
+                const y = origin.y - curve.y(t) * scale;
+                if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+            }
+            ctx.stroke();
+        }
+        
+        function drawPoints(ctx, points, scale, colors, origin) {
+            points.forEach((p, i) => {
+                ctx.beginPath();
+                ctx.fillStyle = colors[i];
+                const x = origin.x + p.x * scale;
+                const y = origin.y - p.y * scale;
+                ctx.arc(x, y, 6, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+            });
+        }
+
+        // --- Plot 1: Osculating Circle ---
+        const osc = {
+            canvas: document.getElementById('canvas-osc'),
+            ctx: document.getElementById('canvas-osc').getContext('2d'),
+            selector: document.getElementById('curve-selector-osc'),
+            tSlider: document.getElementById('t-slider'),
+            hSlider: document.getElementById('h-slider'),
+            tValueSpan: document.getElementById('t-value'),
+            hValueSpan: document.getElementById('h-value'),
+            infoBox: document.getElementById('info-box-osc'),
+            curveName: 'parabola',
+            t: 0,
+            h: 0.5,
+            origin: { x: 0, y: 0 }
+        };
+
+        function setupOsculatingPlot() {
+            for (const key in curves) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = curves[key].name;
+                osc.selector.appendChild(option);
+            }
+
+            resizeCanvas(osc);
+            window.addEventListener('resize', () => { resizeCanvas(osc); drawOsculatingPlot(); });
+            osc.selector.addEventListener('change', (e) => {
+                osc.curveName = e.target.value;
+                updateSlidersForCurve(osc, 't', 'h');
+                drawOsculatingPlot();
+            });
+            osc.tSlider.addEventListener('input', () => { updateStateFromSliders(osc, 't', 'h'); drawOsculatingPlot(); });
+            osc.hSlider.addEventListener('input', () => { updateStateFromSliders(osc, 't', 'h'); drawOsculatingPlot(); });
+
+            updateSlidersForCurve(osc, 't', 'h');
+            drawOsculatingPlot();
+        }
+
+        function drawOsculatingPlot() {
+            const curve = curves[osc.curveName];
+            osc.ctx.fillStyle = '#f9fafb';
+            osc.ctx.fillRect(0, 0, osc.canvas.width, osc.canvas.height);
+            
+            drawAxes(osc.ctx, osc.origin);
+            drawCurve(osc.ctx, curve, curve.scale, osc.origin);
+
+            const osculatingCircleData = calculateOsculatingCircle(curve, osc.t);
+            if (osculatingCircleData) {
+                drawCircle(osc.ctx, osculatingCircleData, curve.scale, true, osc.origin);
+            }
+
+            if (osc.h < 0.001) {
+                 if (osculatingCircleData) {
+                    drawCircle(osc.ctx, osculatingCircleData, curve.scale, false, osc.origin);
+                 }
+            } else {
+                const p1 = { x: curve.x(osc.t - osc.h), y: curve.y(osc.t - osc.h) };
+                const p2 = { x: curve.x(osc.t), y: curve.y(osc.t) };
+                const p3 = { x: curve.x(osc.t + osc.h), y: curve.y(osc.t + osc.h) };
+                const circleData = calculate3PointCircle(p1, p2, p3);
+                if (circleData) {
+                    drawCircle(osc.ctx, circleData, curve.scale, false, osc.origin);
+                    osc.infoBox.classList.add('hidden');
+                } else {
+                    osc.infoBox.textContent = 'Points are collinear. No unique circle.';
+                    osc.infoBox.classList.remove('hidden');
+                }
+            }
+            
+            const points = [
+                { x: curve.x(osc.t - osc.h), y: curve.y(osc.t - osc.h) },
+                { x: curve.x(osc.t), y: curve.y(osc.t) },
+                { x: curve.x(osc.t + osc.h), y: curve.y(osc.t + osc.h) }
+            ];
+            drawPoints(osc.ctx, points, curve.scale, ['#ef4444', '#10b981', '#3b82f6'], osc.origin);
+        }
+        
+        function calculate3PointCircle(p1, p2, p3) {
+            const D = 2 * (p1.x * (p2.y - p3.y) + p2.x * (p3.y - p1.y) + p3.x * (p1.y - p2.y));
+            if (Math.abs(D) < 1e-9) return null;
+            const p1sq = p1.x * p1.x + p1.y * p1.y;
+            const p2sq = p2.x * p2.x + p2.y * p2.y;
+            const p3sq = p3.x * p3.x + p3.y * p3.y;
+            const Ux = (p1sq * (p2.y - p3.y) + p2sq * (p3.y - p1.y) + p3sq * (p1.y - p2.y)) / D;
+            const Uy = (p1sq * (p3.x - p2.x) + p2sq * (p1.x - p3.x) + p3sq * (p2.x - p1.x)) / D;
+            const center = { x: Ux, y: Uy };
+            const radius = Math.sqrt((p1.x - Ux) ** 2 + (p1.y - Uy) ** 2);
+            return { center, radius };
+        }
+
+        function calculateOsculatingCircle(curve, t) {
+            const xp = curve.xp(t), yp = curve.yp(t);
+            const xpp = curve.xpp(t), ypp = curve.ypp(t);
+            const speedSq = xp * xp + yp * yp;
+            const curvatureNum = xp * ypp - yp * xpp;
+            if (Math.abs(curvatureNum) < 1e-9 || speedSq < 1e-9) return null;
+            
+            const radius = Math.pow(speedSq, 1.5) / curvatureNum;
+            const p = {x: curve.x(t), y: curve.y(t)};
+            const center = {
+                x: p.x - (yp * speedSq) / curvatureNum,
+                y: p.y + (xp * speedSq) / curvatureNum
+            };
+            return { center, radius: Math.abs(radius) };
+        }
+        
+        function drawCircle(ctx, circleData, scale, isDotted, origin) {
+            ctx.beginPath();
+            ctx.strokeStyle = isDotted ? 'rgba(0, 0, 0, 0.7)' : 'rgba(239, 68, 68, 0.7)';
+            ctx.lineWidth = 2;
+            if (isDotted) ctx.setLineDash([5, 5]);
+            ctx.arc(origin.x + circleData.center.x * scale, origin.y - circleData.center.y * scale, circleData.radius * scale, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // --- Plot 2: Tangent Line ---
+        const tan = {
+            canvas: document.getElementById('canvas-tan'),
+            ctx: document.getElementById('canvas-tan').getContext('2d'),
+            selector: document.getElementById('curve-selector-tan'),
+            sSlider: document.getElementById('s-slider'),
+            zSlider: document.getElementById('z-slider'),
+            sValueSpan: document.getElementById('s-value'),
+            zValueSpan: document.getElementById('z-value'),
+            infoBox: document.getElementById('info-box-tan'),
+            curveName: 'parabola',
+            s: 0,
+            z: 0.5,
+            origin: { x: 0, y: 0 }
+        };
+
+        function setupTangentPlot() {
+            for (const key in curves) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = curves[key].name;
+                tan.selector.appendChild(option);
+            }
+            
+            resizeCanvas(tan);
+            window.addEventListener('resize', () => { resizeCanvas(tan); drawTangentPlot(); });
+            tan.selector.addEventListener('change', (e) => {
+                tan.curveName = e.target.value;
+                updateSlidersForCurve(tan, 's', 'z');
+                drawTangentPlot();
+            });
+            tan.sSlider.addEventListener('input', () => { updateStateFromSliders(tan, 's', 'z'); drawTangentPlot(); });
+            tan.zSlider.addEventListener('input', () => { updateStateFromSliders(tan, 's', 'z'); drawTangentPlot(); });
+
+            updateSlidersForCurve(tan, 's', 'z');
+            drawTangentPlot();
+        }
+
+        function drawTangentPlot() {
+            const curve = curves[tan.curveName];
+            tan.ctx.fillStyle = '#f9fafb';
+            tan.ctx.fillRect(0, 0, tan.canvas.width, tan.canvas.height);
+            
+            drawAxes(tan.ctx, tan.origin);
+            drawCurve(tan.ctx, curve, curve.scale, tan.origin);
+
+            const p1 = { x: curve.x(tan.s), y: curve.y(tan.s) };
+            const p2 = { x: curve.x(tan.s + tan.z), y: curve.y(tan.s + tan.z) };
+
+            const tangentVector = { x: curve.xp(tan.s), y: curve.yp(tan.s) };
+            drawLine(tan.ctx, p1, tangentVector, curve.scale, true, tan.origin);
+
+            if (Math.abs(tan.z) > 0.001) {
+                const secantVector = { x: p2.x - p1.x, y: p2.y - p1.y };
+                drawLine(tan.ctx, p1, secantVector, curve.scale, false, tan.origin);
+            } else {
+                drawLine(tan.ctx, p1, tangentVector, curve.scale, false, tan.origin);
+            }
+            
+            drawPoints(tan.ctx, [p1, p2], curve.scale, ['#10b981', '#3b82f6'], tan.origin);
+        }
+
+        function drawLine(ctx, point, vector, scale, isDotted, origin) {
+            if (Math.abs(vector.x) < 1e-9 && Math.abs(vector.y) < 1e-9) return;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = isDotted ? 'rgba(0, 0, 0, 0.7)' : 'rgba(59, 130, 246, 0.7)';
+            ctx.lineWidth = 2;
+            if (isDotted) ctx.setLineDash([5, 5]);
+
+            const p = { x: origin.x + point.x * scale, y: origin.y - point.y * scale };
+            
+            const largeFactor = Math.max(ctx.canvas.width, ctx.canvas.height) * 2 / scale;
+            const start = { x: p.x - vector.x * largeFactor * scale, y: p.y + vector.y * largeFactor * scale };
+            const end = { x: p.x + vector.x * largeFactor * scale, y: p.y - vector.y * largeFactor * scale };
+            
+            ctx.moveTo(start.x, start.y);
+            ctx.lineTo(end.x, end.y);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        // --- Shared Setup Functions ---
+        function resizeCanvas(plot) {
+            const container = plot.canvas.parentElement;
+            const size = Math.min(container.clientWidth, container.clientHeight);
+            plot.canvas.width = size;
+            plot.canvas.height = size;
+            plot.origin.x = size / 2;
+            plot.origin.y = size / 2;
+        }
+        
+        function updateSlidersForCurve(plot, tName, hName) {
+            const curve = curves[plot.curveName];
+            const tSlider = plot[tName + 'Slider'];
+            const hSlider = plot[hName + 'Slider'];
+            
+            tSlider.min = curve.tMin;
+            tSlider.max = curve.tMax;
+            tSlider.step = (curve.tMax - curve.tMin) / 1000;
+            tSlider.value = (curve.tMin + curve.tMax) / 2;
+            
+            hSlider.min = 0;
+            hSlider.max = (curve.tMax - curve.tMin) / 4;
+            hSlider.step = (hSlider.max - hSlider.min) / 1000;
+            hSlider.value = hSlider.max / 2;
+            
+            updateStateFromSliders(plot, tName, hName);
+        }
+
+        function updateStateFromSliders(plot, tName, hName) {
+            plot[tName] = parseFloat(plot[tName + 'Slider'].value);
+            plot[hName] = parseFloat(plot[hName + 'Slider'].value);
+            plot[tName + 'ValueSpan'].textContent = plot[tName].toFixed(2);
+            plot[hName + 'ValueSpan'].textContent = plot[hName].toFixed(2);
+        }
+
+        // --- Initialisation ---
+        window.onload = () => {
+            setupOsculatingPlot();
+            setupTangentPlot();
+        };
+    </script>
+</body>
+</html>
