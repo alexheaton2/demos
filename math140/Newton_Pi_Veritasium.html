@@ -29,6 +29,19 @@
             padding-bottom: 0.5rem;
             margin-bottom: 1.5rem;
         }
+        /* Custom aspect ratio for taller videos */
+        .aspect-4-3 {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%; /* 3 / 4 = 0.75 */
+        }
+        .aspect-4-3 iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
     </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
@@ -69,14 +82,13 @@
                 <h2 class="text-2xl font-bold text-gray-900 section-title">Part 2: Watch the Video (Individual)</h2>
                 <p class="mb-6 text-gray-600">Now, watch the following video from Veritasium. As you watch, think about your answers from Part 1 and see how they connect to the history and mathematics presented.</p>
                 <!-- YouTube Video Embed -->
-                <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg">
+                <div class="aspect-4-3 rounded-lg overflow-hidden shadow-lg">
                     <iframe 
                         src="https://www.youtube.com/embed/gMlf1ELvRzc" 
                         title="YouTube video player" 
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                        allowfullscreen
-                        class="w-full h-full">
+                        allowfullscreen>
                     </iframe>
                 </div>
             </section>
@@ -102,36 +114,46 @@
                         </p>
                         <p>This was a revolutionary idea! It allows us to approximate complex functions with simpler polynomials. Use the interactive plot below to see this in action. The slider controls the 'degree' of the polynomial approximation (how many terms from the series we use).</p>
                         
-                        <div class="my-4 border rounded-lg p-2"><canvas id="convergenceChart"></canvas></div>
+                        <!-- Canvas for Chart.js -->
+                        <div class="my-4 border rounded-lg p-2" style="height: 450px;">
+                            <canvas id="convergenceChart"></canvas>
+                        </div>
 
+                        <!-- Slider -->
                         <div class="flex items-center space-x-4 my-4">
                             <label for="degree-slider" class="font-medium whitespace-nowrap">Polynomial Degree:</label>
                             <input id="degree-slider" type="range" min="0" max="10" value="2" class="w-full cursor-pointer">
                             <span id="degree-label" class="font-bold text-blue-600 w-8 text-center bg-blue-100 rounded-md py-1">2</span>
                         </div>
                         
+                        <!-- Current Approximation Display -->
                         <div class="text-center text-sm md:text-base my-4 bg-gray-100 p-4 rounded-md shadow-inner">
                             <p class="font-semibold mb-2">Current Approximation:</p>
                             <p id="polynomial-display">\( 1 + 0.5x - 0.125x^2 \)</p>
                         </div>
+                        
+                        <!-- Desmos Fallback -->
+                        <p class="mt-8 text-sm text-gray-600">If the interactive plot above is not working correctly, you can use the embedded Desmos plot below. Click the "Edit Graph on Desmos" button in the bottom right of the plot to adjust the slider for 'n'.</p>
+                        <div class="my-4 flex justify-center">
+                            <iframe src="https://www.desmos.com/calculator/wr7vlfdb4g?embed" width="500" height="500" style="border: 1px solid #ccc" frameborder=0></iframe>
+                        </div>
 
                         <p class="mb-4"><strong>Part A:</strong> As a group, use the slider and discuss: For what range of <em class="italic">x</em>-values does the polynomial approximation appear to match the actual function \( \sqrt{1+x} \)? In other words, where does the series seem to <strong class="text-blue-600">converge</strong> to the function? What happens to the approximation for <em class="italic">x</em>-values outside of this range, especially as you increase the degree?</p>
 
-                        <p><strong>Part B:</strong> The video explains that to compute \( \sqrt{3} \), you can rewrite it as \( \sqrt{4(1 - 1/4)} = 2\sqrt{1 - 1/4} \). This means you can use the series above with \( x = -1/4 \). The narrator says this gives a "very rapidly converging series." Look at the plot near \( x = -0.25 \). What does "rapidly converging" mean in this context? How does the graph support this claim? (i.e., how quickly does the red dashed line get close to the blue line at that x-value as you increase the degree?)</p>
+                        <p><strong>Part B:</strong> The video explains that to compute \( \sqrt{3} \), you can rewrite it as \( \sqrt{4(1 - 1/4)} = 2\sqrt{1 - 1/4} \). This means you can use the series above with \( x = -1/4 \). The narrator says this gives a "very rapidly converging series." Look at the plot near \( x = -0.25 \). What does "rapidly converging" mean in this context? How does the graph support this claim? (i.e., how quickly does the highlighted line get close to the blue line at that x-value as you increase the degree?)</p>
                     </div>
                     <div class="question">
                         <h3 class="font-semibold text-lg">Question 4: Putting It All Together: Newton's Calculation of Pi</h3>
                         <p class="mb-4">The climax of the video describes how Newton used his new tools—the binomial theorem and calculus—to calculate π to 15 digits. The video moves quickly, so your task is to work together as a group to fill in the mathematical details. Use the video clip below as your guide.</p>
                         
                         <!-- YouTube Video Embed at specific time -->
-                        <div class="aspect-w-16 aspect-h-9 rounded-lg overflow-hidden shadow-lg my-6">
+                        <div class="aspect-4-3 rounded-lg overflow-hidden shadow-lg my-6">
                             <iframe 
                                 src="https://www.youtube.com/embed/gMlf1ELvRzc?start=775" 
                                 title="YouTube video player" 
                                 frameborder="0" 
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen
-                                class="w-full h-full">
+                                allowfullscreen>
                             </iframe>
                         </div>
 
@@ -151,7 +173,6 @@
     </div>
 
     <script>
-        // This script powers the interactive plot for Question 3 using Chart.js
         document.addEventListener('DOMContentLoaded', function () {
             const slider = document.getElementById('degree-slider');
             const degreeLabel = document.getElementById('degree-label');
@@ -199,63 +220,79 @@
 
             function createPlot() {
                 const initialDegree = parseInt(slider.value, 10);
-                const yTaylor = xValues.map(x => evaluateTaylor(x, initialDegree));
                 
-                polyDisplay.innerHTML = formatPolynomial(initialDegree);
-                if (window.MathJax) {
-                    MathJax.typesetPromise([polyDisplay]);
+                const datasets = [];
+
+                datasets.push({
+                    label: 'y = sqrt(1+x)',
+                    data: yTrue,
+                    borderColor: '#3b82f6',
+                    borderWidth: 4,
+                    pointRadius: 0,
+                    tension: 0.1
+                });
+
+                for (let i = 0; i <= 10; i++) {
+                    const yTaylor = xValues.map(x => evaluateTaylor(x, i));
+                    const isHighlighted = (i === initialDegree);
+                    
+                    datasets.push({
+                        label: `Degree ${i} Approx.`,
+                        data: yTaylor,
+                        borderColor: '#ef4444',
+                        borderWidth: isHighlighted ? 2.5 : 1,
+                        borderDash: isHighlighted ? [] : [5, 5],
+                        pointRadius: 0,
+                        tension: 0.1
+                    });
                 }
+                
+                updatePolynomialDisplay(initialDegree);
 
                 chart = new Chart(ctx, {
                     type: 'line',
                     data: {
                         labels: xValues,
-                        datasets: [
-                            {
-                                label: 'y = sqrt(1+x)',
-                                data: yTrue,
-                                borderColor: '#3b82f6',
-                                borderWidth: 3,
-                                pointRadius: 0,
-                                tension: 0.1
-                            },
-                            {
-                                label: 'Taylor Approximation',
-                                data: yTaylor,
-                                borderColor: '#ef4444',
-                                borderWidth: 2,
-                                borderDash: [5, 5],
-                                pointRadius: 0,
-                                tension: 0.1
-                            }
-                        ]
+                        datasets: datasets
                     },
                     options: {
                         responsive: true,
-                        maintainAspectRatio: true,
+                        maintainAspectRatio: false,
                         scales: {
                             x: { type: 'linear', title: { display: true, text: 'x' } },
                             y: { title: { display: true, text: 'y' }, min: -0.5, max: 2.0 }
                         },
                         plugins: {
-                            title: { display: true, text: 'Function vs. Taylor Series Approximation' }
+                            title: { display: true, text: 'Function vs. Taylor Series Approximation' },
+                            legend: { display: false }
                         }
                     }
                 });
             }
 
-            function updatePlot() {
-                const degree = parseInt(slider.value, 10);
-                degreeLabel.textContent = degree;
-                const yTaylorUpdated = xValues.map(x => evaluateTaylor(x, degree));
-                
-                chart.data.datasets[1].data = yTaylorUpdated;
-                chart.update();
-
+            function updatePolynomialDisplay(degree) {
                 polyDisplay.innerHTML = formatPolynomial(degree);
                 if (window.MathJax) {
                     MathJax.typesetPromise([polyDisplay]);
                 }
+            }
+
+            function updatePlot() {
+                const degree = parseInt(slider.value, 10);
+                degreeLabel.textContent = degree;
+
+                for (let i = 0; i <= 10; i++) {
+                    const dataset = chart.data.datasets[i + 1];
+                    if (i === degree) {
+                        dataset.borderWidth = 2.5;
+                        dataset.borderDash = [];
+                    } else {
+                        dataset.borderWidth = 1;
+                        dataset.borderDash = [5, 5];
+                    }
+                }
+                chart.update();
+                updatePolynomialDisplay(degree);
             }
 
             slider.addEventListener('input', updatePlot);
