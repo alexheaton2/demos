@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Self-Guided Activity: Modeling Your Path to $1 Million</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Simple styling for math-like text */
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Self-Guided Activity: Modeling Your Path to $1 Million</h1>
+            <p class="mt-4 text-lg text-slate-600">Created by Alex Heaton, in collaboration with Gemini</p>
+        </header>
+
+        <!-- Introduction -->
+        <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+            <p class="mb-4"><strong class="text-slate-900">Objective:</strong> To analyze a computational model of investment growth, understand its connection to differential equations, and discover a key relationship between a numerical approximation and a true analytic solution.</p>
+            <p><strong class="text-slate-900">The Goal:</strong> You want to become a millionaire. Your strategy is to invest a fixed amount of money, <span class="math">m</span> dollars, every single month. We will use a computational model to explore how this investment grows and see how a simple year-by-year simulation compares to the true result predicted by calculus.</p>
+        </div>
+
+        <hr class="my-10 border-slate-200">
+
+        <!-- Part 1: The Models -->
+        <section id="part1" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: The Models and Their Solutions</h2>
+            <p class="mb-6">We can describe the growth of your investment using the language of differential equations. Let <span class="math">x(t)</span> be the amount of money at time <span class="math">t</span> (in years).</p>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <!-- Model 1 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Model 1: The "Shoebox" Method (Linear Growth)</h3>
+                    <p class="mb-4 text-slate-600">If you simply save money without earning interest, the rate of change <span class="math">x' = dx/dt</span> is constant. With a monthly contribution of <span class="math">m</span> dollars, your annual contribution is <span class="math">12m</span> dollars.</p>
+                    <ul class="space-y-2">
+                        <li><strong>Differential Equation:</strong> <code class="bg-slate-100 p-1 rounded text-sm"><span class="math">x' = 12m</span></code></li>
+                        <li><strong>Analytic Solution:</strong> <code class="bg-slate-100 p-1 rounded text-sm"><span class="math">x(t) = 12mt</span></code> (assuming <span class="math">x(0)=0</span>)</li>
+                    </ul>
+                </div>
+                <!-- Model 2 -->
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Model 2: The Investing Method (Exponential Growth)</h3>
+                    <p class="mb-4 text-slate-600">If you invest your money, it grows from both your contributions (<span class="math">12m</span>) and from market returns (interest). Investment returns are proportional to the amount you have, <span class="math">x</span>.</p>
+                     <ul class="space-y-2">
+                        <li><strong>Differential Equation:</strong> <code class="bg-slate-100 p-1 rounded text-sm"><span class="math">x' = kx + 12m</span></code></li>
+                        <li class="flex items-start"><strong>Analytic Solution:</strong> <code class="bg-slate-100 p-2 rounded text-sm block mt-1"><span class="math">x(t) = (12m/k)(e<sup>kt</sup> - 1)</span></code></li>
+                    </ul>
+                </div>
+            </div>
+            <p class="mt-8 text-sm text-slate-600 bg-slate-100 p-4 rounded-lg">For our models, we will use an annual growth rate of <span class="math">k = 0.07</span>, since this is approximately the annual growth of the US stock market historically, already adjusted for inflation. Look this up online for more information, because although this is the standard "conservative" estimate, it's still just an estimate or assumption and could be wrong.</p>
+        </section>
+
+        <hr class="my-10 border-slate-200">
+
+        <!-- Part 2: The Simulation -->
+        <section id="part2" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: The SageMath Simulation</h2>
+            <p class="mb-6">Instead of building a simulation from scratch, you will use a pre-written Python code snippet. We will run this in SageMathCell, a free online tool that lets you execute code without installing any software.</p>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">Your Task:</h3>
+                <ol class="list-decimal list-inside space-y-3">
+                    <li>
+                        Click this link to open the pre-loaded SageMathCell environment:
+                        <a href="https://sagecell.sagemath.org/?z=eJx9U0Fu2zAQvAvQHwb2xU7i1AnQBihg9Jx7gB4LWlpZTChSXZK21FO_0e_1JV1Kjuw6aQXDoNbDmdnZ9Qs2WN-uHzCHtpVRQTuLFVT5HH2gEsraqAyYQmSbZ43AP64FXDpjFHu0xGicDXWedYlKfvJBccBBhxo_iN0rNM_yTGg0U0M2fFM7EvynhzwrIvOpcr_Os54S9QYX8BXOoXOoKoh6qLVHo2yP8doNCte0ikl8lWQG3TmeEko-oSYEjgTvTByardg1KJQpookCnuobdLgCdS0WeJHTyL7ENe7ur9Dgw1BdvINY4W75VnUGXzvauk5Og7MxIuskeOmDfMgzo61wDNKvMkfaMz7jXAuvmyjTopF7x-4gXAkp6ttevtI5XXkM-P3zl4eLLMI2NsRauoVqW3adbsaJz_Kscoxn8QJWVuJdTO18zjPI0_1l63rouEtTKEtJ3AbW2yE4Pybq1V7bXRqHsuVYOvWZZy3Lm4jM8FihdxFp39DGkF6GlaI-mVFTarQn7sddE9J05aCNQa32KdsbsIsitMAxw6WUZtOa3sp5eaGqrWy4KgcqbfdiTLJU4aj9P7njc67aXQhK20XhuJQMENyQ_r-yf-PtSSaqrDJ90MVpT4UljbrUVUXpT6CFiL7HkaNlKnURPN7zNlFcZvK11kUNaTftqLhlKgK-JDt_AHSjS4E=&lang=sage&interacts=eJyLjgUAARUAuQ==" target="_blank" class="font-semibold text-blue-600 hover:text-blue-800 transition-colors">Open SageMathCell Activity</a>.
+                    </li>
+                    <li>If the link doesn't work, copy the code below and paste it into the editor at <a href="https://sagecell.sagemath.org/" target="_blank" class="font-semibold text-blue-600 hover:text-blue-800 transition-colors">sagecell.sagemath.org</a>.</li>
+                    <li>Click the "Evaluate" button to run the code and see the output.</li>
+                </ol>
+            </div>
+            
+            <div class="mt-6">
+                <h3 class="text-lg font-semibold text-slate-900 mb-2">The Code:</h3>
+                <pre class="bg-slate-800 text-white p-4 rounded-lg shadow-inner text-sm overflow-x-auto"><code class="language-python"><span style="color: #6ee7b7;"># inflation-adjusted annual return</span>
+k = <span style="color: #f0abfc;">0.07</span> 
+<span style="color: #6ee7b7;"># dollars per month</span>
+m = <span style="color: #f0abfc;">250</span> 
+<span style="color: #6ee7b7;"># start with zero dollars</span>
+x = <span style="color: #f0abfc;">0</span> 
+
+retirement_age = <span style="color: #f0abfc;">67</span>
+current_age = <span style="color: #f0abfc;">20</span>
+<span style="color: #6ee7b7;"># after this many years, compare models</span>
+years = retirement_age - current_age 
+
+<span style="color: #6ee7b7;"># This is the true solution from calculus</span>
+solution = x*exp(k * years) + 12*m/k * (exp(k * years) - 1)
+
+<span style="color: #6ee7b7;"># This is the "shoebox" model with no interest</span>
+linear = x + 12*m * years
+
+<span style="color: #6ee7b7;"># This loop simulates the growth year-by-year</span>
+<span style="color: #6ee7b7;"># It's our "numerical approximation"</span>
+<span style="color: #d8b4fe;">for</span> j <span style="color: #d8b4fe;">in</span> range(years):
+    x = x + 12*m + k*x <span style="color: #6ee7b7;"># add contributions from savings, and from interest</span>
+
+<span style="color: #d8b4fe;">print</span>(<span style="color: #a5b4fc;">"If you just put your money in a shoebox every month, you will have "</span>, round(linear), <span style="color: #a5b4fc;">" dollars."</span>)
+<span style="color: #d8b4fe;">print</span>(<span style="color: #a5b4fc;">"If instead you invest that money every month, you will have      "</span>, round(x), <span style="color: #a5b4fc;">" dollars, according to our numerical approximation."</span>)
+<span style="color: #d8b4fe;">print</span>(<span style="color: #a5b4fc;">"The analytic solution to the differential equation predicts      "</span>, round(solution), <span style="color: #a5b4fc;">" dollars. Which one is correct?"</span>)
+</code></pre>
+            </div>
+        </section>
+
+        <hr class="my-10 border-slate-200">
+
+        <!-- Part 3: Guided Investigation -->
+        <section id="part3" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: Guided Investigation</h2>
+            <p class="mb-6">Your goal is to understand what this code is doing and why its results are different. Answer the following questions.</p>
+            
+            <div class="space-y-8">
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Question 1: Understanding the Code's Logic</h3>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li>Run the code with the initial values (m=250). You will see three different final amounts. Which one is the largest? Which is the smallest?</li>
+                        <li>Look at the <code>for</code> loop. The line <code>x = x + 12*m + k*x</code> is a step-by-step (numerical) simulation. In your own words, what calculation is it performing each year?</li>
+                        <li>The line <code>solution = ...</code> calculates the result of the analytic solution for Model 2. Why do you think its result is different from the one calculated by the <code>for</code> loop? Which one do you trust more, and why?</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Question 2: The Underestimation Puzzle</h3>
+                    <p class="mb-4 text-slate-600">You should have noticed that the numerical approximation from the <code>for</code> loop is <em>less than</em> the true value from the analytic solution. Let's figure out why. The line <code>x = x + 12*m + k*x</code> calculates the interest for an entire year (<code>k*x</code>) based on the amount of money you had at the <strong>start</strong> of that year.</p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li><strong>Hint:</strong> In reality, does the amount of money in your account stay fixed for the whole year, or does it increase as you make monthly contributions and earn interest?</li>
+                        <li>Therefore, when our code calculates the interest for the year, is it using a principal amount (<code>x</code>) that is slightly too high or slightly too low compared to what it should be for most of the year?</li>
+                        <li>Based on your answer, explain why our <code>for</code> loop method will always <strong>underestimate</strong> the true final value.</li>
+                    </ul>
+                </div>
+
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Question 3: The Calculus Connection (Concavity)</h3>
+                    <p class="mb-4 text-slate-600">The graph of the true solution, <span class="math">x(t) = (12m/k)(e<sup>kt</sup> - 1)</span>, is <strong>concave up</strong>, meaning it constantly curves upwards. You can test this by taking <strong>two derivatives</strong> and checking the result is always positive. Our numerical method is a simplified version of Euler's Method, which uses the slope at the beginning of an interval (the rate of change <span class="math">x'</span>) to take a linear step forward.</p>
+                    <ul class="list-disc list-inside space-y-2 text-slate-600">
+                        <li>Imagine drawing a tangent line to a curve that is concave up. Besides the point of tangency, is the tangent line above or below the curve? Draw it!</li>
+                        <li>How does this picture of a tangent line and a concave up curve explain why our linear, step-by-step approximation consistently falls short of the true, curving solution?</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        
+        <hr class="my-10 border-slate-200">
+
+        <!-- Part 4: Your Quest -->
+        <section id="part4" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 4: Your Quest for $1 Million</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="mb-4">Now, use the code to plan your retirement. Modify the variables <span class="math">m</span> and <code>years</code> to find what it takes to reach your goal. For this part, trust the <strong>analytic solution</strong> as the correct value.</p>
+                <ol class="list-decimal list-inside space-y-3">
+                    <li><strong>Find the Contribution:</strong> Keep <code>years</code> at 47 (age 67 - age 20). What value do you need to set for the monthly contribution <span class="math">m</span> to make the analytic <code>solution</code> be approximately <strong>$1,000,000</strong>?</li>
+                    <li><strong>Find the Time:</strong> Set the monthly contribution <span class="math">m</span> to <strong>$500</strong>. What is the smallest integer value for <code>years</code> that makes the analytic <code>solution</code> exceed <strong>$1,000,000</strong>?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-10 border-slate-200">
+
+        <!-- Part 5: Deliverable -->
+        <section id="part5" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 5: Deliverable</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="mb-4">Submit a brief report that includes:</p>
+                <ol class="list-decimal list-inside space-y-3 text-slate-600">
+                    <li>Your short answers to the three sets of questions in Part 3 (Understanding the Code, The Underestimation Puzzle, The Calculus Connection).</li>
+                    <li>The values for <span class="math">m</span> (from Part 4, #1) and <code>years</code> (from Part 4, #2) that you found.</li>
+                    <li>A concluding paragraph that summarizes the key takeaway of this activity. It should explain why compound interest leads to exponential growth and why simple linear approximations, while intuitive, fail to capture the full picture and result in an underestimation for functions that are concave up.</li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
