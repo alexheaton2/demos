@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Limits, Nuclear Fission, Google PageRank, and LLM Chatbots</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Script for Chart.js for interactive plots -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Scripts for MathJax for rendering LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .activity-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+        }
+        .activity-card:hover {
+            transform: translateY(-5px);
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6; /* blue-500 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        /* Custom aspect ratio for taller videos */
+        .aspect-4-3 {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%; /* 3 / 4 = 0.75 */
+        }
+        .aspect-4-3 iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">Limits, Nuclear Fission, Google PageRank, and LLM Chatbots</h1>
+            <p class="text-lg text-blue-600 mt-2">A Calculus Group Activity on Limits and Their Applications</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="space-y-12">
+
+            <!-- Part 1: Before You Watch -->
+            <section id="pre-watch" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 1: Limits and Averages</h2>
+                <p class="mb-4 text-gray-600">In calculus, you've studied limits, often in the context of functions approaching a value. For example, \( \lim_{x\to\infty} \frac{1}{x} = 0 \). The <strong>Law of Large Numbers</strong> is a cornerstone of probability that can be understood in the same way.</p>
+                <p class="mb-6 text-gray-600">It states that if you repeat an experiment (like flipping a coin) a large number of times, the average of the results will get closer and closer to the expected value. For a fair coin, we expect 50% heads. If we let \( \bar{X}_n \) be the proportion of heads after \(n\) flips, the Law of Large Numbers can be written as a limit:</p>
+                <p class="text-center text-xl my-4 bg-gray-100 p-4 rounded-md shadow-inner">
+                    \( \lim_{n\to\infty} \bar{X}_n = 0.5 \)
+                </p>
+                <p class="text-gray-600">This means that as the number of flips (<em class="italic">n</em>) approaches infinity, the proportion of heads is guaranteed to approach 0.5. Before watching the video, think about and write down your answers to the questions below.</p>
+                
+                <hr class="my-6">
+                <div class="space-y-4">
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 1: The Gambler's Fallacy</h3>
+                        <p>Imagine you are flipping a fair coin and get 10 heads in a row. Many people feel that the next flip is "due" to be tails. What is the actual probability that the next flip will be tails? Why do you think people have this mistaken intuition?</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 2: Proportions vs. Absolute Numbers</h3>
+                        <p>If you flip a coin 1,000 times, would you be surprised if you got exactly 500 heads and 500 tails? What if you got 510 heads and 490 tails? Is there a difference between the <strong>proportion</strong> (percentage) of heads being close to 50% and the <strong>absolute difference</strong> between the number of heads and tails being close to 0?</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Part 2: Watch The Video -->
+            <section id="watch-video" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 2: Watch the Video (Individual)</h2>
+                <p class="mb-6 text-gray-600">Now, watch the following video from Veritasium, which explores some surprising consequences of the Law of Large Numbers.</p>
+                <!-- YouTube Video Embed -->
+                <div class="aspect-4-3 rounded-lg overflow-hidden shadow-lg">
+                    <iframe src="https://www.youtube.com/embed/KZeIEiBrT_w" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <!-- Part 3: Group Discussion -->
+            <section id="post-watch" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 3: Group Discussion & Written Output</h2>
+                <p class="mb-6 text-gray-600">Now, get together with your group. Discuss the following questions and write down your collective answers.</p>
+                <div class="space-y-6">
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 1: The Surprising Result (Recall)</h3>
+                        <p>The video explains a counter-intuitive idea: as you flip more coins, the <strong>proportion</strong> of heads gets closer to 50%, but at the same time, the <strong>absolute difference</strong> between the number of heads and tails is likely to grow. Explain this paradox in your own words.</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 2: Coin Flip Simulation (Interactive)</h3>
+                        <p class="mb-2">Let's test this idea. The interactive element below simulates 10,000 coin flips. The top graph shows the proportion of heads over time, while the bottom graph shows the absolute difference between heads and tails. Click the button to run a new simulation.</p>
+                        
+                        <div class="my-4 flex justify-center">
+                            <button id="run-simulation" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-transform transform hover:scale-105">
+                                Run New Simulation
+                            </button>
+                        </div>
+
+                        <div class="my-4 border rounded-lg p-2" style="height: 300px;">
+                            <canvas id="proportionChart"></canvas>
+                        </div>
+                        <div class="my-4 border rounded-lg p-2" style="height: 300px;">
+                            <canvas id="differenceChart"></canvas>
+                        </div>
+
+                        <p>Run the simulation several times as a group. How do the graphs confirm the paradox from Question 1? Describe the general shape and behavior you see in the top graph versus the bottom graph. How does the top graph visually represent the idea of a limit?</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 3: Limits and PageRank (Calculus Connection)</h3>
+                        <p class="mb-4">The video describes how Google's PageRank algorithm works by simulating an infinite random web surfer. Re-watch the clip below, which explains the simplified example with four webpages.</p>
+
+                        <!-- YouTube Video Embed at specific time -->
+                        <div class="aspect-4-3 rounded-lg overflow-hidden shadow-lg my-6">
+                           <iframe src="https://www.youtube.com/embed/KZeIEiBrT_w?start=1219" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+
+                        <p>The final ranking depends on the proportion of time the surfer spends on each page in the long run—in other words, the <strong>limit</strong> of the proportions as the number of clicks goes to infinity. How does this process of taking a limit prevent someone from unfairly "gaming the system"? For example, what would happen if Chris just added 1,000 links from his own page back to his own page? Would it trap the surfer and give him a 100% score in the limit?</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 4: Real World Consequences (Synthesis)</h3>
+                        <p>The video mentions that casinos rely on the Law of Large Numbers to guarantee a profit. How does this work? Why can a casino be certain of making money in the long run, even if individual players sometimes win big? Can you think of another real-world industry (like insurance) that relies on the same principle?</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500">
+            <p class="mb-2 font-semibold">Please make sure your group's written answers are neat and clear. This document will be the evidence of your effort, thinking, and discussion during this activity.</p>
+            <p>&copy; Calculus In-Class Activity</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const runButton = document.getElementById('run-simulation');
+            const propCtx = document.getElementById('proportionChart').getContext('2d');
+            const diffCtx = document.getElementById('differenceChart').getContext('2d');
+            let propChart, diffChart;
+
+            function runSimulation() {
+                const numFlips = 10000;
+                let heads = 0;
+                let tails = 0;
+                
+                const proportions = [];
+                const differences = [];
+                const labels = [];
+
+                for (let i = 1; i <= numFlips; i++) {
+                    if (Math.random() < 0.5) {
+                        heads++;
+                    } else {
+                        tails++;
+                    }
+                    // Record data at intervals to make plotting faster
+                    if (i % 10 === 0 || i < 100) {
+                        labels.push(i);
+                        proportions.push(heads / i);
+                        differences.push(Math.abs(heads - tails));
+                    }
+                }
+
+                if (propChart) propChart.destroy();
+                if (diffChart) diffChart.destroy();
+
+                propChart = new Chart(propCtx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Proportion of Heads',
+                            data: proportions,
+                            borderColor: '#22c55e', // green-500
+                            borderWidth: 2,
+                            pointRadius: 0
+                        }, {
+                            label: 'Expected Value (0.5)',
+                            data: labels.map(() => 0.5),
+                            borderColor: '#6b7280', // gray-500
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            borderDash: [5, 5]
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { x: { title: { display: true, text: 'Number of Flips' } }, y: { title: { display: true, text: 'Proportion' }, min: 0, max: 1 } },
+                        plugins: { title: { display: true, text: 'Proportion of Heads vs. Number of Flips' }, legend: {display: false} }
+                    }
+                });
+
+                diffChart = new Chart(diffCtx, {
+                    type: 'line',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Absolute Difference |Heads - Tails|',
+                            data: differences,
+                            borderColor: '#ef4444', // red-500
+                            borderWidth: 2,
+                            pointRadius: 0,
+                            fill: true,
+                            backgroundColor: 'rgba(239, 68, 68, 0.1)'
+                        }]
+                    },
+                    options: {
+                        responsive: true, maintainAspectRatio: false,
+                        scales: { x: { title: { display: true, text: 'Number of Flips' } }, y: { title: { display: true, text: 'Difference' }, beginAtZero: true } },
+                        plugins: { title: { display: true, text: 'Absolute Difference vs. Number of Flips' }, legend: {display: false} }
+                    }
+                });
+            }
+
+            runButton.addEventListener('click', runSimulation);
+            // Run once on page load
+            runSimulation();
+        });
+    </script>
+
+</body>
+</html>
