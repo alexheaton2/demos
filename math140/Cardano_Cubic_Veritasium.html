@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculus Activity: The Secret of the Cubic Formula</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Script for Chart.js for interactive plots -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Scripts for MathJax for rendering LaTeX -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .activity-card {
+            background-color: white;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease-in-out;
+        }
+        .activity-card:hover {
+            transform: translateY(-5px);
+        }
+        .section-title {
+            border-bottom: 2px solid #3b82f6; /* blue-500 */
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        /* Custom aspect ratio for taller videos */
+        .aspect-4-3 {
+            position: relative;
+            width: 100%;
+            padding-bottom: 75%; /* 3 / 4 = 0.75 */
+        }
+        .aspect-4-3 iframe {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 md:p-8 max-w-4xl">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl font-bold text-gray-900">The Secret of the Cubic Formula</h1>
+            <p class="text-lg text-blue-600 mt-2">A Calculus Group Activity on Geometric Reasoning</p>
+        </header>
+
+        <!-- Main Content -->
+        <main class="space-y-12">
+
+            <!-- Part 1: Before You Watch -->
+            <section id="pre-watch" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 1: Thinking Geometrically</h2>
+                <p class="mb-4 text-gray-600">In calculus, you learned the <strong>product rule</strong> for derivatives. One of the most intuitive ways to understand it is by thinking about the area of a rectangle. If a rectangle has a width <em class="italic">u</em> and a height <em class="italic">v</em>, its area is <em class="italic">A = uv</em>. If you change the width and height by tiny amounts, <em class="italic">du</em> and <em class="italic">dv</em>, the change in area is shown by the three shaded rectangles in the diagram below.</p>
+                
+                <div class="my-6 flex justify-center">
+                    <figure>
+                        <a href="https://commons.wikimedia.org/wiki/File:Schema_R%C3%A8gle_produit.png#/media/File:Schema_R%C3%A8gle_produit.png"><img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Schema_R%C3%A8gle_produit.png" alt="Geometric visualization of the product rule." height="300" width="448"></a>
+                        <figcaption class="text-xs text-center mt-2 text-gray-500">By <a href="//commons.wikimedia.org/wiki/User:ThibautLienart" title="User:ThibautLienart">ThibautLienart</a>, <a href="https://creativecommons.org/licenses/by-sa/3.0" title="Creative Commons Attribution-Share Alike 3.0">CC BY-SA 3.0</a>, <a href="https://commons.wikimedia.org/w/index.php?curid=5779799">Link</a></figcaption>
+                    </figure>
+                </div>
+
+                <p class="mb-6 text-gray-600">The total change in area is \( dA = u(dv) + v(du) + (du)(dv) \). In calculus, we imagine these changes are infinitesimally small, so the corner piece \( (du)(dv) \) is negligible, leaving us with the product rule: \( dA = u(dv) + v(du) \). You may have seen this written in Leibniz notation as \( \frac{d(fg)}{dx} = f \frac{dg}{dx} + g \frac{df}{dx} \), or in prime notation as \( (fg)' = f'g + fg' \).</p>
+                <p class="text-gray-600">Before the invention of modern symbols like <em class="italic">x</em> and <em class="italic">y</em>, mathematicians thought of every product as a literal area, and every product of three terms as a literal volume. This geometric thinking leads to some fascinating history and surprising solutions, as you'll see in the video.</p>
+            </section>
+
+            <!-- Part 2: Watch The Video -->
+            <section id="watch-video" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 2: Watch the Video (Individual)</h2>
+                <p class="mb-6 text-gray-600">Now, watch the following video from Veritasium about the centuries-long quest to solve the cubic equation.</p>
+                <!-- YouTube Video Embed -->
+                <div class="aspect-4-3 rounded-lg overflow-hidden shadow-lg">
+                    <iframe src="https://www.youtube.com/embed/cUzklzVXJwo" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </section>
+
+            <!-- Part 3: Group Discussion -->
+            <section id="post-watch" class="activity-card p-6 md:p-8">
+                <h2 class="text-2xl font-bold text-gray-900 section-title">Part 3: Group Discussion & Written Output</h2>
+                <p class="mb-6 text-gray-600">Now, get together with your group. Discuss the following questions and write down your collective answers.</p>
+                <div class="space-y-6">
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 1: Cardano's Geometric Solution (Recall)</h3>
+                        <p>The video shows Gerolamo Cardano's geometric solution to the specific problem \(x^3 + 6x = 20\). He imagined a large cube of side length <em class="italic">t</em>, and broke it down into smaller volumes. As a group, try to reconstruct this argument on paper. What was the key insight that allowed him to solve for <em class="italic">x</em>? If you get stuck, it's okay to look back at the video. The goal is to understand each step!</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 2: Visualizing Cubic Roots (Interactive)</h3>
+                        <p class="mb-2">Cardano's method works for "depressed" cubic equations of the form \(x^3 + px = q\). We can find the solution by finding the root of the function \(f(x) = x^3 + px - q\). Use the interactive plot below to see how the solution changes as you vary <em class="italic">p</em> and <em class="italic">q</em>.</p>
+                        
+                        <div class="my-4 border rounded-lg p-2" style="height: 450px;">
+                            <canvas id="cubicChart"></canvas>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 my-4">
+                            <div class="flex items-center space-x-4">
+                                <label for="p-slider" class="font-medium">p =</label>
+                                <input id="p-slider" type="range" min="-15" max="15" value="6" step="0.5" class="w-full">
+                                <span id="p-label" class="font-bold text-blue-600 w-12 text-center bg-blue-100 rounded-md py-1">6</span>
+                            </div>
+                            <div class="flex items-center space-x-4">
+                                <label for="q-slider" class="font-medium">q =</label>
+                                <input id="q-slider" type="range" min="-20" max="20" value="20" step="1" class="w-full">
+                                <span id="q-label" class="font-bold text-blue-600 w-12 text-center bg-blue-100 rounded-md py-1">20</span>
+                            </div>
+                        </div>
+
+                        <p><strong>Part A:</strong> Set the sliders to \(p=6\) and \(q=20\), the example from the video. Where does the graph cross the x-axis? Does this match the solution found in the video?</p>
+                        <p><strong>Part B:</strong> The video mentions the "casus irreducibilis," a frustrating case where the formula requires complex numbers even though there are three simple, real-number solutions. This happens when <em class="italic">p</em> is negative. Try to find a negative value for <em class="italic">p</em> (and some value for <em class="italic">q</em>) that results in the function having <strong>three</strong> distinct real roots (crossing the x-axis three times).</p>
+                    </div>
+                    <div class="question">
+                        <h3 class="font-semibold text-lg">Question 3: The Birth of a New Number (Synthesis)</h3>
+                        <p>The video's stunning conclusion is that the cubic formula, not the quadratic, forced mathematicians to invent imaginary and complex numbers. Why was \( \sqrt{-1} \) unavoidable for solving cubics, even when the final answers were real numbers? What does this tell you about the nature of numbers and problem-solving?</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center mt-12 text-gray-500">
+            <p class="mb-2 font-semibold">Please make sure your group's written answers are neat and clear. This document will be the evidence of your effort, thinking, and discussion during this activity.</p>
+            <p>&copy; Calculus In-Class Activity</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const pSlider = document.getElementById('p-slider');
+            const qSlider = document.getElementById('q-slider');
+            const pLabel = document.getElementById('p-label');
+            const qLabel = document.getElementById('q-label');
+            const ctx = document.getElementById('cubicChart').getContext('2d');
+            let chart;
+
+            function evaluateCubic(x, p, q) {
+                return Math.pow(x, 3) + p * x - q;
+            }
+
+            const xValues = [];
+            for (let i = -5; i <= 5; i += 0.2) {
+                xValues.push(Number(i.toFixed(2)));
+            }
+
+            function createPlot() {
+                const p = parseFloat(pSlider.value);
+                const q = parseFloat(qSlider.value);
+                const yValues = xValues.map(x => evaluateCubic(x, p, q));
+
+                chart = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: xValues,
+                        datasets: [{
+                            label: 'y = x³ + px - q',
+                            data: yValues,
+                            borderColor: '#ef4444', // red-500
+                            borderWidth: 3,
+                            pointRadius: 0,
+                            tension: 0.1
+                        }, {
+                            label: 'x-axis',
+                            data: xValues.map(() => 0),
+                            borderColor: '#6b7280', // gray-500
+                            borderWidth: 1,
+                            pointRadius: 0,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: { type: 'linear', title: { display: true, text: 'x' } },
+                            y: { title: { display: true, text: 'y' } }
+                        },
+                        plugins: {
+                            title: { display: true, text: 'Visualizing Roots of a Depressed Cubic' },
+                            legend: { display: false }
+                        }
+                    }
+                });
+            }
+
+            function updatePlot() {
+                const p = parseFloat(pSlider.value);
+                const q = parseFloat(qSlider.value);
+                pLabel.textContent = p;
+                qLabel.textContent = q;
+
+                chart.data.datasets[0].data = xValues.map(x => evaluateCubic(x, p, q));
+                chart.update();
+            }
+
+            pSlider.addEventListener('input', updatePlot);
+            qSlider.addEventListener('input', updatePlot);
+            createPlot();
+        });
+    </script>
+
+</body>
+</html>
