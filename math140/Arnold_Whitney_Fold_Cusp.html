@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>An Enrichment Activity: Understanding Singularities</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/numeric/1.2.6/numeric.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">An Enrichment Activity: <br> Understanding Singularities</h1>
+            <p class="mt-4 text-lg text-slate-600">A Guided Reading of V.I. Arnold's "Catastrophe Theory"</p>
+        </header>
+
+        <!-- Introduction -->
+        <section id="intro" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Introduction: What is a Singularity?</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700">
+                <p>Welcome! In this activity, we will explore the fascinating world of **singularities**. In mathematics, a singularity is a point where a function or a geometric object behaves in an unusual or "non-smooth" way. The reading from V.I. Arnold's <em>Catastrophe Theory</em> introduces the foundational work of Hassler Whitney, who studied mappings from one surface to another.</p>
+                <p>Imagine shining a light on a 3D object to create a 2D shadow. The outline of that shadow is a projection, or a "mapping," from the surface of the object to the flat wall. Whitney discovered that for almost any smooth object, the outline of its shadow will only ever have two kinds of "weird" points, no matter how you turn the object or the light. He called these the **fold** and the **cusp**.</p>
+                <p class="p-4 bg-blue-50 border-l-4 border-blue-400 text-blue-800"><strong>Our Goal:</strong> To understand how these two special singularities arise from simple functions that describe surfaces. We will see that these singularities happen at points where the surface is perfectly "vertical" with respect to the direction we are looking from, causing a collapse in dimension that creates these interesting shapes.</p>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 1: The Fold Singularity -->
+        <section id="part1" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: The Fold Singularity</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <p class="text-slate-700">Arnold begins by describing Whitney's first stable singularity, the **fold**. The example given is the projection of a sphere onto a plane (see Fig. 1 in the text). Imagine looking at a globe from the side. The equator represents the edge of what you can see. At every point along this visible edge, the surface of the sphere "folds" away from your line of sight.</p>
+                <p class="mt-4 text-slate-700">This mapping can be described by simple functions. For a sphere of radius 1 centered at (0,0,2), its surface is given by the equation <span class="math">x² + y² + (z-2)² = 1</span>. When we project this onto the xy-plane, we are simply ignoring the z-coordinate. The interactive plot below simulates this. You can control a point in the xy-plane and see how many points on the sphere project onto it.</p>
+            </div>
+
+            <!-- Interactive Plot 1: Fold Singularity -->
+            <div class="w-full bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <header class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Interactive Visualization: The Fold (2D View)</h3>
+                    <p class="text-gray-600 mt-2">Control the point in the xy-plane (the "shadow") and see the corresponding points on the sphere (the "preimages").</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-gray-200 rounded-lg overflow-hidden aspect-square relative" id="fold-canvas-container">
+                        <canvas id="canvas-fold"></canvas>
+                        <div id="fold-tooltip" class="absolute bg-slate-800 text-white text-xs rounded py-1 px-2 pointer-events-none opacity-0 transition-opacity"></div>
+                    </div>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-4">Live Data</h4>
+                        <div class="space-y-4">
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Your Point in the Plane (x, y):</p>
+                                <p id="fold-point-coords" class="font-mono text-indigo-600 p-2 bg-indigo-100 rounded-md mt-1">(-, -)</p>
+                            </div>
+                            <div>
+                                <p class="text-sm font-medium text-gray-700">Points on Sphere (Preimages):</p>
+                                <div id="fold-preimages" class="font-mono text-sm text-green-800 p-2 bg-green-100 rounded-md mt-1 space-y-1">
+                                    <p>Move your cursor over the canvas.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Interactive Desmos Instructions for Fold -->
+            <div class="w-full bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <header class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Interactive Exploration: The Fold on Desmos (3D View)</h3>
+                    <p class="text-gray-600 mt-2">This 3D graph provides another perspective on the fold singularity.</p>
+                </header>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-4">Instructions:</h4>
+                    <ol class="list-decimal list-inside space-y-3 text-slate-700">
+                        <li>
+                            Click this link to open the Desmos 3D graph: 
+                            <a href="https://www.desmos.com/3d/zz8tmkhtrd" target="_blank" class="font-semibold text-blue-600 hover:text-blue-800">Fold Singularity Visualization</a>.
+                        </li>
+                        <li>In the left panel, use the sliders for <span class="math">a</span> and <span class="math">b</span> to move the point P=(a,b,0) around in the xy-plane.</li>
+                        <li>Observe the vertical gray line passing through P. The points where this line intersects the sphere are the "preimages" of P.</li>
+                        <li>Notice how moving P inside the unit circle gives two intersection points, while moving it outside gives zero.</li>
+                        <li>The fold singularity occurs when there is exactly **one** preimage. This happens when P is exactly on the unit circle, where the vertical line just grazes the sphere at its equator.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700">
+                    <li>Using the interactive plot, what happens to the number of preimages when you move your point from inside the gray circle to outside of it? What happens when your point is exactly on the edge of the circle?</li>
+                    <li>The edge of the circle is the "fold." At these points, the two preimages merge into one. Where on the sphere are these points located? Why does it make sense to call this a "fold"?</li>
+                    <li>Arnold mentions that the mapping for a fold can be described by the formulas <span class="math">y₁ = x₁²</span>, <span class="math">y₂ = x₂</span>. How does the parabola <span class="math">y = x²</span> "fold" the x-axis onto the positive y-axis? How is this similar to what you see with the sphere?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 2: The Cusp Singularity -->
+        <section id="part2" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: The Cusp Singularity</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700 mb-8">
+                <p>The second stable singularity is the **cusp**. Arnold notes that this one is harder to notice but is just as common. He describes it with the surface <span class="math">y₁ = x₁³ + x₁x₂</span> (see Fig. 2 in the text). This surface has a sort of "pleat" in it. When you project it onto a plane, the fold line itself appears to have a sharp point, or a cusp.</p>
+                <p>The key feature of the cusp is that it creates a region where points in the plane have **three** preimages on the surface. As you cross a fold line, two of these preimages merge and disappear. At the cusp point itself, all three preimages merge into a single point.</p>
+                <p>To explore this projection, we will use an interactive 3D graph. We will look at the surface <span class="math">z = x³ + xy</span> and project it onto the plane <span class="math">x=4</span>. You will be able to control a point in this plane and see how many points on the surface project onto it.</p>
+            </div>
+
+            <!-- Interactive Desmos Instructions -->
+            <div class="w-full bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <header class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Interactive Exploration: The Cusp on Desmos</h3>
+                    <p class="text-gray-600 mt-2">This 3D graph will help you visualize how the cusp is formed.</p>
+                </header>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <h4 class="text-lg font-semibold text-gray-700 mb-4">Instructions:</h4>
+                    <ol class="list-decimal list-inside space-y-3 text-slate-700">
+                        <li>
+                            Click this link to open the Desmos 3D graph: 
+                            <a href="https://www.desmos.com/3d/jr88ktmold" target="_blank" class="font-semibold text-blue-600 hover:text-blue-800">Cusp Singularity Visualization</a>.
+                        </li>
+                        <li>In the left panel, you will see sliders for the variables <span class="math">a</span> and <span class="math">b</span>. These control the position of the point P = (4, a, b) on the blue projection plane.</li>
+                        <li>Observe the vertical gray line that passes through point P. The points where this line intersects the curved red surface are the "preimages" of P.</li>
+                        <li>Move the sliders for <span class="math">a</span> and <span class="math">b</span> and watch how the number of intersection points changes. You should be able to find positions for P that result in one, two, or three intersection points.</li>
+                        <li>The singularities occur exactly when there are **two** preimages. These points (a, b) trace out the cusp shape on the projection plane and mark the boundary between the region with one preimage and the region with three.</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700" start="4">
+                    <li>Using the Desmos plot, describe the values of <span class="math">a</span> and <span class="math">b</span> that give you three preimages (intersection points). What region do these points (a, b) form on the blue plane?</li>
+                    <li>Set the slider for <span class="math">b</span> to 0. Now slowly change the slider for <span class="math">a</span> from a positive value to a negative value. Describe what happens to the number of preimages. At what value of <span class="math">a</span> does the change happen?</li>
+                    <li>The curve on the projection plane that separates the one-preimage region from the three-preimage region is the singularity. Why is this shape called a "cusp"?</li>
+                    <li>Arnold mentions seeing cusps on the "mouth of a milk bottle" (Fig. 5). Where else in everyday life have you seen shapes that resemble folds or cusps? (Hint: think about light reflecting off the inside of a coffee cup, or the patterns at the bottom of a swimming pool).</li>
+                </ol>
+            </div>
+        </section>
+        
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 3: The Geometry of Singularities -->
+        <section id="part3" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: Why Do Singularities Happen?</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8 space-y-4 text-slate-700">
+                <p>So why do these specific shapes appear? It has to do with the tangent plane to the surface. At any non-singular point on a surface, there is a unique tangent plane—a flat 2D plane that just touches the surface at that point.</p>
+                <p>When we project the surface, we are looking at it from a certain direction. A singularity occurs at a point where the tangent plane is "edge-on" to our view. In other words, the tangent plane is parallel to our line of sight. At these critical points, the 2D plane of the surface looks like a 1D line. This "loss of a dimension" during the projection is what creates the singularity.</p>
+                <p>For the sphere, this happens all along the equator. For the cusp surface, this happens along a curve that, when projected, creates the cusp shape. Whitney's amazing discovery was that for any generic surface, the way this "loss of dimension" can happen is limited to these two fundamental forms: the fold and the cusp.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Guiding Questions:</h3>
+                <ol class="list-decimal list-inside space-y-3 text-slate-700" start="7">
+                    <li>Think about the sphere again. If you are looking down from directly above the north pole, where is the tangent plane "edge-on"? What does the "shadow" or projection of the sphere look like from this angle?</li>
+                    <li>Why do you think Whitney's theorem is so powerful? What does it mean for these singularities to be "generic" and "stable"?</li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- PLOT 1: FOLD SINGULARITY (SPHERE) ---
+        const foldCanvas = document.getElementById('canvas-fold');
+        const foldCtx = foldCanvas.getContext('2d');
+        const foldContainer = document.getElementById('fold-canvas-container');
+        const foldCoordsEl = document.getElementById('fold-point-coords');
+        const foldPreimagesEl = document.getElementById('fold-preimages');
+        const foldTooltip = document.getElementById('fold-tooltip');
+
+        let foldRadius;
+
+        function setupFoldCanvas() {
+            const size = foldContainer.clientWidth;
+            foldCanvas.width = size;
+            foldCanvas.height = size;
+            foldRadius = size * 0.4; // Radius of the projected circle in pixels
+            drawFold();
+        }
+
+        function drawFold(point = null) {
+            const center = { x: foldCanvas.width / 2, y: foldCanvas.height / 2 };
+            
+            // Clear and draw background
+            foldCtx.fillStyle = '#e2e8f0'; // slate-200
+            foldCtx.fillRect(0, 0, foldCanvas.width, foldCanvas.height);
+
+            // Draw the fold line (unit circle)
+            foldCtx.beginPath();
+            foldCtx.strokeStyle = '#475569'; // slate-600
+            foldCtx.lineWidth = 2;
+            foldCtx.arc(center.x, center.y, foldRadius, 0, 2 * Math.PI);
+            foldCtx.stroke();
+
+            // Draw the controlled point
+            if (point) {
+                foldCtx.beginPath();
+                foldCtx.fillStyle = '#4f46e5'; // indigo-600
+                foldCtx.arc(point.x, point.y, 6, 0, 2 * Math.PI);
+                foldCtx.fill();
+            }
+        }
+
+        function handleFoldMouseMove(e) {
+            const rect = foldCanvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            drawFold({x, y});
+
+            const centerX = foldCanvas.width / 2;
+            const centerY = foldCanvas.height / 2;
+
+            // Convert pixel coordinates to math coordinates (-1 to 1)
+            const mx = (x - centerX) / foldRadius;
+            const my = (centerY - y) / foldRadius; // Invert y-axis
+
+            foldCoordsEl.textContent = `(${mx.toFixed(3)}, ${my.toFixed(3)})`;
+            
+            const rSq = mx * mx + my * my;
+            let preimagesHTML = '';
+
+            if (rSq > 1.001) {
+                preimagesHTML = '<p class="text-red-600">0 Preimages (Outside)</p>';
+            } else if (rSq > 0.999 && rSq < 1.001) {
+                 preimagesHTML = '<p class="text-yellow-600">1 Preimage (On the Fold)</p><p>z = 2.000</p>';
+            } else {
+                const z_offset = Math.sqrt(1 - rSq);
+                const z1 = 2 + z_offset;
+                const z2 = 2 - z_offset;
+                preimagesHTML = `<p class="text-green-700">2 Preimages (Inside)</p><p>z₁ = ${z1.toFixed(3)}</p><p>z₂ = ${z2.toFixed(3)}</p>`;
+            }
+            foldPreimagesEl.innerHTML = preimagesHTML;
+
+            // Tooltip
+            foldTooltip.style.left = `${x + 15}px`;
+            foldTooltip.style.top = `${y}px`;
+            foldTooltip.textContent = `(${mx.toFixed(2)}, ${my.toFixed(2)})`;
+            foldTooltip.style.opacity = 1;
+        }
+        
+        foldCanvas.addEventListener('mousemove', handleFoldMouseMove);
+        foldCanvas.addEventListener('mouseleave', () => {
+            drawFold();
+            foldTooltip.style.opacity = 0;
+            foldPreimagesEl.innerHTML = '<p>Move your cursor over the canvas.</p>';
+            foldCoordsEl.textContent = '(-, -)';
+        });
+
+        // --- Initialisation ---
+        window.onload = () => {
+            setupFoldCanvas();
+        };
+        window.onresize = () => {
+            setupFoldCanvas();
+        };
+
+    </script>
+</body>
+</html>
