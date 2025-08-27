@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enrichment Activity: Second Derivatives, Laplacians, and Harmonic Functions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.plot.ly/plotly-2.12.1.min.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Enrichment Activity: <br> Second Derivatives, Laplacians, and Harmonic Functions</h1>
+            <p class="mt-4 text-lg text-slate-600">Created by Alex Heaton in collaboration with Gemini</p>
+        </header>
+
+        <!-- Introduction -->
+        <section id="intro" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Introduction: What a Second Derivative Tells Us</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700">
+                <p>In single-variable calculus, the second derivative, <span class="math">f''(x)</span>, gives us crucial information about a function's concavity. It measures the <em>change in the slope</em> of the tangent line. A positive second derivative means the function is concave up (like a cup holding water), while a negative one means it's concave down, like a hill.</p>
+                <p>But what if our function depends on more than one variable, like <span class="math">f(x, y)</span>? This could represent the temperature on a metal plate or the altitude of a landscape. We can combine the second partial derivatives to create the **Laplacian**, denoted by ∇² (pronounced "del-squared"). The Laplacian tells us how the value of a function at a point compares to the average value in its immediate neighborhood.</p>
+                <div class="grid md:grid-cols-2 gap-6 pt-4">
+                    <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                        <h3 class="font-semibold text-blue-900">Harmonic Functions (∇²<span class="math">f</span> = 0)</h3>
+                        <p class="text-blue-800 mt-1">These represent a state of equilibrium. The function's value at any point is the exact average of its neighbors. Think of a perfectly stretched soap film, which minimizes its surface area.</p>
+                    </div>
+                    <div class="p-4 bg-green-50 border-l-4 border-green-400">
+                        <h3 class="font-semibold text-green-900">The Laplacian Eigenvalue Problem (∇²<span class="math">f</span> = λ<span class="math">f</span>)</h3>
+                        <p class="text-green-800 mt-1">This describes systems where a function's curvature is proportional to its value. This feedback loop creates standing waves, like on a vibrating drumhead, where λ is related to the frequency.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Step 1: The One-Dimensional Case -->
+        <section id="step1" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Step 1: The One-Dimensional Case</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <p class="text-slate-700">In one dimension, the Laplacian is simply the second derivative: ∇²<span class="math">f(x)</span> = <span class="math">f''(x)</span>.</p>
+                <ul class="list-disc list-inside space-y-2 mt-4 text-slate-600">
+                    <li>A <strong>1D Harmonic Function</strong> satisfies <span class="math">f''(x)</span> = 0.</li>
+                    <li>The <strong>1D Laplacian Eigenvalue Problem</strong> is <span class="math">f''(x)</span> = λ<span class="math">f(x)</span>.</li>
+                </ul>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Exercise 1</h3>
+                <ol class="list-alpha list-inside space-y-3 text-slate-700">
+                    <li>Consider the general linear function <span class="math">f(x) = mx + b</span>. Is this function harmonic? Show your calculation.</li>
+                    <li>Based on your answer, describe the shape of all one-dimensional harmonic functions.</li>
+                </ol>
+            </div>
+            
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Exercise 2</h3>
+                <p class="mb-4 text-slate-600">Let's try to build a non-trivial solution to the 1D eigenvalue problem. For solutions to oscillate (like a wave), the eigenvalue λ must be negative. Let's write λ = -k² for some positive constant k. Our equation is now:</p>
+                <div class="text-center my-4 p-2 bg-slate-100 rounded">
+                    <p class="text-lg math">f''(x) = -k² f(x)</p>
+                </div>
+                <p class="mb-4 text-slate-600">This equation states that a function's concavity is always the <em>opposite sign</em> of its value. Let's reason through what the graph of such a function must look like.</p>
+                
+                <ol class="list-alpha list-inside space-y-3 text-slate-700 mt-6">
+                    <li>Pick a point on the graph where the function has a positive value (i.e., it's above the x-axis, so <span class="math">f(x) > 0</span>). According to the equation, what must be the sign of the second derivative <span class="math">f''(x)</span>? What does this tell you about the concavity of the graph at all points where it is positive?</li>
+                    <li>Now consider a point where the function has a negative value (<span class="math">f(x) < 0</span>). What is the sign of <span class="math">f''(x)</span> here, and what does that mean for the concavity of the graph whenever it is below the x-axis?</li>
+                    <li>Where must the inflection points of the graph be located? (Recall that an inflection point can only occur where <span class="math">f''(x) = 0</span>). Use the equation to determine where this happens.</li>
+                    <li>Sketch a function that obeys these three rules, starting at <span class="math">x=0</span> with <span class="math">f(0)=0</span> and an initial positive slope. Describe the shape that you are forced to draw. Does it resemble a common function from trigonometry?</li>
+                </ol>
+
+                <div class="mt-8 p-4 bg-blue-50 border-l-4 border-blue-400 text-blue-800 rounded-lg">
+                    <p>The oscillating solutions you reasoned through are known as **"standing waves,"** and they are fundamental solutions to the Laplacian eigenvalue problem <span class="math">f''(x) = -k²f(x)</span>. To see physical demonstrations of waves and standing waves, watch the first 7.5 minutes of this video:</p>
+                    <div class="mt-4 aspect-w-16 aspect-h-9">
+                        <iframe class="w-full aspect-video rounded-lg shadow-md" src="https://www.youtube.com/embed/pc93R2u3pjE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+        
+        <!-- Step 2: Two Dimensions -->
+        <section id="step2" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Step 2: Stepping Up to Two Dimensions</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                 <p class="text-slate-700">For a function <span class="math">f(x, y)</span>, the Laplacian is the sum of the second partial derivatives: ∇²<span class="math">f</span> = ∂²<span class="math">f</span>/∂<span class="math">x</span>² + ∂²<span class="math">f</span>/∂<span class="math">y</span>². A function is harmonic if ∇²<span class="math">f</span> = 0, meaning its concavity in the x-direction and y-direction perfectly cancel each other out, creating a saddle shape or a flat plane.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Exercise 3</h3>
+                <p class="mb-2 text-slate-600">Is the function <span class="math">f(x, y) = x² - y²</span> harmonic?</p>
+                <ol class="list-alpha list-inside space-y-3 text-slate-700">
+                    <li>Calculate ∂²<span class="math">f</span>/∂<span class="math">x</span>².</li>
+                    <li>Calculate ∂²<span class="math">f</span>/∂<span class="math">y</span>².</li>
+                    <li>Compute the Laplacian, ∇²<span class="math">f</span>. Is the function harmonic?</li>
+                </ol>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Exercise 4</h3>
+                <p class="mb-2 text-slate-600">Consider <span class="math">h(x, y) = sin(3x)cos(4y)</span>, which can describe a vibration on a rectangular membrane.</p>
+                <ol class="list-alpha list-inside space-y-3 text-slate-700">
+                    <li>Calculate the Laplacian of <span class="math">h(x, y)</span>.</li>
+                    <li>Can you find a constant eigenvalue λ such that ∇²<span class="math">h</span> = λ<span class="math">h</span>? If so, what is λ?</li>
+                </ol>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+        
+        <!-- Step 3: Complex Numbers -->
+        <section id="step3" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Step 3: Generating Harmonic Functions with Complex Numbers</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md mb-8 space-y-4 text-slate-700">
+                <p>There's a deep and surprising connection between harmonic functions and complex numbers. Any analytic function of a complex variable <span class="math">z = x + iy</span> has real and imaginary parts that are harmonic functions of (<span class="math">x, y</span>).</p>
+                <p>For example, <span class="math">F(z) = z² = (x + iy)² = (x² - y²) + i(2xy)</span>. The real part is <span class="math">u(x,y) = x² - y²</span> and the imaginary part is <span class="math">v(x,y) = 2xy</span>. You showed <span class="math">u(x,y)</span> is harmonic in Exercise 3, and you can verify that <span class="math">v(x,y)</span> is as well. This works for any integer power <span class="math">n</span>!</p>
+            </div>
+            
+            <!-- Interactive Plot for Harmonic Functions -->
+            <div class="w-full bg-white rounded-xl shadow-lg p-6 md:p-8 mb-8">
+                <header class="mb-6">
+                    <h3 class="text-2xl font-bold text-gray-800">Interactive Visualization: Harmonic Functions from <span class="math">zⁿ</span></h3>
+                    <p class="text-gray-600 mt-2">This plot shows the surface of the real part of <span class="math">F(z) = (x+iy)ⁿ</span>. Use the slider to change <span class="math">n</span> and see the beautiful harmonic functions that are generated.</p>
+                </header>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="md:col-span-1 bg-gray-50 p-6 rounded-lg">
+                        <h4 class="text-lg font-semibold text-gray-700 mb-4">Controls</h4>
+                        <div>
+                            <label for="n-slider" class="block text-sm font-medium text-gray-700">Power (<span class="math">n</span>)</label>
+                            <div class="flex items-center space-x-3">
+                                <input id="n-slider" type="range" min="1" max="6" value="2" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <span id="n-value" class="text-sm font-mono text-indigo-600 w-12 text-center">2</span>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-3 bg-indigo-100 text-indigo-800 rounded-md text-sm">
+                            <p class="font-semibold">Function Plotted:</p>
+                            <p id="function-display" class="font-mono mt-1">Re(zⁿ) = ...</p>
+                        </div>
+                    </div>
+                    <div id="plot-3d" class="md:col-span-2 bg-gray-200 rounded-lg overflow-hidden aspect-square"></div>
+                </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Exercise 5</h3>
+                <p class="mb-2 text-slate-600">Let's generate the next pair of harmonic functions using <span class="math">F(z) = z³</span>.</p>
+                <ol class="list-alpha list-inside space-y-3 text-slate-700">
+                    <li>Expand <span class="math">F(z) = (x+iy)³</span> and separate it into its real part, <span class="math">u(x,y)</span>, and imaginary part, <span class="math">v(x,y)</span>.</li>
+                    <li>Show that the real part, <span class="math">u(x,y)</span>, is harmonic by calculating its Laplacian.</li>
+                    <li>Show that the imaginary part, <span class="math">v(x,y)</span>, is also harmonic.</li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+        // --- 3D Harmonic Function Plot ---
+        const nSlider = document.getElementById('n-slider');
+        const nValueEl = document.getElementById('n-value');
+        const functionDisplayEl = document.getElementById('function-display');
+        const plotDiv = document.getElementById('plot-3d');
+
+        function getRealPartExpression(n) {
+            if (n === 1) return 'x';
+            if (n === 2) return 'x² - y²';
+            if (n === 3) return 'x³ - 3xy²';
+            if (n === 4) return 'x⁴ - 6x²y² + y⁴';
+            if (n === 5) return 'x⁵ - 10x³y² + 5xy⁴';
+            if (n === 6) return 'x⁶ - 15x⁴y² + 15x²y⁴ - y⁶';
+            return '';
+        }
+
+        function update3DPlot() {
+            const n = parseInt(nSlider.value);
+            nValueEl.textContent = n;
+            functionDisplayEl.textContent = getRealPartExpression(n);
+
+            const size = 50;
+            const x = new Array(size);
+            const y = new Array(size);
+            const z = new Array(size);
+
+            for (let i = 0; i < size; i++) {
+                x[i] = -1 + 2 * i / (size - 1);
+                y[i] = -1 + 2 * i / (size - 1);
+                z[i] = new Array(size);
+            }
+
+            for (let i = 0; i < size; i++) {
+                for (let j = 0; j < size; j++) {
+                    // Calculate (x+iy)^n and take the real part
+                    // Using De Moivre's formula: z^n = r^n * (cos(n*theta) + i*sin(n*theta))
+                    const r = Math.sqrt(x[j] * x[j] + y[i] * y[i]);
+                    const theta = Math.atan2(y[i], x[j]);
+                    z[i][j] = Math.pow(r, n) * Math.cos(n * theta);
+                }
+            }
+            
+            const data = [{
+                z: z,
+                x: x,
+                y: y,
+                type: 'surface',
+                colorscale: 'Viridis',
+                showscale: false
+            }];
+
+            const layout = {
+                margin: { l: 0, r: 0, b: 0, t: 0 },
+                scene: {
+                    camera: { eye: {x: 1.5, y: 1.5, z: 1.5} },
+                    xaxis: { title: 'x', showticklabels: false, showgrid: false, zeroline: false },
+                    yaxis: { title: 'y', showticklabels: false, showgrid: false, zeroline: false },
+                    zaxis: { title: 'Re(zⁿ)', showticklabels: false, showgrid: false, zeroline: false },
+                }
+            };
+
+            Plotly.newPlot('plot-3d', data, layout, {responsive: true});
+        }
+        nSlider.addEventListener('input', update3DPlot);
+
+
+        // --- Initialisation ---
+        window.onload = () => {
+            update3DPlot();
+        };
+    </script>
+</body>
+</html>
