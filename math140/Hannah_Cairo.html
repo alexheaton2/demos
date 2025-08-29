@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Activity Guide: A Major Math Mystery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: 'italic';
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Activity Guide: Solving a Major Math Mystery</h1>
+        </header>
+
+        <!-- Introduction -->
+        <section id="intro" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Your Mission</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700">
+                <p>Your goal is to read and discuss a fascinating article from <em>Quanta Magazine</em> about a high school student who solved a famous, long-standing problem in a field of math called **harmonic analysis**. This activity will guide you through the process of understanding the problem, the solution, and its significance.</p>
+                <p>You will work in your small group to answer questions before and after reading the article. Follow the steps below in order.</p>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Step 1: Pre-Reading Questions -->
+        <section id="step1" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: Pre-Reading Discussion</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Instructions:</h3>
+                <p class="mb-6 text-slate-600"><strong>Before you read the article</strong>, discuss the following questions and explore the interactive plot. The goal is to activate your prior knowledge about the core ideas in harmonic analysis.</p>
+                
+                <ol class="list-decimal list-inside space-y-4 text-slate-700 mb-8">
+                    <li>
+                        <strong>Building Blocks:</strong> Think about complex things that are built from simple repeating parts. How is a musical chord built from individual notes? How is white light built from a rainbow of colors? Discuss this idea of "decomposition."
+                    </li>
+                    <li>
+                        <strong>Properties of a Wave:</strong> Look at a simple sine wave. What are its most important properties? How would you describe the difference between a high-pitched sound wave and a low-pitched one?
+                    </li>
+                </ol>
+
+                <div class="w-full bg-white rounded-xl shadow-inner p-6 md:p-8">
+                    <header class="mb-6">
+                        <h3 class="text-2xl font-bold text-gray-800">Interactive Demo: Building a Function from Waves</h3>
+                        <p class="text-gray-600 mt-2">The core idea of harmonic analysis is that complex functions can be built by adding simple sine waves together. This is called a **Fourier Series**. If we add up sine waves with different frequencies in just the right amplitudes, they can begin to approximate the square wave step function, which doesn't look like a sine wave at all! Use the slider below to add more sine wave components and see how the approximation (solid blue line) gets closer to the target function (dashed gray line).</p>
+                    </header>
+                    <div class="bg-gray-50 p-6 rounded-lg">
+                        <div class="mb-4">
+                            <label for="n-slider" class="block text-sm font-medium text-gray-700">Number of Sine Waves (Terms in Series)</label>
+                            <div class="flex items-center space-x-3">
+                                <input id="n-slider" type="range" min="1" max="15" value="1" step="1" class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                                <span id="n-value" class="text-sm font-mono text-indigo-600 w-12 text-center">1</span>
+                            </div>
+                        </div>
+                        <div class="bg-gray-200 rounded-lg overflow-hidden">
+                            <canvas id="fourier-canvas"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Step 2: The Reading -->
+        <section id="step2" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: The Reading</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Instructions:</h3>
+                <p class="mb-6 text-slate-600">Now, read the following article from <em>Quanta Magazine</em>. As you read, think about how the ideas in the article connect to the concept of building functions from waves.</p>
+                <div class="text-center">
+                    <a href="https://www.quantamagazine.org/at-17-hannah-cairo-solved-a-major-math-mystery-20250801/" target="_blank" class="inline-block bg-blue-600 text-white font-bold py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors">
+                        Read the Article Here
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+        
+        <!-- Step 3: Post-Reading Discussion -->
+        <section id="step3" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: Post-Reading Discussion</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-4">Instructions:</h3>
+                <p class="mb-6 text-slate-600">After everyone in your group has finished reading, discuss the following questions together.</p>
+                <ol class="list-decimal list-inside space-y-4 text-slate-700">
+                    <li>
+                        <strong>Harmonic Analysis:</strong> The article says harmonic analysis "studies how functions are assembled from wavelike components." How does the interactive demo in Part 1 provide a visual example of this process?
+                    </li>
+                    <li>
+                        <strong>Restricted Frequencies:</strong> In your own words, what is the Mizohata-Takeuchi conjecture about? What does it mean for the "frequencies" of a function to be restricted to a surface like a sphere?
+                    </li>
+                    <li>
+                        <strong>Hannah Cairo's Contribution:</strong> What was the "long-standing mystery" that Hannah Cairo solved? What did her solution reveal about the "flatness" of functions that are built from these restricted frequencies?
+                    </li>
+                    <li>
+                        <strong>The Nature of Mathematical Discovery:</strong> The article mentions that Cairo's solution was "elegant and surprisingly simple." What does this tell you about how progress is made in mathematics? Does a solution always have to be complicated to be powerful?
+                    </li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+    <script>
+        const nSlider = document.getElementById('n-slider');
+        const nValueEl = document.getElementById('n-value');
+        const fourierCtx = document.getElementById('fourier-canvas').getContext('2d');
+        let fourierChart;
+
+        function updateFourierPlot() {
+            const n_terms = parseInt(nSlider.value);
+            nValueEl.textContent = n_terms;
+
+            const labels = [];
+            const datasets = [];
+            const step = 0.05;
+
+            // Generate x-axis labels
+            for (let x = -Math.PI; x <= Math.PI; x += step) {
+                labels.push(x.toFixed(2));
+            }
+
+            // 1. Target Function (Square Wave)
+            const targetData = labels.map(x => (parseFloat(x) > 0 ? 1 : -1));
+            datasets.push({
+                label: 'Target Function (Square Wave)',
+                data: targetData,
+                borderColor: 'rgba(107, 114, 128, 0.5)', // gray-500
+                borderWidth: 2,
+                pointRadius: 0,
+                borderDash: [5, 5]
+            });
+
+            // 2. Individual Sine Wave Components
+            for (let i = 0; i < n_terms; i++) {
+                const n = 2 * i + 1;
+                const componentData = labels.map(x_val => {
+                    const x = parseFloat(x_val);
+                    return (4 / Math.PI) * (1 / n) * Math.sin(n * x);
+                });
+                datasets.push({
+                    label: `Component ${i + 1}`,
+                    data: componentData,
+                    borderColor: 'rgba(107, 114, 128, 0.3)', // Faded gray
+                    borderWidth: 1,
+                    pointRadius: 0,
+                    borderDash: [2, 2]
+                });
+            }
+
+            // 3. Fourier Series Approximation (Sum)
+            const approxData = new Array(labels.length).fill(0);
+            for (let i = 0; i < n_terms; i++) {
+                const n = 2 * i + 1;
+                for (let j = 0; j < labels.length; j++) {
+                    const x = parseFloat(labels[j]);
+                    approxData[j] += (4 / Math.PI) * (1 / n) * Math.sin(n * x);
+                }
+            }
+            datasets.push({
+                label: 'Fourier Series Approximation',
+                data: approxData,
+                borderColor: 'rgb(59, 130, 246)', // blue-500
+                borderWidth: 3,
+                pointRadius: 0,
+                tension: 0.1
+            });
+
+            const data = {
+                labels: labels,
+                datasets: datasets
+            };
+
+            const config = {
+                type: 'line',
+                data: data,
+                options: {
+                    animation: { duration: 0 },
+                    scales: {
+                        x: { display: false },
+                        y: { min: -1.8, max: 1.8 }
+                    },
+                    plugins: {
+                        legend: { display: false }
+                    }
+                }
+            };
+
+            if (fourierChart) {
+                fourierChart.destroy();
+            }
+            fourierChart = new Chart(fourierCtx, config);
+        }
+
+        nSlider.addEventListener('input', updateFourierPlot);
+        window.onload = updateFourierPlot;
+    </script>
+</body>
+</html>
