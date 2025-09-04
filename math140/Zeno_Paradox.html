@@ -29,7 +29,6 @@
         <header class="text-center mb-10">
             <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Activity Guide: Zeno, Escher, and the Limit</h1>
             <p class="mt-4 text-lg text-slate-600">An exploration of infinity and paradoxes from "Gödel, Escher, Bach"</p>
-            <p class="mt-4 text-lg text-slate-600">Created with help from Gemini.</p>
         </header>
 
         <!-- Introduction -->
@@ -53,6 +52,28 @@
                 <ol class="list-decimal list-inside space-y-6 text-slate-700">
                     <li>
                         <strong>The Halfway Paradox:</strong> Imagine you want to walk to a wall. First, you have to walk half the distance. Then you have to walk half of the *remaining* distance. Then half of that new remainder, and so on forever. Will you ever physically touch the wall? Why or why not?
+                        <!-- Interactive Demo -->
+                        <div class="mt-6 p-4 border rounded-lg bg-slate-100 shadow-inner">
+                            <h4 class="font-semibold text-center mb-4">Interactive Paradox: Achilles vs. The Tortoise</h4>
+                            <div id="race-track" class="relative w-full h-24 bg-amber-100 rounded-lg border-2 border-amber-200">
+                                <div class="absolute top-0 left-0 w-full h-full" style="background-image: repeating-linear-gradient(90deg, transparent, transparent 19px, #d2b48c20 20px);"></div>
+                                <img id="achilles" src="https://upload.wikimedia.org/wikipedia/commons/b/ba/Achilles_fighting_against_Memnon_Leiden_Rijksmuseum_voor_Oudheden.jpg" 
+                                     onerror="this.onerror=null; this.src='https://placehold.co/80x80/f87171/ffffff?text=A';" 
+                                     alt="Achilles" class="absolute bottom-0 h-20 transition-all duration-200 ease-linear" style="left: 0%; transform: translateX(0%);">
+                                <img id="tortoise" src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/A._gigantea_Aldabra_Giant_Tortoise.jpg/500px-A._gigantea_Aldabra_Giant_Tortoise.jpg" 
+                                     onerror="this.onerror=null; this.src='https://placehold.co/80x80/a3e635/ffffff?text=T';" 
+                                     alt="Tortoise" class="absolute bottom-0 h-16" style="left: 100%;">
+                            </div>
+                            <div class="mt-4 flex items-center justify-center space-x-4">
+                                <button id="decrement-btn" class="px-4 py-2 bg-slate-300 text-slate-800 rounded-md hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 font-bold text-lg">-</button>
+                                <div class="text-center">
+                                    <label class="block text-sm font-medium text-gray-700">Number of Halfway Steps</label>
+                                    <span id="steps-value" class="font-bold text-2xl">0</span>
+                                </div>
+                                <button id="increment-btn" class="px-4 py-2 bg-slate-300 text-slate-800 rounded-md hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 font-bold text-lg">+</button>
+                            </div>
+                            <p class="text-center text-sm mt-2 text-slate-600">Achilles' Position: <span id="position-value" class="font-mono font-bold">0.000</span> / 10.0</p>
+                        </div>
                     </li>
                     <li>
                         <strong>Infinite Sums:</strong> Can you add up an infinite number of positive numbers and get a finite answer? For example, consider the sum <span class="math">S = 1/2 + 1/4 + 1/8 + 1/16 + ...</span> What number does this sum seem to be getting closer and closer to?
@@ -123,7 +144,7 @@
                     <!-- Problem 1 -->
                     <div>
                         <h4 class="font-semibold text-lg mb-2">Connection 1: The Limit from a Table</h4>
-                        <img src="figures\KA_limits_from_tables_and_graphs_1.png" alt="Khan Academy limit problem from a table." class="rounded-lg shadow-md mb-4 w-full max-w-md mx-auto">
+                        <img src="KA_limits_from_tables_and_graphs_1.png" alt="Khan Academy limit problem from a table." class="rounded-lg shadow-md mb-4 w-full max-w-md mx-auto">
                         <p class="text-slate-700">In Zeno's paradox, Achilles takes an infinite number of steps to get closer and closer to the Tortoise. How is that infinite process similar to the values of <span class="math">x</span> in this table getting closer and closer to -2? Even though <span class="math">x</span> never actually equals -2 in the table, what can you say about the value that <span class="math">g(x)</span> is approaching?
                         </p>
                     </div>
@@ -131,15 +152,56 @@
                     <!-- Problem 2 -->
                     <div>
                         <h4 class="font-semibold text-lg mb-2">Connection 2: The Limit from a Graph</h4>
-                        <img src="figures\KA_limits_from_tables_and_graphs_2.png" alt="Khan Academy limit problem from a graph with a hole." class="rounded-lg shadow-md mb-4 w-full max-w-md mx-auto">
+                        <img src="KA_limits_from_tables_and_graphs_2.png" alt="Khan Academy limit problem from a graph with a hole." class="rounded-lg shadow-md mb-4 w-full max-w-md mx-auto">
                         <p class="text-slate-700">In the dialogue, Zeno's argument focuses on an infinite number of points in time *before* Achilles catches the Tortoise. He never talks about the exact moment they meet. How is this similar to the "hole" in the graph of the function <span class="math">h(x)</span> at <span class="math">x = -1</span>? The function isn't defined at that exact point, but the limit tells us what value the function is approaching from both sides. Discuss the difference between the value <span class="math">h(-1)</span> and the value of <span class="math">lim<sub>x→-1</sub> h(x)</span>.
                         </p>
                     </div>
                 </div>
             </div>
         </section>
-
     </div>
 
+    <script>
+        const decrementBtn = document.getElementById('decrement-btn');
+        const incrementBtn = document.getElementById('increment-btn');
+        const achillesImg = document.getElementById('achilles');
+        const stepsValue = document.getElementById('steps-value');
+        const positionValue = document.getElementById('position-value');
+
+        let currentSteps = 0;
+        const maxSteps = 10;
+
+        function updateAchillesPosition(n) {
+            stepsValue.textContent = n;
+
+            let position = 0;
+            if (n > 0) {
+                // Sum of a geometric series: 10 * (1 - 0.5^n)
+                position = 10 * (1 - Math.pow(0.5, n));
+            }
+
+            positionValue.textContent = position.toFixed(3);
+            const percentage = (position / 10) * 100;
+            achillesImg.style.left = `${percentage}%`;
+        }
+
+        incrementBtn.addEventListener('click', () => {
+            if (currentSteps < maxSteps) {
+                currentSteps++;
+                updateAchillesPosition(currentSteps);
+            }
+        });
+
+        decrementBtn.addEventListener('click', () => {
+            if (currentSteps > 0) {
+                currentSteps--;
+                updateAchillesPosition(currentSteps);
+            }
+        });
+
+        // Initialize view
+        updateAchillesPosition(0);
+    </script>
 </body>
 </html>
+
