@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signal from Noise: Denoising with Integrals</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
+
+        <!-- Header Section -->
+        <header class="text-center mb-10">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Signal from Noise: <br> An Interactive Guide to Denoising with Integrals</h1>
+            <p class="mt-4 text-lg text-slate-600">In this activity, your group will explore how the mathematical concept of an integral can be used to clean up "noise" from a signal, like static in an audio file.</p>
+        </header>
+
+        <!-- Introduction: Roles -->
+        <section id="intro" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Your Roles</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-4 text-slate-700">
+                <p>To help your group work effectively, please assign the following roles. You can switch roles in different parts of the activity if you like!</p>
+                <ul class="list-disc list-inside space-y-2 mt-4 text-slate-600">
+                    <li><strong>Facilitator:</strong> Makes sure everyone in the group has a chance to share their thoughts. Keeps the group on task and moving forward. Encourages discussion by asking questions like, "What do you all think?" or "Can you explain that in your own words?"</li>
+                    <li><strong>Recorder:</strong> Takes notes on the group's answers to the questions. This person will write down the final agreed-upon answer for each question, which will be your group's deliverable.</li>
+                    <li><strong>Investigator:</strong> Interacts with the plots and sliders in this guide. This person will be "driving," making changes to the visuals as the group decides to explore different ideas. They should describe what they see happening as they adjust the interactive elements.</li>
+                </ul>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 1: Creating a Noisy Wave -->
+        <section id="part1" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: What is a "Noisy" Wave?</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <p class="text-slate-700">Many signals, like sound waves or radio waves, can be represented by mathematical functions. A "clean" or smooth signal is often made up of a few simple waves added together. Let's start by creating a smooth wave by adding three sine waves of different frequencies.</p>
+                
+                <div class="my-6">
+                    <canvas id="smoothWaveChart"></canvas>
+                </div>
+
+                <p class="text-slate-700">Now, let's simulate what happens when this clean signal gets corrupted by "noise." Noise is essentially random, high-frequency interference. We'll take our smooth wave, sample it at 300 points, and then add a small random value to each point to create a new, "noisy" wave.</p>
+
+                <div class="my-6">
+                    <canvas id="noisyWaveChart"></canvas>
+                </div>
+                
+                <p class="text-slate-700">Below is a plot showing just the random noise that was added. Notice how it jumps around unpredictably compared to the smooth wave.</p>
+
+                <div class="my-6">
+                    <canvas id="noiseOnlyChart"></canvas>
+                </div>
+
+                <div class="flex justify-center mt-4">
+                     <button id="regenerateNoiseBtn" class="bg-slate-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
+                        Generate New Noise
+                    </button>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 1:</h3>
+                    <p class="text-blue-800 mt-1">As a group, describe the main visual differences between the "Smooth Wave" and the "Noisy Wave." How does the plot of "Just the Noise" help you understand where these differences come from? Click the "Generate New Noise" button a few times. Does the noisy wave look exactly the same each time? Why or why not?</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 2: What is an Integral? -->
+        <section id="part2" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: A Quick Refresher on Integrals</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <p class="text-slate-700">To clean our noisy signal, we need a tool called the integral. The integral of a function is simply the "signed area" between the function's curve and the x-axis. We can approximate this area by filling it with thin rectangles and summing their areas. This sum is called a Riemann Sum.</p>
+                <p class="text-slate-700">Use the slider below to see what happens as we increase the number of rectangles. Notice that some rectangles are above the x-axis (positive area) and some are below (negative area). The integral adds up all these signed areas.</p>
+                
+                <div class="my-6">
+                    <canvas id="riemannSumChart"></canvas>
+                </div>
+                <div class="mt-4 p-4 bg-slate-100 rounded-lg flex items-center gap-4 border border-slate-200">
+                    <label for="riemannSlider" class="font-medium text-slate-600">Number of Rectangles:</label>
+                    <input type="range" id="riemannSlider" min="2" max="100" value="10" class="w-full">
+                    <span id="riemannCount" class="font-bold w-12 text-center text-slate-700">10</span>
+                </div>
+                 <p class="text-center font-medium text-slate-600 mt-4">Signed Area (Integral) ≈ <span id="integralValue" class="font-bold text-slate-800">0.00</span></p>
+
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                     <h3 class="font-semibold text-blue-900">Question 2:</h3>
+                    <p class="text-blue-800 mt-1">Set the slider to a low number of rectangles (like 4). Then, slowly move the slider to the right. What happens to the shape of the rectangles as you increase their number? How does the approximation of the area seem to change?</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 3: Using Integrals to Measure Similarity -->
+        <section id="part3" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: Measuring Similarity with Integrals</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <p class="text-slate-700">Here's a fascinating idea: the integral of the product of two functions, $\int f(x)g(x)dx$, can measure how "similar" or "aligned" they are. Let's explore why.</p>
+                <ul class="list-disc list-inside space-y-2 my-4 text-slate-600">
+                    <li>If both functions are <strong>positive</strong> in an interval, their product is positive, and the integral increases.</li>
+                    <li>If both functions are <strong>negative</strong> in an interval, their product is <strong>still positive</strong>, and the integral increases.</li>
+                    <li>If one function is positive and the other is negative, their product is negative, and the integral decreases.</li>
+                </ul>
+                <p class="text-slate-700">So, a large positive integral means the functions tend to have the same sign (they are "in sync"), while an integral near zero means they don't align much at all.</p>
+
+                <div class="my-6">
+                    <canvas id="similarityChart"></canvas>
+                </div>
+                 <div class="mt-4 p-4 bg-slate-100 rounded-lg flex items-center gap-4 border border-slate-200">
+                    <label for="functionSelect" class="font-medium text-slate-600">Compare Function 1 to:</label>
+                    <select id="functionSelect" class="w-full p-2 rounded-lg border border-slate-300 bg-white">
+                        <option value="aligned">An Aligned Wave</option>
+                        <option value="offset">An Offset Wave</option>
+                        <option value="different">A Different Frequency Wave</option>
+                    </select>
+                </div>
+                <p class="text-center font-medium text-slate-600 mt-4">Similarity Score (Integral of Product) ≈ <span id="similarityScore" class="font-bold text-slate-800">0.00</span></p>
+
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 3:</h3>
+                    <p class="text-blue-800 mt-1">Select "An Aligned Wave" from the dropdown. Look at the "Product of the two functions" plot. Why is it mostly positive? Now select "A Different Frequency Wave". Why does the product plot have both positive and negative parts? How does this affect the final "Similarity Score"?</p>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-12 border-slate-200">
+
+        <!-- Part 4: De-noising the Wave -->
+        <section id="part4" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 4: Removing Noise with Integrals</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <p class="text-slate-700">Let's put it all together. Our noisy wave is made of our original low-frequency smooth wave plus a lot of high-frequency noise. We can remove the noise by "subtracting out" these high-frequency components.</p>
+                <p class="text-slate-700">But how much of each high-frequency wave should we subtract? We use the similarity measure from Part 3! For each high-frequency sine wave, we compute the integral of its product with our noisy wave. This "similarity score" tells us exactly how much of that high-frequency wave is "hiding" in our signal. We then subtract that amount.</p>
+                <p class="text-slate-700">Use the sliders below to remove high-frequency components from the noisy wave. The "Cutoff Frequency" sets the starting point for removal. Watch as the de-noised wave starts to look more and more like the original smooth signal!</p>
+                
+                <div class="my-6">
+                    <canvas id="denoisingChart"></canvas>
+                </div>
+                <div class="mt-4 p-4 bg-slate-100 rounded-lg flex flex-col gap-4 border border-slate-200">
+                    <div class="flex items-center gap-4 w-full">
+                         <label for="cutoffSlider" class="font-medium text-slate-600 w-48">Cutoff Frequency:</label>
+                        <input type="range" id="cutoffSlider" min="0" max="15" value="10" step="1" class="w-full">
+                        <span id="cutoffValue" class="font-bold w-12 text-center text-slate-700">10</span>
+                    </div>
+                    <div class="flex items-center gap-4 w-full">
+                        <label for="denoiseSlider" class="font-medium text-slate-600 w-48">Waves to Remove:</label>
+                        <input type="range" id="denoiseSlider" min="0" max="150" value="0" class="w-full">
+                        <span id="denoiseCount" class="font-bold w-12 text-center text-slate-700">0</span>
+                    </div>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 4:</h3>
+                    <p class="text-blue-800 mt-1">Start with the slider at 0. As you slowly increase the number of high-frequency waves removed, what happens to the blue "De-noised Wave"? At what point does it look "good enough" or very similar to the original smooth wave (shown in grey)? What happens if you remove too many frequencies (slide it all the way to the right)?</p>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 5:</h3>
+                    <p class="text-blue-800 mt-1">Reset the "Waves to Remove" slider to a value that cleans the signal (e.g., 50). Now, lower the "Cutoff Frequency" slider. What happens to the de-noised wave as the cutoff passes 4, 3, 2, and 1? What does this suggest about the frequencies that make up the original smooth wave?</p>
+                </div>
+            </div>
+        </section>
+        
+        <hr class="my-12 border-slate-200">
+
+        <!-- Summary of Questions -->
+        <section id="summary" class="mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Summary of Questions</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
+                <p class="text-slate-700">Please make sure your group's Recorder has written down your agreed-upon answers to all the following questions.</p>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 1:</h3>
+                    <p class="text-blue-800 mt-1">As a group, describe the main visual differences between the "Smooth Wave" and the "Noisy Wave." How does the plot of "Just the Noise" help you understand where these differences come from? Click the "Generate New Noise" button a few times. Does the noisy wave look exactly the same each time? Why or why not?</p>
+                </div>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 2:</h3>
+                    <p class="text-blue-800 mt-1">Set the slider to a low number of rectangles (like 4). Then, slowly move the slider to the right. What happens to the shape of the rectangles as you increase their number? How does the approximation of the area seem to change?</p>
+                </div>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 3:</h3>
+                    <p class="text-blue-800 mt-1">Select "An Aligned Wave" from the dropdown. Look at the "Product of the two functions" plot. Why is it mostly positive? Now select "A Different Frequency Wave". Why does the product plot have both positive and negative parts? How does this affect the final "Similarity Score"?</p>
+                </div>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 4:</h3>
+                    <p class="text-blue-800 mt-1">Start with the slider at 0. As you slowly increase the number of high-frequency waves removed, what happens to the blue "De-noised Wave"? At what point does it look "good enough" or very similar to the original smooth wave (shown in grey)? What happens if you remove too many frequencies (slide it all the way to the right)?</p>
+                </div>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 5:</h3>
+                    <p class="text-blue-800 mt-1">Reset the "Waves to Remove" slider to a value that cleans the signal (e.g., 50). Now, lower the "Cutoff Frequency" slider. What happens to the de-noised wave as the cutoff passes 4, 3, 2, and 1? What does this suggest about the frequencies that make up the original smooth wave?</p>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <script>
+    // --- Chart.js Global Config ---
+    Chart.defaults.font.family = 'Inter';
+    Chart.defaults.plugins.legend.position = 'bottom';
+    
+    // --- Data Generation ---
+    const NUM_POINTS = 300;
+    const X_VALUES = Array.from({ length: NUM_POINTS }, (_, i) => (i / (NUM_POINTS - 1)) * 4 * Math.PI);
+
+    let smoothWaveData = [];
+    let noiseData = [];
+    let noisyWaveData = [];
+
+    // Function to generate all wave data
+    function generateWaveData() {
+        smoothWaveData = X_VALUES.map(x => 
+            Math.sin(x) + 0.6 * Math.sin(2.1 * x) + 0.4 * Math.sin(3.5 * x)
+        );
+        noiseData = Array.from({ length: NUM_POINTS }, () => (Math.random() - 0.5) * 0.4);
+        noisyWaveData = smoothWaveData.map((y, i) => y + noiseData[i]);
+    }
+
+    // --- Part 1: Noisy Wave Charts ---
+    let smoothWaveChart, noisyWaveChart, noiseOnlyChart;
+    
+    function setupPart1Charts() {
+        const ctxSmooth = document.getElementById('smoothWaveChart').getContext('2d');
+        smoothWaveChart = new Chart(ctxSmooth, {
+            type: 'line',
+            data: {
+                labels: X_VALUES,
+                datasets: [{
+                    label: 'Smooth Wave',
+                    data: smoothWaveData,
+                    borderColor: 'rgb(75, 192, 192)',
+                    tension: 0.1,
+                    pointRadius: 0
+                }]
+            },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Original Smooth Wave' } } }
+        });
+
+        const ctxNoisy = document.getElementById('noisyWaveChart').getContext('2d');
+        noisyWaveChart = new Chart(ctxNoisy, {
+            type: 'line',
+            data: {
+                labels: X_VALUES,
+                datasets: [{
+                    label: 'Noisy Wave',
+                    data: noisyWaveData,
+                    borderColor: 'rgb(255, 99, 132)',
+                    tension: 0.1,
+                    pointRadius: 0
+                }]
+            },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Wave After Adding Noise' } } }
+        });
+
+        const ctxNoiseOnly = document.getElementById('noiseOnlyChart').getContext('2d');
+        noiseOnlyChart = new Chart(ctxNoiseOnly, {
+            type: 'bar',
+            data: {
+                labels: X_VALUES,
+                datasets: [{
+                    label: 'Just the Noise',
+                    data: noiseData,
+                    backgroundColor: 'rgba(153, 102, 255, 0.6)',
+                }]
+            },
+            options: { responsive: true, plugins: { title: { display: true, text: 'Just the Noise That Was Added' } } }
+        });
+    }
+    
+    document.getElementById('regenerateNoiseBtn').addEventListener('click', () => {
+        generateWaveData();
+        smoothWaveChart.data.datasets[0].data = smoothWaveData;
+        noisyWaveChart.data.datasets[0].data = noisyWaveData;
+        noiseOnlyChart.data.datasets[0].data = noiseData;
+        smoothWaveChart.update();
+        noisyWaveChart.update();
+        noiseOnlyChart.update();
+        // Also update the denoising chart's base data
+        denoisingChart.data.datasets[0].data = noisyWaveData;
+        denoisingChart.data.datasets[1].data = smoothWaveData;
+        updateDenoisingChart();
+    });
+
+    // --- Part 2: Riemann Sum Chart ---
+    const riemannSlider = document.getElementById('riemannSlider');
+    const riemannCount = document.getElementById('riemannCount');
+    const integralValue = document.getElementById('integralValue');
+    let riemannSumChart;
+    const riemannFunc = x => Math.sin(x) * Math.cos(0.5*x) * 2; // A function with pos/neg parts
+
+    function setupPart2Chart() {
+        const ctx = document.getElementById('riemannSumChart').getContext('2d');
+        const curvePoints = X_VALUES.map(x => ({ x, y: riemannFunc(x) }));
+        riemannSumChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                datasets: [{
+                    label: 'Riemann Rectangles',
+                    data: [], // will be populated by slider
+                    backgroundColor: (context) => {
+                        if (!context.raw) return 'rgba(75, 192, 192, 0.6)';
+                        return context.raw.y > 0 ? 'rgba(75, 192, 192, 0.6)' : 'rgba(255, 99, 132, 0.6)';
+                    },
+                    borderColor: (context) => {
+                        if (!context.raw) return 'rgb(75, 192, 192)';
+                        return context.raw.y > 0 ? 'rgb(75, 192, 192)' : 'rgb(255, 99, 132)';
+                    },
+                    borderWidth: 1,
+                    barPercentage: 1.0,
+                    categoryPercentage: 1.0,
+                }, {
+                    label: 'Function Curve',
+                    data: curvePoints,
+                    type: 'line',
+                    borderColor: 'rgb(54, 162, 235)',
+                    tension: 0.1,
+                    pointRadius: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'Integral as a Limit of Riemann Sums' } },
+                scales: { x: { type: 'linear', min: 0, max: 4 * Math.PI } }
+            }
+        });
+        updateRiemannChart();
+    }
+    
+    function updateRiemannChart() {
+        const numRects = parseInt(riemannSlider.value);
+        riemannCount.textContent = numRects;
+        const width = (4 * Math.PI) / numRects;
+        const rectData = [];
+        let totalArea = 0;
+        for (let i = 0; i < numRects; i++) {
+            const x = i * width;
+            const y = riemannFunc(x + width / 2); // Midpoint rule
+            rectData.push({ x: x + width / 2, y });
+            totalArea += y * width;
+        }
+        riemannSumChart.data.datasets[0].data = rectData;
+        riemannSumChart.options.scales.x.min = 0;
+        riemannSumChart.options.scales.x.max = 4*Math.PI;
+        riemannSumChart.update();
+        integralValue.textContent = totalArea.toFixed(2);
+    }
+    
+    riemannSlider.addEventListener('input', updateRiemannChart);
+
+    // --- Part 3: Similarity Chart ---
+    let similarityChart;
+    const functionSelect = document.getElementById('functionSelect');
+    const similarityScoreEl = document.getElementById('similarityScore');
+    const f1 = x => Math.sin(x);
+    const g_aligned = x => 1.5 * Math.sin(x + 0.1);
+    const g_offset = x => Math.cos(x); // sin(x + pi/2)
+    const g_different = x => 1.2*Math.sin(3 * x);
+
+    function setupPart3Charts() {
+        const ctx = document.getElementById('similarityChart').getContext('2d');
+        similarityChart = new Chart(ctx, { 
+            type: 'line', 
+            data: { 
+                labels: X_VALUES, 
+                datasets: [
+                    { 
+                        label: 'Function 1', 
+                        data: X_VALUES.map(f1), 
+                        borderColor: 'rgb(75, 192, 192)', 
+                        tension: 0.1, 
+                        pointRadius: 0 
+                    },
+                    { 
+                        label: 'Function 2', 
+                        data: [], 
+                        borderColor: 'rgb(255, 99, 132)', 
+                        tension: 0.1, 
+                        pointRadius: 0 
+                    },
+                    { 
+                        label: 'Product (f1 * f2)', 
+                        data: [], 
+                        borderColor: 'rgb(153, 102, 255)', 
+                        tension: 0.1, 
+                        pointRadius: 0, 
+                        fill: true, 
+                        backgroundColor: 'rgba(153, 102, 255, 0.2)' 
+                    }
+                ] 
+            }, 
+            options: { 
+                responsive: true,
+                plugins: { title: { display: true, text: 'Comparing Functions and their Product' } },
+                scales: { y: { min: -2.5, max: 2.5 } } 
+            } 
+        });
+
+        updateSimilarityCharts();
+    }
+
+    function updateSimilarityCharts() {
+        const selection = functionSelect.value;
+        let g;
+        if (selection === 'aligned') g = g_aligned;
+        else if (selection === 'offset') g = g_offset;
+        else g = g_different;
+        
+        const f1_data = X_VALUES.map(f1);
+        const g_data = X_VALUES.map(g);
+        const product_data = f1_data.map((y, i) => y * g_data[i]);
+        
+        similarityChart.data.datasets[1].data = g_data;
+        similarityChart.data.datasets[2].data = product_data;
+        similarityChart.update();
+        
+        // Calculate integral of product
+        let similarityScore = 0;
+        const dx = X_VALUES[1] - X_VALUES[0];
+        for (const val of product_data) {
+            similarityScore += val * dx;
+        }
+        similarityScoreEl.textContent = similarityScore.toFixed(2);
+    }
+    
+    functionSelect.addEventListener('change', updateSimilarityCharts);
+
+    // --- Part 4: Denoising Chart ---
+    const denoiseSlider = document.getElementById('denoiseSlider');
+    const denoiseCount = document.getElementById('denoiseCount');
+    const cutoffSlider = document.getElementById('cutoffSlider');
+    const cutoffValue = document.getElementById('cutoffValue');
+    let denoisingChart;
+
+    function setupPart4Chart() {
+        const ctx = document.getElementById('denoisingChart').getContext('2d');
+        denoisingChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: X_VALUES,
+                datasets: [
+                {
+                    label: 'Noisy Wave',
+                    data: noisyWaveData,
+                    borderColor: 'rgba(255, 99, 132, 0.5)',
+                    tension: 0.1,
+                    pointRadius: 0,
+                    borderWidth: 2,
+                }, {
+                    label: 'Original Smooth Wave',
+                    data: smoothWaveData,
+                    borderColor: 'rgba(128, 128, 128, 0.8)',
+                    tension: 0.1,
+                    pointRadius: 0,
+                    borderDash: [5, 5],
+                    borderWidth: 2,
+                }, {
+                    label: 'De-noised Wave',
+                    data: noisyWaveData, // Initially same as noisy
+                    borderColor: 'rgb(54, 162, 235)',
+                    tension: 0.1,
+                    pointRadius: 0,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: { title: { display: true, text: 'De-noising the Signal' } }
+            }
+        });
+        updateDenoisingChart();
+    }
+
+    function calculateIntegral(data1, data2) {
+        const dx = X_VALUES[1] - X_VALUES[0];
+        let integral = 0;
+        for (let i = 0; i < data1.length; i++) {
+            integral += data1[i] * data2[i] * dx;
+        }
+        return integral;
+    }
+
+    function updateDenoisingChart() {
+        const frequenciesToRemove = parseInt(denoiseSlider.value);
+        const cutoffFrequency = parseInt(cutoffSlider.value);
+        denoiseCount.textContent = frequenciesToRemove;
+        cutoffValue.textContent = cutoffFrequency;
+
+        let currentWave = [...noisyWaveData]; // Start with the noisy wave
+
+        // Start removing from higher frequencies upwards
+        for(let i = 0; i < frequenciesToRemove; i++) {
+            // We model noise with high-frequency sine and cosine waves.
+            // Frequency increases with i. Start with a reasonably high base frequency.
+            const freq = cutoffFrequency + i * 0.5; 
+            const sinWave = X_VALUES.map(x => Math.sin(freq * x));
+            const cosWave = X_VALUES.map(x => Math.cos(freq * x));
+            
+            // How much of the sin wave is in our current wave?
+            const sinCoefficient = calculateIntegral(currentWave, sinWave) / calculateIntegral(sinWave, sinWave);
+             // How much of the cos wave is in our current wave?
+            const cosCoefficient = calculateIntegral(currentWave, cosWave) / calculateIntegral(cosWave, cosWave);
+            
+            // Subtract these components
+            currentWave = currentWave.map((y, j) => y - sinCoefficient * sinWave[j] - cosCoefficient * cosWave[j]);
+        }
+
+        denoisingChart.data.datasets[2].data = currentWave;
+        denoisingChart.update();
+    }
+    
+    denoiseSlider.addEventListener('input', updateDenoisingChart);
+    cutoffSlider.addEventListener('input', updateDenoisingChart);
+
+    // --- Initial Setup Call ---
+    window.onload = function() {
+        generateWaveData();
+        setupPart1Charts();
+        setupPart2Chart();
+        setupPart3Charts();
+        setupPart4Chart();
+    };
+    </script>
+</body>
+</html>
+
