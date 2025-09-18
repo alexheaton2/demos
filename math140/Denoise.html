@@ -55,6 +55,12 @@
                 <div class="my-6">
                     <canvas id="noisyWaveChart"></canvas>
                 </div>
+
+                <div class="flex justify-center my-6">
+                     <button id="regenerateNoiseBtn" class="bg-slate-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
+                        Generate New Noise
+                    </button>
+                </div>
                 
                 <p class="text-slate-700">Below is a plot showing just the random noise that was added. Notice how it jumps around unpredictably compared to the smooth wave.</p>
 
@@ -62,15 +68,14 @@
                     <canvas id="noiseOnlyChart"></canvas>
                 </div>
 
-                <div class="flex justify-center mt-4">
-                     <button id="regenerateNoiseBtn" class="bg-slate-600 text-white font-bold py-2 px-4 rounded-lg hover:bg-slate-700 transition-colors">
-                        Generate New Noise
-                    </button>
-                </div>
-
                 <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
                     <h3 class="font-semibold text-blue-900">Question 1:</h3>
                     <p class="text-blue-800 mt-1">As a group, describe the main visual differences between the "Smooth Wave" and the "Noisy Wave." How does the plot of "Just the Noise" help you understand where these differences come from? Click the "Generate New Noise" button a few times. Does the noisy wave look exactly the same each time? Why or why not?</p>
+                </div>
+
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 2:</h3>
+                    <p class="text-blue-800 mt-1">As a group, come up with three real-world examples of a function or signal, and how "noise" might corrupt that signal. In each example, what might the source of the "noise" be? Write down your answers (as always).</p>
                 </div>
             </div>
         </section>
@@ -82,7 +87,7 @@
             <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: A Quick Refresher on Integrals</h2>
             <div class="bg-white p-6 rounded-lg shadow-md space-y-6">
                 <p class="text-slate-700">To clean our noisy signal, we need a tool called the integral. The integral of a function is simply the "signed area" between the function's curve and the x-axis. We can approximate this area by filling it with thin rectangles and summing their areas. This sum is called a Riemann Sum.</p>
-                <p class="text-slate-700">Use the slider below to see what happens as we increase the number of rectangles. Notice that some rectangles are above the x-axis (positive area) and some are below (negative area). The integral adds up all these signed areas.</p>
+                <p class="text-slate-700">Use the slider below to see what happens as we increase the number of rectangles. Notice that some rectangles are above the x-axis (positive area) and some are below (negative area). The integral adds up all these signed areas. In the example shown below, the positive and negative areas exactly cancel out, showing that those two functions are completely dissimilar. Of course, for other functions their total signed area might be net positive, or net negative, and the integral is how we compute it.</p>
                 
                 <div class="my-6">
                     <canvas id="riemannSumChart"></canvas>
@@ -95,8 +100,12 @@
                  <p class="text-center font-medium text-slate-600 mt-4">Signed Area (Integral) ≈ <span id="integralValue" class="font-bold text-slate-800">0.00</span></p>
 
                 <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
-                     <h3 class="font-semibold text-blue-900">Question 2:</h3>
+                     <h3 class="font-semibold text-blue-900">Question 3:</h3>
                     <p class="text-blue-800 mt-1">Set the slider to a low number of rectangles (like 4). Then, slowly move the slider to the right. What happens to the shape of the rectangles as you increase their number? How does the approximation of the area seem to change?</p>
+                </div>
+                <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
+                     <h3 class="font-semibold text-blue-900">Question 4:</h3>
+                    <p class="text-blue-800 mt-1">Will the signed area under a curve ever be exactly equal to the sum of finitely many rectangles?  In your own words, explain when we'll need a "limit" to compute the exact area under a curve.</p>
                 </div>
             </div>
         </section>
@@ -129,7 +138,7 @@
                 <p class="text-center font-medium text-slate-600 mt-4">Similarity Score (Integral of Product) ≈ <span id="similarityScore" class="font-bold text-slate-800">0.00</span></p>
 
                 <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
-                    <h3 class="font-semibold text-blue-900">Question 3:</h3>
+                    <h3 class="font-semibold text-blue-900">Question 5:</h3>
                     <p class="text-blue-800 mt-1">Select "An Aligned Wave" from the dropdown. Look at the "Product of the two functions" plot. Why is it mostly positive? Now select "A Different Frequency Wave". Why does the product plot have both positive and negative parts? How does this affect the final "Similarity Score"?</p>
                 </div>
             </div>
@@ -162,12 +171,12 @@
                 </div>
 
                 <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
-                    <h3 class="font-semibold text-blue-900">Question 4:</h3>
+                    <h3 class="font-semibold text-blue-900">Question 6:</h3>
                     <p class="text-blue-800 mt-1">Start with the slider at 0. As you slowly increase the number of high-frequency waves removed, what happens to the blue "De-noised Wave"? At what point does it look "good enough" or very similar to the original smooth wave (shown in grey)? What happens if you remove too many frequencies (slide it all the way to the right)?</p>
                 </div>
 
                 <div class="mt-6 p-4 bg-blue-50 border-l-4 border-blue-400">
-                    <h3 class="font-semibold text-blue-900">Question 5:</h3>
+                    <h3 class="font-semibold text-blue-900">Question 7:</h3>
                     <p class="text-blue-800 mt-1">Reset the "Waves to Remove" slider to a value that cleans the signal (e.g., 50). Now, lower the "Cutoff Frequency" slider. What happens to the de-noised wave as the cutoff passes 4, 3, 2, and 1? What does this suggest about the frequencies that make up the original smooth wave?</p>
                 </div>
             </div>
@@ -186,18 +195,26 @@
                 </div>
                  <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
                     <h3 class="font-semibold text-blue-900">Question 2:</h3>
-                    <p class="text-blue-800 mt-1">Set the slider to a low number of rectangles (like 4). Then, slowly move the slider to the right. What happens to the shape of the rectangles as you increase their number? How does the approximation of the area seem to change?</p>
+                    <p class="text-blue-800 mt-1">As a group, come up with three real-world examples of a function or signal, and how "noise" might corrupt that signal. In each example, what might the source of the "noise" be? Write down your answers (as always).</p>
                 </div>
                  <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
                     <h3 class="font-semibold text-blue-900">Question 3:</h3>
-                    <p class="text-blue-800 mt-1">Select "An Aligned Wave" from the dropdown. Look at the "Product of the two functions" plot. Why is it mostly positive? Now select "A Different Frequency Wave". Why does the product plot have both positive and negative parts? How does this affect the final "Similarity Score"?</p>
+                    <p class="text-blue-800 mt-1">Set the slider to a low number of rectangles (like 4). Then, slowly move the slider to the right. What happens to the shape of the rectangles as you increase their number? How does the approximation of the area seem to change?</p>
                 </div>
                  <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
                     <h3 class="font-semibold text-blue-900">Question 4:</h3>
-                    <p class="text-blue-800 mt-1">Start with the slider at 0. As you slowly increase the number of high-frequency waves removed, what happens to the blue "De-noised Wave"? At what point does it look "good enough" or very similar to the original smooth wave (shown in grey)? What happens if you remove too many frequencies (slide it all the way to the right)?</p>
+                    <p class="text-blue-800 mt-1">Will the signed area under a curve ever be exactly equal to the sum of finitely many rectangles?  In your own words, explain when we'll need a "limit" to compute the exact area under a curve.</p>
                 </div>
                  <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
                     <h3 class="font-semibold text-blue-900">Question 5:</h3>
+                    <p class="text-blue-800 mt-1">Select "An Aligned Wave" from the dropdown. Look at the "Product of the two functions" plot. Why is it mostly positive? Now select "A Different Frequency Wave". Why does the product plot have both positive and negative parts? How does this affect the final "Similarity Score"?</p>
+                </div>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 6:</h3>
+                    <p class="text-blue-800 mt-1">Start with the slider at 0. As you slowly increase the number of high-frequency waves removed, what happens to the blue "De-noised Wave"? At what point does it look "good enough" or very similar to the original smooth wave (shown in grey)? What happens if you remove too many frequencies (slide it all the way to the right)?</p>
+                </div>
+                 <div class="p-4 bg-blue-50 border-l-4 border-blue-400">
+                    <h3 class="font-semibold text-blue-900">Question 7:</h3>
                     <p class="text-blue-800 mt-1">Reset the "Waves to Remove" slider to a value that cleans the signal (e.g., 50). Now, lower the "Cutoff Frequency" slider. What happens to the de-noised wave as the cutoff passes 4, 3, 2, and 1? What does this suggest about the frequencies that make up the original smooth wave?</p>
                 </div>
             </div>
