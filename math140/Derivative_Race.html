@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demo: Derivative as a Rate of Change</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .race-track::before {
+            content: '0';
+            position: absolute;
+            left: 0;
+            bottom: -20px;
+            font-size: 0.8rem;
+        }
+        .race-track::after {
+            content: '10';
+            position: absolute;
+            right: 0;
+            bottom: -20px;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="container mx-auto max-w-7xl px-4 py-8">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Derivative as a Rate of Change</h1>
+            <p class="mt-3 text-lg text-slate-600">Visualizing the Race between Achilles and the Tortoise</p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+            <!-- Left Column: The Race Animation -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">The Race</h2>
+                <p class="text-slate-600 mb-6">Watch the motion of Achilles and the Tortoise along the track. Observe how their speed and direction change over time. This represents their "rate of change" of position.</p>
+                
+                <!-- Race Track -->
+                <div class="relative w-full h-32 bg-amber-100 rounded-lg border-2 border-amber-200 mb-8 race-track">
+                    <!-- Dashed lines for meter marks -->
+                    <div class="absolute top-0 left-0 w-full h-full flex justify-around">
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                        <div class="w-px h-full bg-amber-300"></div>
+                    </div>
+                    
+                    <!-- Achilles -->
+                    <div id="achilles" class="absolute top-4 text-5xl transition-transform duration-100" style="left: 0%;">🏃</div>
+                    <div id="achilles-label" class="absolute top-20 text-sm font-semibold text-red-600" style="left: 0%;">Achilles</div>
+
+                    <!-- Tortoise -->
+                    <div id="tortoise" class="absolute top-4 text-5xl transition-transform duration-100" style="left: 0%;">🐢</div>
+                    <div id="tortoise-label" class="absolute top-20 text-sm font-semibold text-green-600" style="left: 0%;">Tortoise</div>
+                </div>
+
+                <!-- Status Display -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
+                    <div>
+                        <p class="text-sm font-medium text-slate-500">Time (t)</p>
+                        <p id="time-display" class="font-mono font-bold text-2xl">0.00s</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-red-500">Achilles Position x(t)</p>
+                        <p id="achilles-pos" class="font-mono font-bold text-2xl">0.00</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-green-500">Tortoise Position x(t)</p>
+                        <p id="tortoise-pos" class="font-mono font-bold text-2xl">0.00</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Right Column: The Graph -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Position vs. Time Graph</h2>
+                <p class="text-slate-600 mb-6">The slope (derivative) of a line on this graph represents the speed of the character. A steep slope means high speed, a flat slope means zero speed, and a negative slope means moving backward.</p>
+                <canvas id="raceChart"></canvas>
+            </div>
+
+        </div>
+
+        <!-- Controls -->
+        <div class="mt-8 bg-white p-6 rounded-lg shadow-lg flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+            <button id="play-pause-btn" class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-bold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-colors text-xl">
+                Play
+            </button>
+            <button id="reset-btn" class="w-full sm:w-auto px-8 py-3 bg-slate-300 text-slate-800 font-bold rounded-lg hover:bg-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-500 transition-colors text-xl">
+                Reset
+            </button>
+        </div>
+        
+        <!-- Winner Message -->
+        <div id="winner-message" class="hidden mt-6 text-center text-3xl font-bold text-green-600 bg-green-100 border-2 border-green-500 p-4 rounded-lg">
+            The Tortoise Wins!
+        </div>
+
+    </div>
+
+    <script>
+        // DOM Elements
+        const achillesElement = document.getElementById('achilles');
+        const tortoiseElement = document.getElementById('tortoise');
+        const achillesLabel = document.getElementById('achilles-label');
+        const tortoiseLabel = document.getElementById('tortoise-label');
+        const timeDisplay = document.getElementById('time-display');
+        const achillesPosDisplay = document.getElementById('achilles-pos');
+        const tortoisePosDisplay = document.getElementById('tortoise-pos');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const winnerMessage = document.getElementById('winner-message');
+        const chartCanvas = document.getElementById('raceChart');
+
+        // Animation State
+        let animationFrameId = null;
+        let isPlaying = false;
+        let startTime = null;
+        let pausedTime = 0;
+        const totalDuration = 12; // seconds for the whole simulation
+
+        // --- Motion Functions ---
+        function getAchillesPosition(t) {
+            if (t >= 0 && t < 2.5) {
+                // Part 1: Moves forward, slowing down. x(t) = -0.8t^2 + 4t
+                return -0.8 * t * t + 4 * t;
+            } else if (t >= 2.5 && t < 5) {
+                // Part 2: Moves backward at a constant pace. x(t) = -2t + 10
+                return -2 * t + 10;
+            } else if (t >= 5 && t <= 11) {
+                // Part 3: Moves forward at a constant pace. x(t) = (5/3)t - 25/3
+                return (5 / 3) * t - (25 / 3);
+            } else if (t > 11) {
+                return 10; // Stays at the finish line
+            }
+            return 0;
+        }
+
+        function getTortoisePosition(t) {
+            if (t >= 0 && t <= 10) {
+                // Moves forward at a constant rate. x(t) = t
+                return t;
+            } else if (t > 10) {
+                return 10; // Stays at the finish line
+            }
+            return 0;
+        }
+
+        // --- Derivative (Rate of Change) Functions ---
+        function getAchillesDerivative(t) {
+            if (t > 0 && t < 2.5) {
+                // Derivative of -0.8t^2 + 4t is -1.6t + 4
+                return -1.6 * t + 4;
+            } else if (t >= 2.5 && t < 5) {
+                // Derivative of -2t + 10 is -2
+                return -2;
+            } else if (t >= 5 && t < 11) {
+                // Derivative of (5/3)t - 25/3 is 5/3
+                return 5 / 3;
+            }
+            // Stationary at the beginning and end, so slope is 0
+            return 0;
+        }
+
+        function getTortoiseDerivative(t) {
+            if (t > 0 && t < 10) {
+                // Derivative of t is 1
+                return 1;
+            }
+            // Stationary at the end, so slope is 0
+            return 0;
+        }
+
+        // --- Chart.js Setup ---
+        
+        // Pre-calculate data for the static lines
+        const timePoints = [];
+        const achillesDataPoints = [];
+        const tortoiseDataPoints = [];
+        for (let t = 0; t <= totalDuration; t += 0.1) {
+            timePoints.push(t.toFixed(2));
+            achillesDataPoints.push(getAchillesPosition(t));
+            tortoiseDataPoints.push(getTortoisePosition(t));
+        }
+
+        const ctx = chartCanvas.getContext('2d');
+        const raceChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: timePoints,
+                datasets: [
+                    {
+                        label: 'Achilles Position',
+                        data: achillesDataPoints,
+                        borderColor: 'rgba(220, 38, 38, 0.8)', // Red
+                        backgroundColor: 'rgba(220, 38, 38, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Tortoise Position',
+                        data: tortoiseDataPoints,
+                        borderColor: 'rgba(22, 163, 74, 0.8)', // Green
+                        backgroundColor: 'rgba(22, 163, 74, 0.1)',
+                        borderWidth: 2,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Achilles Now',
+                        data: [{x: 0, y: 0}],
+                        borderColor: 'rgb(192, 0, 0)',
+                        backgroundColor: 'rgb(255, 0, 0)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        showLine: false,
+                        type: 'scatter'
+                    },
+                    {
+                        label: 'Tortoise Now',
+                        data: [{x: 0, y: 0}],
+                        borderColor: 'rgb(0, 128, 0)',
+                        backgroundColor: 'rgb(0, 200, 0)',
+                        pointRadius: 8,
+                        pointHoverRadius: 10,
+                        showLine: false,
+                        type: 'scatter'
+                    },
+                    {
+                        label: 'Achilles Tangent',
+                        data: [],
+                        borderColor: 'rgba(178, 34, 34, 0.9)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        borderDash: [5, 5], // Dashed line style
+                        fill: false,
+                        tension: 0
+                    },
+                    {
+                        label: 'Tortoise Tangent',
+                        data: [],
+                        borderColor: 'rgba(0, 100, 0, 0.9)',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        borderDash: [5, 5], // Dashed line style
+                        fill: false,
+                        tension: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    x: {
+                        type: 'linear',
+                        title: {
+                            display: true,
+                            text: 'Time (s)'
+                        },
+                        min: 0,
+                        max: totalDuration
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Position (x)'
+                        },
+                        min: 0,
+                        max: 10.5
+                    }
+                },
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: false
+                    }
+                },
+                animation: {
+                    duration: 0 // We handle animation manually
+                }
+            }
+        });
+
+        // --- Animation Loop ---
+        function animate(timestamp) {
+            if (!startTime) {
+                startTime = timestamp - pausedTime;
+            }
+            const elapsedTime = (timestamp - startTime) / 1000; // in seconds
+
+            updateState(elapsedTime);
+
+            if (elapsedTime < totalDuration && isPlaying) {
+                animationFrameId = requestAnimationFrame(animate);
+            } else if (elapsedTime >= totalDuration) {
+                updateState(totalDuration); // Ensure final state is shown
+                isPlaying = false;
+                playPauseBtn.textContent = 'Play';
+            }
+        }
+
+        // --- Update Function ---
+        function updateState(currentTime) {
+            // Clamp time to our simulation duration
+            const t = Math.max(0, Math.min(currentTime, totalDuration));
+
+            const achillesPos = getAchillesPosition(t);
+            const tortoisePos = getTortoisePosition(t);
+
+            // Update on-screen text displays
+            timeDisplay.textContent = `${t.toFixed(2)}s`;
+            achillesPosDisplay.textContent = achillesPos.toFixed(2);
+            tortoisePosDisplay.textContent = tortoisePos.toFixed(2);
+
+            // Update race track positions (as percentage)
+            const achillesPercent = (achillesPos / 10) * 100;
+            const tortoisePercent = (tortoisePos / 10) * 100;
+            
+            achillesElement.style.left = `calc(${achillesPercent}% - 24px)`;
+            tortoiseElement.style.left = `calc(${tortoisePercent}% - 24px)`;
+            achillesLabel.style.left = `calc(${achillesPercent}% - 30px)`;
+            tortoiseLabel.style.left = `calc(${tortoisePercent}% - 30px)`;
+            
+            // Flip Achilles when running backward
+            if (t >= 2.5 && t < 5) {
+                 achillesElement.style.transform = 'scaleX(-1)';
+            } else {
+                 achillesElement.style.transform = 'scaleX(1)';
+            }
+
+            // --- Tangent Line Calculation ---
+            const achillesSlope = getAchillesDerivative(t);
+            const tortoiseSlope = getTortoiseDerivative(t);
+
+            // Generate two points for each tangent line using point-slope form.
+            // We'll make the line segment 2 time units long (1 unit on each side of the point).
+            const tangentLength = 1.0; 
+            const achillesTangentPoints = [
+                {x: t - tangentLength, y: achillesPos - achillesSlope * tangentLength},
+                {x: t + tangentLength, y: achillesPos + achillesSlope * tangentLength}
+            ];
+            const tortoiseTangentPoints = [
+                {x: t - tangentLength, y: tortoisePos - tortoiseSlope * tangentLength},
+                {x: t + tangentLength, y: tortoisePos + tortoiseSlope * tangentLength}
+            ];
+
+            // Update chart's moving points
+            raceChart.data.datasets[2].data = [{x: t, y: achillesPos}];
+            raceChart.data.datasets[3].data = [{x: t, y: tortoisePos}];
+            
+            // Update tangent line data
+            raceChart.data.datasets[4].data = achillesTangentPoints;
+            raceChart.data.datasets[5].data = tortoiseTangentPoints;
+
+            raceChart.update();
+            
+            // Check for winner
+            if (getTortoisePosition(t) >= 10) {
+                 winnerMessage.classList.remove('hidden');
+            }
+        }
+
+        // --- Event Handlers ---
+        function handlePlayPause() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playPauseBtn.textContent = 'Pause';
+                startTime = null; // Reset start time on play
+                animationFrameId = requestAnimationFrame(animate);
+            } else {
+                playPauseBtn.textContent = 'Play';
+                pausedTime += performance.now() - (startTime + pausedTime);
+                if (animationFrameId) {
+                    cancelAnimationFrame(animationFrameId);
+                }
+            }
+        }
+
+        function handleReset() {
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+            isPlaying = false;
+            startTime = null;
+            pausedTime = 0;
+            playPauseBtn.textContent = 'Play';
+            winnerMessage.classList.add('hidden');
+            updateState(0);
+        }
+
+        playPauseBtn.addEventListener('click', handlePlayPause);
+        resetBtn.addEventListener('click', handleReset);
+        
+        // Initialize on load
+        window.addEventListener('load', () => {
+            updateState(0);
+        });
+
+    </script>
+</body>
+</html>
+
+
