@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demo: The Product Rule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        .math {
+            font-family: 'Times New Roman', Times, serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-slate-100 text-slate-800">
+
+    <div class="container mx-auto max-w-7xl px-4 py-8">
+
+        <!-- Header -->
+        <header class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">The Product Rule for Derivatives</h1>
+            <p class="mt-3 text-lg text-slate-600">Visualizing <span class="math">(fg)' = f'g + fg'</span> with an Area Model</p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+
+            <!-- Left Column: The Graphs and Slider -->
+            <div class="bg-white p-6 rounded-lg shadow-lg">
+                <h2 class="text-2xl font-bold text-slate-900 mb-4">Functions <span class="math">f(x)</span> and <span class="math">g(x)</span></h2>
+                <p class="text-slate-600 mb-2">We have two functions:</p>
+                <ul class="list-disc list-inside mb-4 text-slate-600">
+                    <li><span class="math text-blue-600">f(x) = (x-2)<sup>2</sup> + 1</span></li>
+                    <li><span class="math text-green-600">g(x) = &radic;<span style="text-decoration:overline;">&nbsp;x-2&nbsp;</span></span></li>
+                </ul>
+                <p class="text-slate-600 mb-6">The points highlight the function values at <span class="math">x=3</span>. The value of <span class="math">h</span> from the slider is used in the area model on the right.</p>
+                
+                <canvas id="functionsChart"></canvas>
+
+                <!-- Slider Control -->
+                <div class="mt-6">
+                    <label for="h-slider" class="block text-lg font-medium text-slate-700">Adjust <span class="math">h</span></label>
+                    <div class="flex items-center space-x-4">
+                        <span class="font-mono">0</span>
+                        <input id="h-slider" type="range" min="0" max="1" value="0.5" step="0.01" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                        <span class="font-mono">1</span>
+                    </div>
+                    <p class="text-center text-xl font-mono mt-2">h = <span id="h-value">0.50</span></p>
+                </div>
+            </div>
+
+            <!-- Right Column: The Rectangle Area -->
+            <div class="bg-white p-6 rounded-lg shadow-lg flex flex-col">
+                <div>
+                    <h2 class="text-2xl font-bold text-slate-900 mb-4">Area Model of the Product</h2>
+                    <p class="text-slate-600 mb-4">The area of a rectangle with base <span class="math">f(x)</span> and height <span class="math">g(x)</span> is <span class="math">A(x) = f(x)g(x)</span>. This graphic shows how the area changes when <span class="math">x</span> changes by a small amount <span class="math">h</span>.</p>
+                </div>
+                <div class="w-full">
+                    <canvas id="rectangleCanvas"></canvas>
+                </div>
+                <div class="mt-4 text-slate-700 space-y-4">
+                    <h3 class="text-xl font-bold">Connecting Area to the Product Rule</h3>
+                    <p>The total change in area, <span class="math">&Delta;A</span>, is the sum of the three new colored rectangles. The derivative of the area is the limit of <span class="math">&Delta;A / h</span> as <span class="math">h &rarr; 0</span>.</p>
+                    <p>The Product Rule formula is: <br> <span class="math text-xl font-bold">(f(x)g(x))' = f'(x)g(x) + f(x)g'(x)</span></p>
+                    <p>As you move the slider for <span class="math">h</span> closer to 0, notice how the area of the small purple rectangle (<span class="math">&Delta;f &middot; &Delta;g</span>) shrinks much faster than the other two. In the limit, its contribution becomes zero, leaving us with the two terms in the product rule, which represent the areas of the blue and green rectangles.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // DOM Elements
+        const hSlider = document.getElementById('h-slider');
+        const hValueDisplay = document.getElementById('h-value');
+        const functionsChartCanvas = document.getElementById('functionsChart');
+        const rectangleCanvas = document.getElementById('rectangleCanvas');
+
+        // --- Functions ---
+        const f = x => Math.pow(x - 2, 2) + 1;
+        const g = x => (x >= 2) ? Math.sqrt(x - 2) : NaN;
+        
+        const x_val = 3;
+
+        // --- Chart.js Setup (Left Plot) ---
+        const timePoints = [];
+        const fDataPoints = [];
+        const gDataPoints = [];
+        for (let x = 0; x <= 5; x += 0.05) {
+            timePoints.push(x.toFixed(2));
+            fDataPoints.push(f(x));
+            gDataPoints.push(g(x));
+        }
+
+        const functionsChartCtx = functionsChartCanvas.getContext('2d');
+        const functionsChart = new Chart(functionsChartCtx, {
+            type: 'line',
+            data: {
+                labels: timePoints,
+                datasets: [
+                    {
+                        label: 'f(x) = (x-2)² + 1',
+                        data: fDataPoints,
+                        borderColor: 'rgba(59, 130, 246, 0.8)',
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'g(x) = sqrt(x-2)',
+                        data: gDataPoints,
+                        borderColor: 'rgba(22, 163, 74, 0.8)',
+                        borderWidth: 3,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Points at x=3',
+                        data: [{x: 3, y: f(3)}, {x: 3, y: g(3)}],
+                        backgroundColor: 'rgba(239, 68, 68, 1)',
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        type: 'scatter'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { type: 'linear', min: 0, max: 5, title: { display: true, text: 'x' } },
+                    y: { min: 0, max: 5, title: { display: true, text: 'y' } }
+                },
+                plugins: { legend: { position: 'top' } }
+            }
+        });
+
+        // --- Canvas Setup (Right Plot) ---
+        const rectCtx = rectangleCanvas.getContext('2d');
+        function drawRectangles(h) {
+            const canvas = rectCtx.canvas;
+            const rect = canvas.getBoundingClientRect();
+            const canvasWidth = rect.width;
+            
+            const padding = 50;
+
+            // --- FIX: Dynamically set canvas height based on content aspect ratio ---
+            const max_h = 1.0; // Max value of the slider
+            const maxTotalWidth = f(x_val + max_h);
+            const maxTotalHeight = g(x_val + max_h);
+
+            const contentAspectRatio = maxTotalHeight / maxTotalWidth;
+            const contentHeight = (canvasWidth - padding * 2) * contentAspectRatio;
+            const idealCanvasHeight = contentHeight + padding * 2;
+            
+            // Set canvas resolution and size
+            if (canvas.width !== canvasWidth || canvas.height !== idealCanvasHeight) {
+                canvas.width = canvasWidth;
+                canvas.height = idealCanvasHeight;
+            }
+            // --- END FIX ---
+
+            const canvasHeight = canvas.height;
+            rectCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            rectCtx.font = "16px Inter";
+
+            const f3 = f(x_val);
+            const g3 = g(x_val);
+            const f3h = f(x_val + h);
+            const g3h = g(x_val + h);
+
+            const df = f3h - f3;
+            const dg = g3h - g3;
+
+            // Calculate scale based on the now-correct dimensions
+            const scale = (canvas.width - padding * 2) / maxTotalWidth;
+            
+            const scaled_f3 = f3 * scale;
+            const scaled_g3 = g3 * scale;
+            const scaled_df = df * scale;
+            const scaled_dg = dg * scale;
+
+            const startX = padding;
+            const startY = canvasHeight - padding;
+
+            // Draw rectangles (from bottom-left, moving up)
+            // 1. Original rectangle f(3)g(3) - orange
+            rectCtx.fillStyle = 'rgba(251, 146, 60, 0.6)';
+            rectCtx.fillRect(startX, startY - scaled_g3, scaled_f3, scaled_g3);
+            
+            // 2. g(3) * df rectangle - blue
+            rectCtx.fillStyle = 'rgba(59, 130, 246, 0.6)';
+            rectCtx.fillRect(startX + scaled_f3, startY - scaled_g3, scaled_df, scaled_g3);
+            
+            // 3. f(3) * dg rectangle - green
+            rectCtx.fillStyle = 'rgba(22, 163, 74, 0.6)';
+            rectCtx.fillRect(startX, startY - scaled_g3 - scaled_dg, scaled_f3, scaled_dg);
+            
+            // 4. df * dg rectangle - purple
+            rectCtx.fillStyle = 'rgba(139, 92, 246, 0.6)';
+            rectCtx.fillRect(startX + scaled_f3, startY - scaled_g3 - scaled_dg, scaled_df, scaled_dg);
+
+            // Draw labels
+            rectCtx.fillStyle = '#333';
+            rectCtx.textAlign = 'center';
+            rectCtx.textBaseline = 'middle';
+            // Base labels
+            rectCtx.fillText('f(3)', startX + scaled_f3 / 2, startY + 20);
+            if (scaled_df > 30) rectCtx.fillText('f(3+h) - f(3)', startX + scaled_f3 + scaled_df / 2, startY + 20);
+            // Height labels
+            rectCtx.textAlign = 'right';
+            rectCtx.textBaseline = 'middle';
+            rectCtx.fillText('g(3)', startX - 15, startY - scaled_g3 / 2);
+            if (scaled_dg > 30) rectCtx.fillText('g(3+h) - g(3)', startX - 15, startY - scaled_g3 - scaled_dg/2);
+        }
+
+        // --- Event Handlers and Initial Call ---
+        function updateAllVisuals() {
+            const h = parseFloat(hSlider.value);
+            hValueDisplay.textContent = h.toFixed(2);
+            drawRectangles(h);
+        }
+
+        hSlider.addEventListener('input', updateAllVisuals);
+        window.addEventListener('load', updateAllVisuals);
+        window.addEventListener('resize', updateAllVisuals);
+
+    </script>
+</body>
+</html>
+
+
+
+
