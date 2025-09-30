@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Demo: The Chain Rule</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .math {
+            font-family: 'Times New Roman', serif;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800">
+
+    <div class="container mx-auto max-w-7xl px-4 py-10">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">An Intuitive Look at the Chain Rule</h1>
+            <p class="mt-4 text-lg text-slate-600 max-w-3xl mx-auto">Understanding <span class="math">f(g(x))' = f'(g(x)) * g'(x)</span> by visualizing rates of change.</p>
+        </header>
+
+        <!-- Part 1: Derivative as a Scaled Rate -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2">Part 1: The Derivative as a Scaled Rate of Change</h2>
+            <p class="text-slate-600 mb-6">The derivative <span class="math">f'(x)</span> tells us the rate of change of the output for a "unit speed" change in the input. If the input changes faster or slower than unit speed, we must scale the derivative to find the true output rate. A faster input change leads to a proportionally faster output change.</p>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <!-- Part 1 Controls & Display -->
+                <div>
+                    <div class="mb-6">
+                        <label for="x-slider-p1" class="block text-sm font-medium text-slate-700">Select point <span class="math">x</span></label>
+                        <input id="x-slider-p1" type="range" min="-1.5" max="1.5" value="0.8" step="0.01" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    </div>
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-slate-700 mb-2">Input Change Speed</label>
+                        <div class="flex items-center justify-start gap-4">
+                            <button id="speed-decrement" class="w-12 h-12 flex items-center justify-center font-bold text-2xl bg-slate-200 rounded-full hover:bg-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">-</button>
+                            <span id="speed-val-display" class="font-mono text-3xl text-red-600 font-bold w-16 text-center">1</span>
+                            <button id="speed-increment" class="w-12 h-12 flex items-center justify-center font-bold text-2xl bg-slate-200 rounded-full hover:bg-slate-300 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500">+</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-100 p-4 rounded-lg space-y-3">
+                        <div class="flex justify-between items-center text-lg">
+                            <span class="font-medium text-slate-600">Function:</span>
+                            <span class="font-mono text-blue-600 font-bold"><span class="math">f(x) = x<sup>2</sup></span></span>
+                        </div>
+                         <div class="flex justify-between items-center text-lg">
+                            <span class="font-medium text-slate-600">Point <span class="math">x</span>:</span>
+                            <span id="x-val-p1" class="font-mono text-slate-900 font-bold">0.80</span>
+                        </div>
+                        <div class="flex justify-between items-center text-lg">
+                            <span class="font-medium text-slate-600">Derivative <span class="math">f'(x)</span>:</span>
+                            <span id="deriv-val-p1" class="font-mono text-slate-900 font-bold">1.60</span>
+                        </div>
+                        <hr class="my-2 border-slate-300">
+                        <div class="flex justify-between items-center text-lg">
+                            <span class="font-medium text-red-600">Input Change Speed:</span>
+                            <span id="speed-val" class="font-mono text-red-600 font-bold">1.00</span>
+                        </div>
+                        <div class="flex justify-between items-center text-lg">
+                            <span class="font-medium text-green-600">Resulting Output Rate:</span>
+                            <span id="output-rate-p1" class="font-mono text-green-600 font-bold">1.60</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Part 1 Chart -->
+                <div class="bg-slate-50 p-4 rounded-lg">
+                    <canvas id="chart-p1"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Part 2: Chaining Functions -->
+        <div class="bg-white p-6 md:p-8 rounded-2xl shadow-lg">
+            <h2 class="text-3xl font-bold text-slate-900 mb-2">Part 2: Applying the Scaling to Chained Functions</h2>
+            <p class="text-slate-600 mb-6">Now, consider <span class="math">z = f(g(x))</span>. The input to function <span class="math">f</span> is no longer <span class="math">x</span>, but <span class="math">g(x)</span>. The function <span class="math">g</span> causes this input to change at a rate of <span class="math">g'(x)</span>. From Part 1, we know we must scale <span class="math">f</span>'s derivative by its input's rate of change. Therefore, the final rate of change for <span class="math">z</span> is <span class="math">f'(g(x))</span> (the base rate) multiplied by <span class="math">g'(x)</span> (the input speed).</p>
+            
+            <!-- Part 2 Controls and Display -->
+             <div class="mb-6">
+                <label for="x-slider-p2" class="block text-sm font-medium text-slate-700">Select point <span class="math">x</span> (Use Play/Pause or drag)</label>
+                <div class="flex items-center gap-4">
+                    <input id="x-slider-p2" type="range" min="0" max="6.28" value="1.0" step="0.01" class="w-full h-2 bg-slate-200 rounded-lg appearance-none cursor-pointer">
+                    <button id="play-pause-btn" class="px-4 py-2 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors w-28">Play</button>
+                </div>
+            </div>
+
+            <!-- Part 2 Visuals Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                 <!-- Left Column: Graphs -->
+                 <div>
+                    <div class="mb-8">
+                         <h3 class="text-xl font-bold text-center mb-2">Process 1: <span class="math">y = g(x)</span></h3>
+                         <div class="bg-slate-50 p-4 rounded-lg">
+                            <canvas id="chart-g"></canvas>
+                         </div>
+                    </div>
+                    <div>
+                         <h3 class="text-xl font-bold text-center mb-2">Process 2: <span class="math">z = f(y)</span></h3>
+                         <div class="bg-slate-50 p-4 rounded-lg">
+                            <canvas id="chart-f"></canvas>
+                         </div>
+                    </div>
+                 </div>
+
+                 <!-- Right Column: Results & Explanation -->
+                 <div class="bg-slate-100 p-6 rounded-lg">
+                    <h3 class="text-xl font-bold text-slate-900 mb-4">Calculation Breakdown</h3>
+                    <div class="space-y-4">
+                         <div class="p-3 bg-white rounded-md">
+                            <p class="text-sm text-slate-500">Function <span class="math">g(x)</span></p>
+                            <p class="text-lg font-mono font-bold text-blue-600"><span class="math">g(x) = sin(x)</span></p>
+                        </div>
+                        <div class="p-3 bg-white rounded-md">
+                            <p class="text-sm text-slate-500">Function <span class="math">f(y)</span></p>
+                            <p class="text-lg font-mono font-bold text-blue-600"><span class="math">f(y) = y<sup>2</sup></span></p>
+                        </div>
+                        <hr class="my-3 border-slate-300">
+                        <div class="p-3 bg-white rounded-md">
+                             <p class="text-sm text-slate-500">Current input <span class="math">x</span></p>
+                            <p id="x-val-p2" class="text-lg font-mono font-bold">1.00</p>
+                        </div>
+                        <div class="p-3 bg-white rounded-md">
+                            <p class="text-sm text-slate-500">Input speed to <span class="math">f</span> (rate of <span class="math">g</span>)</p>
+                            <p class="text-lg font-mono font-bold text-red-600"><span class="math">g'(x) = </span><span id="g-prime-val">0.54</span></p>
+                        </div>
+                        <div class="p-3 bg-white rounded-md">
+                             <p class="text-sm text-slate-500">Base rate of <span class="math">f</span> at <span class="math">y = g(x)</span></p>
+                             <p class="text-lg font-mono font-bold text-purple-600"><span class="math">f'(g(x)) = </span><span id="f-prime-val">1.68</span></p>
+                        </div>
+                        <div class="p-4 bg-green-100 border border-green-300 rounded-lg text-center mt-4">
+                             <p class="text-sm font-medium text-green-800">Final Rate of Change</p>
+                             <p class="text-lg font-mono font-bold text-green-800"><span class="math">f'(g(x)) * g'(x)</span></p>
+                             <p id="final-rate" class="text-2xl font-mono font-bold text-green-800">0.91</p>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+
+            <!-- Added Explanation Text -->
+            <div class="mt-8 p-6 bg-sky-50 border border-sky-200 rounded-lg">
+                <h4 class="font-bold text-lg text-sky-800 mb-2">A Tricky Case to Understand</h4>
+                <p class="text-slate-700 leading-relaxed">
+                    This one is tricky to understand, so let me help. First place the slider so that <code class="bg-slate-200 px-1 rounded">x=2.0</code> is the current input value. You should see that <span class="math">g(x)=sin(x)</span> slopes downward at that point, meaning the derivative <span class="math">g'(x)</span> is negative. Now the key point: In the <span class="math">z=f(y)</span> graph, the slope is positive at the current <span class="math">y=g(2)</span> value, but if you move the slider forward from <code class="bg-slate-200 px-1 rounded">x=2.0</code> to <code class="bg-slate-200 px-1 rounded">x=2.1</code> and <code class="bg-slate-200 px-1 rounded">x=2.2</code> you should notice the point on the <span class="math">z=f(y)</span> graph actually moves to the LEFT and DOWN. This shows that a small positive change in the x-input value causes a negative rate of change of <span class="math">z=f(g(x))</span>, despite the local slope of <span class="math">f</span> being positive. This is a perfect illustration of the effect of multiplying by <span class="math">g'(x)</span>, which is negative, and correctly reverses the sign to give the overall negative rate of change.
+                </p>
+            </div>
+            
+        </div>
+    </div>
+
+    <script>
+    // --- Shared Utilities ---
+    const chartConfig = {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            x: { title: { display: true }, grid: { color: 'rgba(203, 213, 225, 0.5)' } },
+            y: { title: { display: true }, grid: { color: 'rgba(203, 213, 225, 0.5)' } }
+        },
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        animation: { duration: 0 }
+    };
+
+    function createChart(canvasId, options) {
+        const ctx = document.getElementById(canvasId).getContext('2d');
+        return new Chart(ctx, options);
+    }
+    
+    // --- Part 1: Derivative as Scaled Rate ---
+    {
+        const xSlider = document.getElementById('x-slider-p1');
+        const speedDecrementBtn = document.getElementById('speed-decrement');
+        const speedIncrementBtn = document.getElementById('speed-increment');
+        const speedValDisplay = document.getElementById('speed-val-display');
+        const xValDisplay = document.getElementById('x-val-p1');
+        const derivValDisplay = document.getElementById('deriv-val-p1');
+        const speedValText = document.getElementById('speed-val');
+        const outputRateDisplay = document.getElementById('output-rate-p1');
+
+        let currentSpeed = 1;
+
+        // Function and its derivative for Part 1
+        const f = x => x * x;
+        const f_prime = x => 2 * x;
+
+        // Chart setup for Part 1
+        const xValues_p1 = Array.from({ length: 101 }, (_, i) => -2 + 4 * i / 100);
+        const functionData_p1 = xValues_p1.map(x => ({x: x, y: f(x)}));
+
+        const chart_p1 = createChart('chart-p1', {
+            type: 'line',
+            data: {
+                datasets: [
+                    { label: 'f(x)', data: functionData_p1, borderColor: 'rgb(59, 130, 246)', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+                    { label: 'Current Point', data: [], type: 'scatter', backgroundColor: 'rgb(239, 68, 68)', pointRadius: 6, zIndex: 10 },
+                    { label: 'Tangent Line', data: [], borderColor: 'rgba(51, 65, 85, 0.5)', borderWidth: 2, pointRadius: 0, borderDash: [5, 5] },
+                    { label: 'Run (dx)', data: [], type: 'line', borderColor: 'rgb(239, 68, 68)', borderWidth: 3, pointRadius: 0 },
+                    { label: 'Rise (dy)', data: [], type: 'line', borderColor: 'rgb(16, 185, 129)', borderWidth: 3, pointRadius: 0 }
+                ]
+            },
+            options: { ...chartConfig, scales: { x: { type: 'linear', ...chartConfig.scales.x, title: { ...chartConfig.scales.x.title, text: 'x' }, min: -2, max: 2 }, y: { type: 'linear', ...chartConfig.scales.y, title: { ...chartConfig.scales.y.title, text: 'f(x)' }, min: -0.5, max: 4 } } }
+        });
+
+        function updatePart1() {
+            const x = parseFloat(xSlider.value);
+            const speed = currentSpeed;
+            const y = f(x);
+            const deriv = f_prime(x);
+            const outputRate = deriv * speed;
+
+            xValDisplay.textContent = x.toFixed(2);
+            derivValDisplay.textContent = deriv.toFixed(2);
+            speedValDisplay.textContent = speed;
+            speedValText.textContent = speed.toFixed(2);
+            outputRateDisplay.textContent = outputRate.toFixed(2);
+
+            // Update chart
+            chart_p1.data.datasets[1].data = [{ x, y }];
+
+            // Tangent line
+            const tangentLength = 2; // Make tangent line longer to span the view
+            chart_p1.data.datasets[2].data = [
+                { x: x - tangentLength, y: y - deriv * tangentLength },
+                { x: x + tangentLength, y: y + deriv * tangentLength }
+            ];
+            
+            // Input/Output visualization (Rise/Run Triangle)
+            const inputChange = 0.25 * speed; 
+            const outputChange = inputChange * deriv;
+            // Input "run" line
+            chart_p1.data.datasets[3].data = [{x: x, y: y}, {x: x + inputChange, y: y}];
+            // Output "rise" line
+            chart_p1.data.datasets[4].data = [{x: x + inputChange, y: y}, {x: x + inputChange, y: y + outputChange}];
+
+            chart_p1.update();
+        }
+
+        xSlider.addEventListener('input', updatePart1);
+        speedDecrementBtn.addEventListener('click', () => {
+            currentSpeed = Math.max(-3, currentSpeed - 1);
+            updatePart1();
+        });
+        speedIncrementBtn.addEventListener('click', () => {
+            currentSpeed = Math.min(3, currentSpeed + 1);
+            updatePart1();
+        });
+        window.addEventListener('load', updatePart1);
+    }
+
+    // --- Part 2: Chaining Functions ---
+    {
+        const xSlider = document.getElementById('x-slider-p2');
+        const playPauseBtn = document.getElementById('play-pause-btn');
+        const xValDisplay = document.getElementById('x-val-p2');
+        const gPrimeDisplay = document.getElementById('g-prime-val');
+        const fPrimeDisplay = document.getElementById('f-prime-val');
+        const finalRateDisplay = document.getElementById('final-rate');
+
+        // Functions for Part 2
+        const g = x => Math.sin(x);
+        const g_prime = x => Math.cos(x);
+        const f = y => y * y;
+        const f_prime = y => 2 * y;
+        
+        let isPlaying = false;
+        let animationFrameId = null;
+
+        // Chart g(x)
+        const xValues_g = Array.from({ length: 101 }, (_, i) => 0 + 6.28 * i / 100);
+        const functionData_g = xValues_g.map(x => ({x: x, y: g(x)}));
+        const chart_g = createChart('chart-g', {
+            type: 'line',
+            data: { datasets: [
+                { label: 'g(x)', data: functionData_g, borderColor: 'rgb(59, 130, 246)', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+                { label: 'Current Point', data: [], type: 'scatter', backgroundColor: 'rgb(239, 68, 68)', pointRadius: 6 },
+                { label: 'Tangent', data: [], borderColor: 'rgb(239, 68, 68)', borderWidth: 2, pointRadius: 0, borderDash: [5, 5] },
+            ]},
+            options: { ...chartConfig, scales: { x: { type: 'linear', ...chartConfig.scales.x, title: { ...chartConfig.scales.x.title, text: 'x' }, min: 0, max: 6.28 }, y: { type: 'linear', ...chartConfig.scales.y, title: { ...chartConfig.scales.y.title, text: 'y = g(x)' }, min: -1.2, max: 1.2 } } }
+        });
+
+        // Chart f(y)
+        const xValues_f = Array.from({ length: 101 }, (_, i) => -1.1 + 2.2 * i / 100);
+        const functionData_f = xValues_f.map(x => ({x: x, y: f(x)}));
+        const chart_f = createChart('chart-f', {
+            type: 'line',
+            data: { datasets: [
+                { label: 'f(y)', data: functionData_f, borderColor: 'rgb(168, 85, 247)', borderWidth: 2, pointRadius: 0, tension: 0.1 },
+                { label: 'Current Point', data: [], type: 'scatter', backgroundColor: 'rgb(16, 185, 129)', pointRadius: 6 },
+                { label: 'Tangent', data: [], borderColor: 'rgb(16, 185, 129)', borderWidth: 2, pointRadius: 0, borderDash: [5, 5] },
+            ]},
+            options: { ...chartConfig, scales: { x: { type: 'linear', ...chartConfig.scales.x, title: { ...chartConfig.scales.x.title, text: 'y' }, min: -1.1, max: 1.1 }, y: { type: 'linear', ...chartConfig.scales.y, title: { ...chartConfig.scales.y.title, text: 'z = f(y)' }, min: -0.2, max: 1.2 } } }
+        });
+
+        function updatePart2() {
+            const x = parseFloat(xSlider.value);
+            const y = g(x);
+            const z = f(y);
+
+            const g_p = g_prime(x);
+            const f_p = f_prime(y);
+            const finalRate = f_p * g_p;
+            
+            xValDisplay.textContent = x.toFixed(2);
+            gPrimeDisplay.textContent = g_p.toFixed(2);
+            fPrimeDisplay.textContent = f_p.toFixed(2);
+            finalRateDisplay.textContent = finalRate.toFixed(2);
+
+            // Update chart g
+            chart_g.data.datasets[1].data = [{ x, y }];
+            const tanLenG = 1;
+            chart_g.data.datasets[2].data = [{ x: x - tanLenG, y: y - g_p * tanLenG }, { x: x + tanLenG, y: y + g_p * tanLenG }];
+            chart_g.update();
+
+            // Update chart f
+            chart_f.data.datasets[1].data = [{ x: y, y: z }]; // Note x-axis is y here
+            const tanLenF = 0.5;
+            chart_f.data.datasets[2].data = [{ x: y - tanLenF, y: z - f_p * tanLenF }, { x: y + tanLenF, y: z + f_p * tanLenF }];
+            chart_f.update();
+        }
+
+        function animate() {
+            let currentValue = parseFloat(xSlider.value);
+            currentValue += 0.02;
+            if (currentValue > 6.28) {
+                currentValue = 0;
+            }
+            xSlider.value = currentValue;
+            updatePart2();
+            if (isPlaying) {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        }
+
+        function handlePlayPause() {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playPauseBtn.textContent = 'Pause';
+                animationFrameId = requestAnimationFrame(animate);
+            } else {
+                playPauseBtn.textContent = 'Play';
+                cancelAnimationFrame(animationFrameId);
+            }
+        }
+        
+        playPauseBtn.addEventListener('click', handlePlayPause);
+        xSlider.addEventListener('input', () => {
+             if (isPlaying) handlePlayPause(); // Pause if user interacts
+             updatePart2();
+        });
+        window.addEventListener('load', updatePart2);
+    }
+    </script>
+</body>
+</html>
+
+
+
