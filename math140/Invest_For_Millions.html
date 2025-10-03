@@ -28,7 +28,6 @@
         <!-- Header Section -->
         <header class="text-center mb-10">
             <h1 class="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight">Self-Guided Activity: Modeling Your Path to $1 Million</h1>
-            <p class="mt-4 text-lg text-slate-600">Created by Alex Heaton, in collaboration with Gemini</p>
         </header>
 
         <!-- Introduction -->
@@ -38,10 +37,72 @@
         </div>
 
         <hr class="my-10 border-slate-200">
+        
+        <!-- Part 0: Assign Roles -->
+        <section id="part0" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 0: Assign Your Roles</h2>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <h3 class="text-xl font-semibold text-slate-900 mb-3">First Step: Assign Your Roles</h3>
+                <p class="mb-4 text-slate-600">For this activity to run smoothly, each person in your group of 3-4 needs a specific job. Decide who will take on each role. You can switch roles later if you'd like!</p>
+                <ol class="list-decimal list-outside space-y-4 ml-5">
+                    <li>
+                        <strong class="font-semibold text-slate-800">Timer</strong><br>
+                        This person sets a timer before each new problem. Everyone works silently and alone until the timer rings. The timer can be set for 1, 2, or 3 minutes, and can be different for each problem based on what the group decides.
+                    </li>
+                    <li>
+                        <strong class="font-semibold text-slate-800">Leader</strong><br>
+                        This person (gently) asks a different person to speak first on each problem. Your job is to rotate the first speaker from problem to problem to ensure everyone gets a chance to initiate the discussion.
+                    </li>
+                    <li>
+                        <strong class="font-semibold text-slate-800">Writer</strong><br>
+                        This person fills out the group worksheet with key takeaways, strategies, or 'aha' moments. They will be responsible for submitting the completed worksheet at the end of class.
+                    </li>
+                </ol>
+            </div>
+        </section>
 
-        <!-- Part 1: The Models -->
+        <hr class="my-10 border-slate-200">
+
+        <!-- Part 1: Interactive Plot -->
         <section id="part1" class="mb-10">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: The Models and Their Solutions</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 1: Interactive Visualization</h2>
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p><strong>Timer,</strong> set a timer for 3 minutes so everyone can play with this visualization individually. After the timer ends, discuss your initial thoughts with the group before moving on to the next section of the worksheet.</p>
+            </div>
+            <div class="bg-white p-6 rounded-lg shadow-md">
+                <p class="mb-4 text-slate-600">This interactive plot lets you visualize the three models directly. Unlike the SageMath code, you can enter the total number of years directly instead of calculating it from an age difference. Play around with different values to see how the monthly contribution (<span class="math">m</span>), annual return (<span class="math">k</span>), and time (<span class="math">years</span>) affect your investment growth. Try to get a feel for how much you could actually save each month, and see what that means for your long-term investments.</p>
+                
+                <!-- Input Controls -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-slate-50 rounded-lg">
+                    <div>
+                        <label for="k_rate" class="block text-sm font-medium text-slate-700">Annual Return (k)</label>
+                        <input type="number" id="k_rate" value="0.07" step="0.01" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                    </div>
+                    <div>
+                        <label for="m_monthly" class="block text-sm font-medium text-slate-700">Monthly Savings (m)</label>
+                        <input type="number" id="m_monthly" value="250" step="50" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                    </div>
+                    <div>
+                        <label for="t_years" class="block text-sm font-medium text-slate-700">Years</label>
+                        <input type="number" id="t_years" value="10" step="1" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
+                    </div>
+                </div>
+
+                <!-- Chart Canvas -->
+                <div class="w-full">
+                    <canvas id="investmentChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+        <hr class="my-10 border-slate-200">
+        
+        <!-- Part 2: The Models -->
+        <section id="part2" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: The Models and Their Solutions</h2>
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p><strong>Timer,</strong> set a brief timer so everyone has a chance to silently read the beginning of the section. When the timer ends, discuss briefly before attempting any questions.</p>
+            </div>
             <p class="mb-6">We can describe the growth of your investment using the language of differential equations. Let <span class="math">x(t)</span> be the amount of money at time <span class="math">t</span> (in years).</p>
 
             <div class="grid md:grid-cols-2 gap-8">
@@ -64,14 +125,35 @@
                     </ul>
                 </div>
             </div>
+            
+            <div class="mt-8">
+                <p class="mb-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">In a differential equation like <span class="math">x’ = 12m</span>, where <span class="math">m</span> is a fixed constant number, the “solution” we seek is a function <span class="math">x(t)</span> that satisfies <span class="math">dx/dt = 12m</span>. For example, if <span class="math">x(t) = t<sup>2</sup></span>, then <span class="math">dx/dt = 2t</span>, which is not equal to <span class="math">12m</span>, hence <span class="math">x(t) = t<sup>2</sup></span> does not satisfy the differential equation. In algebraic equations like <span class="math">2x + 5 = 1</span>, the solution we seek is a number like <span class="math">x = -2</span>. Differential equations are harder because the solution is an entire function! …not just a number.</p>
+                
+                <div class="bg-white p-6 rounded-lg shadow-md">
+                    <h3 class="text-xl font-semibold text-slate-900 mb-3">Derivative Warm-Up Questions</h3>
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                        <p><strong>Timer,</strong> set a brief timer so everyone can try the question alone first. Then discuss answers when timer ends.</p>
+                    </div>
+                    <ol class="list-decimal list-inside space-y-4 text-slate-600">
+                        <li>Consider the equation <span class="math">x’ = 17</span>. Can you find a solution <span class="math">x(t) = ?</span></li>
+                        <li>Consider the equation <span class="math">x’ = 17t</span>. Can you find a solution <span class="math">x(t) = ?</span></li>
+                        <li>Consider the equation <span class="math">x’ = kt</span>, where <span class="math">k</span> is a fixed number. Can you find a solution <span class="math">x(t) = ?</span></li>
+                        <li>Consider the equation <span class="math">x’ = kx + 12m</span> where <span class="math">k</span> and <span class="math">m</span> are fixed numbers. Carefully and explicitly verify that <span class="math">x(t) = (12m / k)( e<sup>kt</sup> - 1 )</span> solves the equation. Plug into both sides, simplify, and verify that you get the same results on both sides of the equation. Write out each step carefully.</li>
+                    </ol>
+                </div>
+            </div>
+
             <p class="mt-8 text-sm text-slate-600 bg-slate-100 p-4 rounded-lg">For our models, we will use an annual growth rate of <span class="math">k = 0.07</span>, since this is approximately the annual growth of the US stock market historically, already adjusted for inflation. Look this up online for more information, because although this is the standard "conservative" estimate, it's still just an estimate or assumption and could be wrong.</p>
         </section>
 
         <hr class="my-10 border-slate-200">
 
-        <!-- Part 2: The Simulation -->
-        <section id="part2" class="mb-10">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 2: The SageMath Simulation</h2>
+        <!-- Part 3: The Simulation -->
+        <section id="part3" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: The SageMath Simulation</h2>
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p><strong>Timer,</strong> set a brief timer so everyone has a chance to silently read the beginning of the section. When the timer ends, discuss briefly before attempting any questions.</p>
+            </div>
             <p class="mb-6">Instead of building a simulation from scratch, you will use a pre-written Python code snippet. We will run this in SageMathCell, a free online tool that lets you execute code without installing any software.</p>
             
             <div class="bg-white p-6 rounded-lg shadow-md">
@@ -120,14 +202,20 @@ linear = x + 12*m * years
 
         <hr class="my-10 border-slate-200">
 
-        <!-- Part 3: Guided Investigation -->
-        <section id="part3" class="mb-10">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 3: Guided Investigation</h2>
+        <!-- Part 4: Guided Investigation -->
+        <section id="part4" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 4: Guided Investigation</h2>
+            <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p><strong>Timer,</strong> set a brief timer so everyone has a chance to silently read the beginning of the section. When the timer ends, discuss briefly before attempting any questions.</p>
+            </div>
             <p class="mb-6">Your goal is to understand what this code is doing and why its results are different. Answer the following questions.</p>
             
             <div class="space-y-8">
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold text-slate-900 mb-3">Question 1: Understanding the Code's Logic</h3>
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                        <p><strong>Timer,</strong> set a brief timer so everyone can try the question alone first. Then discuss answers when timer ends.</p>
+                    </div>
                     <ul class="list-disc list-inside space-y-2 text-slate-600">
                         <li>Run the code with the initial values (m=250). You will see three different final amounts. Which one is the largest? Which is the smallest?</li>
                         <li>Look at the <code>for</code> loop. The line <code>x = x + 12*m + k*x</code> is a step-by-step (numerical) simulation. In your own words, what calculation is it performing each year?</li>
@@ -137,6 +225,9 @@ linear = x + 12*m * years
 
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold text-slate-900 mb-3">Question 2: The Underestimation Puzzle</h3>
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                        <p><strong>Timer,</strong> set a brief timer so everyone can try the question alone first. Then discuss answers when timer ends.</p>
+                    </div>
                     <p class="mb-4 text-slate-600">You should have noticed that the numerical approximation from the <code>for</code> loop is <em>less than</em> the true value from the analytic solution. Let's figure out why. The line <code>x = x + 12*m + k*x</code> calculates the interest for an entire year (<code>k*x</code>) based on the amount of money you had at the <strong>start</strong> of that year.</p>
                     <ul class="list-disc list-inside space-y-2 text-slate-600">
                         <li><strong>Hint:</strong> In reality, does the amount of money in your account stay fixed for the whole year, or does it increase as you make monthly contributions and earn interest?</li>
@@ -147,6 +238,9 @@ linear = x + 12*m * years
 
                 <div class="bg-white p-6 rounded-lg shadow-md">
                     <h3 class="text-xl font-semibold text-slate-900 mb-3">Question 3: The Calculus Connection (Concavity)</h3>
+                    <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                        <p><strong>Timer,</strong> set a brief timer so everyone can try the question alone first. Then discuss answers when timer ends.</p>
+                    </div>
                     <p class="mb-4 text-slate-600">The graph of the true solution, <span class="math">x(t) = (12m/k)(e<sup>kt</sup> - 1)</span>, is <strong>concave up</strong>, meaning it constantly curves upwards. You can test this by taking <strong>two derivatives</strong> and checking the result is always positive. Our numerical method is a simplified version of Euler's Method, which uses the slope at the beginning of an interval (the rate of change <span class="math">x'</span>) to take a linear step forward.</p>
                     <ul class="list-disc list-inside space-y-2 text-slate-600">
                         <li>Imagine drawing a tangent line to a curve that is concave up. Besides the point of tangency, is the tangent line above or below the curve? Draw it!</li>
@@ -158,61 +252,21 @@ linear = x + 12*m * years
         
         <hr class="my-10 border-slate-200">
 
-        <!-- Part 4: Your Quest -->
-        <section id="part4" class="mb-10">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 4: Your Quest for $1 Million</h2>
+        <!-- Part 5: Your Quest -->
+        <section id="part5" class="mb-10">
+            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 5: Your Quest for $1 Million</h2>
+             <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6" role="alert">
+                <p><strong>Timer,</strong> set a brief timer so everyone has a chance to silently read the beginning of the section. When the timer ends, discuss briefly before attempting any questions.</p>
+            </div>
             <div class="bg-white p-6 rounded-lg shadow-md">
                 <p class="mb-4">Now, use the code to plan your retirement. Modify the variables <span class="math">m</span> and <code>years</code> to find what it takes to reach your goal. For this part, trust the <strong>analytic solution</strong> as the correct value.</p>
+                 <div class="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-4" role="alert">
+                    <p><strong>Timer,</strong> set a brief timer so everyone can try the question alone first. Then discuss answers when timer ends.</p>
+                </div>
                 <ol class="list-decimal list-inside space-y-3">
                     <li><strong>Find the Contribution:</strong> Keep <code>years</code> at 47 (age 67 - age 20). What value do you need to set for the monthly contribution <span class="math">m</span> to make the analytic <code>solution</code> be approximately <strong>$1,000,000</strong>?</li>
                     <li><strong>Find the Time:</strong> Set the monthly contribution <span class="math">m</span> to <strong>$500</strong>. What is the smallest integer value for <code>years</code> that makes the analytic <code>solution</code> exceed <strong>$1,000,000</strong>?</li>
                 </ol>
-            </div>
-        </section>
-
-        <hr class="my-10 border-slate-200">
-
-        <!-- Part 5: Deliverable -->
-        <section id="part5" class="mb-10">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 5: Deliverable</h2>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <p class="mb-4">Submit a brief report that includes:</p>
-                <ol class="list-decimal list-inside space-y-3 text-slate-600">
-                    <li>Your short answers to the three sets of questions in Part 3 (Understanding the Code, The Underestimation Puzzle, The Calculus Connection).</li>
-                    <li>The values for <span class="math">m</span> (from Part 4, #1) and <code>years</code> (from Part 4, #2) that you found.</li>
-                    <li>A concluding paragraph that summarizes the key takeaway of this activity. It should explain why compound interest leads to exponential growth and why simple linear approximations, while intuitive, fail to capture the full picture and result in an underestimation for functions that are concave up.</li>
-                </ol>
-            </div>
-        </section>
-
-        <hr class="my-10 border-slate-200">
-
-        <!-- Part 6: Interactive Plot -->
-        <section id="part6" class="mb-10">
-            <h2 class="text-3xl font-bold text-slate-900 mb-6">Part 6: Interactive Visualization</h2>
-            <div class="bg-white p-6 rounded-lg shadow-md">
-                <p class="mb-4 text-slate-600">This interactive plot lets you visualize the three models directly. Unlike the SageMath code, you can enter the total number of years directly instead of calculating it from an age difference. Play around with different values to see how the monthly contribution (<span class="math">m</span>), annual return (<span class="math">k</span>), and time (<span class="math">years</span>) affect your investment growth. Try to get a feel for how much you could actually save each month, and see what that means for your long-term investments.</p>
-                
-                <!-- Input Controls -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6 p-4 bg-slate-50 rounded-lg">
-                    <div>
-                        <label for="k_rate" class="block text-sm font-medium text-slate-700">Annual Return (k)</label>
-                        <input type="number" id="k_rate" value="0.07" step="0.01" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
-                    </div>
-                    <div>
-                        <label for="m_monthly" class="block text-sm font-medium text-slate-700">Monthly Savings (m)</label>
-                        <input type="number" id="m_monthly" value="250" step="50" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
-                    </div>
-                    <div>
-                        <label for="t_years" class="block text-sm font-medium text-slate-700">Years</label>
-                        <input type="number" id="t_years" value="10" step="1" class="mt-1 block w-full rounded-md border-slate-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm p-2">
-                    </div>
-                </div>
-
-                <!-- Chart Canvas -->
-                <div class="w-full">
-                    <canvas id="investmentChart"></canvas>
-                </div>
             </div>
         </section>
 
@@ -353,3 +407,4 @@ linear = x + 12*m * years
     </script>
 </body>
 </html>
+
