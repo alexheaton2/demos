@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Calculus: Linearization & Newton's Method</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="https://unpkg.com/function-plot/dist/function-plot.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc; /* Tailwind gray-50 */
+        }
+        .formula {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 1.25rem;
+            background-color: #f1f5f9; /* Tailwind slate-100 */
+            padding: 1rem 1.5rem;
+            border-radius: 0.5rem;
+            display: inline-block;
+            border: 1px solid #e2e8f0; /* Tailwind slate-200 */
+        }
+        h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1e293b; /* Tailwind slate-800 */
+            border-bottom: 2px solid #64748b; /* Tailwind slate-500 */
+            padding-bottom: 0.5rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1.5rem;
+        }
+        p, li {
+            color: #334155; /* Tailwind slate-700 */
+            line-height: 1.7;
+        }
+        .btn {
+            background-color: #0ea5e9; /* Tailwind sky-500 */
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease-in-out;
+            box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+        }
+        .btn:hover {
+            background-color: #0284c7; /* Tailwind sky-600 */
+        }
+        .btn:disabled {
+            background-color: #94a3b8; /* Tailwind slate-400 */
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <h1 class="text-4xl font-bold text-center text-slate-900 mb-8">Interactive Calculus Demonstrations</h1>
+
+        <!-- Section 1: Local Linearization -->
+        <section>
+            <h2>Local Linearization</h2>
+            <p class="mb-4">The formula for linear approximation states that for a value of <i>x</i> near a point <i>a</i>, we can approximate the function <i>f(x)</i> using its tangent line at <i>a</i>.</p>
+            <div class="text-center my-6">
+                <span class="formula"><i>f(x)</i> ≈ <i>f(a)</i> + <i>f'(a)</i> (<i>x</i> - <i>a</i>)</span>
+            </div>
+            <p class="mb-6">The plot below demonstrates how to approximate the value of a function at <i>x</i> = 3.2, given that we know the function's value and derivative at the nearby point <i>a</i> = 3. We are stepping just 0.2 away from <i>a</i>, so we approximate the change by adding the slope (the derivative) multiplied by this small step.</p>
+            <div id="linearization-plot" class="rounded-lg shadow-lg overflow-hidden border border-slate-200"></div>
+        </section>
+
+        <!-- Section 2: Newton's Method -->
+        <section>
+            <h2>Newton's Method</h2>
+            <p class="mb-4">Newton's method is a powerful technique for finding successively better approximations to the roots (or zeroes) of a real-valued function, solving for <i>x</i> in the equation <i>f(x)</i> = 0.</p>
+            <p class="mb-4">For instance, to find the square root of 2, we can solve the nonlinear equation <i>f(x)</i> = <i>x</i><sup>2</sup> - 2 = 0. The process is as follows:</p>
+            <ol class="list-decimal list-inside space-y-2 mb-4">
+                <li>Start with an initial guess, say <i>x</i><sub>0</sub> = 1. We see that <i>f</i>(1) = 1<sup>2</sup> - 2 = -1, which is not zero.</li>
+                <li>Find the derivative: <i>f'(x)</i> = 2<i>x</i>. At our guess, the slope is <i>f'</i>(1) = 2.</li>
+                <li>Use the linear approximation formula and set <i>f(x)</i> = 0 to find where the tangent line hits the x-axis:
+                    <br>0 = <i>f(a)</i> + <i>f'(a)</i> (<i>x</i> - <i>a</i>)
+                    <br>0 = -1 + 2(<i>x</i> - 1)
+                </li>
+                <li>Solving for <i>x</i> gives our new, better guess: <i>x</i><sub>1</sub> = 1.5. This is much closer to the true value of &radic;2 ≈ 1.414.</li>
+                <li>We repeat this process with our new guess to get even closer.</li>
+            </ol>
+
+            <p class="mb-4">The interactive plot below demonstrates this process. Click the "Next Step" button to walk through the iterations.</p>
+            <div class="flex items-center justify-center space-x-4 my-6">
+                <button id="newton-next-btn" class="btn">Next Step</button>
+                <button id="newton-reset-btn" class="btn bg-slate-500 hover:bg-slate-600">Reset</button>
+            </div>
+            <div id="newton-plot" class="rounded-lg shadow-lg overflow-hidden border border-slate-200"></div>
+            <p id="newton-step-info" class="text-center mt-4 text-slate-600 font-medium h-6"></p>
+
+        </section>
+    </div>
+
+    <script>
+        // --- Plot 1: Linearization ---
+        function plotLinearization() {
+            const a = 3;
+            const x = 3.2;
+            const f = (val) => val * val;
+            const fPrime = (val) => 2 * val;
+
+            const fa = f(a);
+            const fPrimeA = fPrime(a);
+            
+            // Tangent line equation: y = f(a) + f'(a)(x-a)
+            const tangentLine = (val) => fa + fPrimeA * (val - a);
+            const approximationAtX = tangentLine(x);
+
+            const options = {
+                target: '#linearization-plot',
+                width: 800,
+                height: 500,
+                xAxis: { label: 'x', domain: [2, 4] },
+                yAxis: { label: 'y', domain: [3, 17] },
+                grid: true,
+                data: [
+                    { fn: 'x^2', color: '#0ea5e9' }, // The function f(x)
+                    { fn: `${fa} + ${fPrimeA} * (x - ${a})`, color: '#f97316', fnType: 'linear' } // The tangent line
+                ],
+                annotations: [
+                    // Point (a, f(a))
+                    { x: a, y: fa, text: `(a, f(a)) = (${a}, ${fa})`},
+                    // Point of approximation
+                    { x: x, y: approximationAtX, text: `Approximation (${x}, ${approximationAtX.toFixed(2)})`},
+                    // Actual value
+                    { x: x, y: f(x), text: `Actual f(x) = (${x}, ${f(x).toFixed(2)})` },
+                    // Δx arrow and label
+                    { x: (a + x) / 2, text: 'Δx = 0.2' },
+                    {
+                        x: a, y: fa - 1,
+                        x2: x, y2: fa - 1,
+                        arrow: true,
+                    },
+                     // Rise arrow and label
+                    { x: x + 0.05, y: (fa + approximationAtX) / 2, text: 'Rise = f\'(a)Δx' },
+                    {
+                        x: x, y: fa,
+                        x2: x, y2: approximationAtX,
+                        arrow: true
+                    }
+                ],
+                 // We add points separately to style them
+                points: [
+                    { x: a, y: fa, color: '#0ea5e9'},
+                    { x: x, y: approximationAtX, color: '#f97316'},
+                    { x: x, y: f(x), color: '#0ea5e9'}
+                ],
+                tip: {
+                    xLine: true,
+                    yLine: true
+                }
+            };
+
+            functionPlot(options);
+        }
+
+        // --- Plot 2: Newton's Method ---
+        let newtonState = {
+            step: 0,
+            guess: 1,
+            maxSteps: 7 // 3 full iterations + initial state
+        };
+
+        const f_newton = (x) => x * x - 2;
+        const f_prime_newton = (x) => 2 * x;
+
+        function updateNewtonPlot() {
+            const { step, guess } = newtonState;
+            const infoEl = document.getElementById('newton-step-info');
+
+            let data = [{ fn: 'x^2 - 2', color: '#0ea5e9' }];
+            let annotations = [];
+            let points = [];
+            
+            // --- Pre-calculate all values for the demonstration ---
+            // Iteration 1
+            const y1 = f_newton(guess);
+            const slope1 = f_prime_newton(guess);
+            const guess2 = guess - y1 / slope1;
+
+            // Iteration 2
+            const y2 = f_newton(guess2);
+            const slope2 = f_prime_newton(guess2);
+            const guess3 = guess2 - y2 / slope2;
+            
+            // Final point y-value
+            const y3 = f_newton(guess3);
+
+
+            // --- Add plot elements based on the current step ---
+            if (step >= 0) { // Initial guess point
+                points.push({ x: guess, y: y1, color: '#f97316' });
+                annotations.push({ x: guess, y: y1, text: `Guess x₀: (${guess.toFixed(2)}, ${y1.toFixed(2)})`});
+                infoEl.textContent = `Start with initial guess x = ${guess.toFixed(2)}`;
+            }
+            if (step >= 1) { // Draw first tangent line
+                data.push({ fn: `${y1} + ${slope1} * (x - ${guess})`, color: '#ef4444', fnType: 'linear' });
+                infoEl.textContent = `Draw tangent at (${guess.toFixed(2)}, ${y1.toFixed(2)})`;
+            }
+            if (step >= 2) { // Show x-intercept of first tangent
+                points.push({ x: guess2, y: 0, color: '#ef4444' });
+                annotations.push({ x: guess2, y: 0.5, text: `New guess x₁: ${guess2.toFixed(2)}` });
+                infoEl.textContent = `Tangent line finds next guess x = ${guess2.toFixed(2)}`;
+            }
+            if (step >= 3) { // Show new point on curve
+                points.push({ x: guess2, y: y2, color: '#f97316' });
+                annotations.push({x: guess2, y: y2, text: `Next point (${guess2.toFixed(2)}, ${y2.toFixed(2)})`});
+                infoEl.textContent = `Find new point on the curve at x = ${guess2.toFixed(2)}`;
+            }
+             if (step >= 4) { // Draw 2nd tangent
+                data.push({ fn: `${y2} + ${slope2} * (x - ${guess2})`, color: '#22c55e', fnType: 'linear' });
+                infoEl.textContent = `Draw second tangent line.`;
+            }
+            if (step >= 5) { // Show 2nd x-intercept
+                points.push({ x: guess3, y: 0, color: '#22c55e' });
+                annotations.push({x: guess3, y: 0.5, text: `Final guess x₂: ${guess3.toFixed(3)}`});
+                infoEl.textContent = `Final guess is now x = ${guess3.toFixed(3)}, very close to √2!`;
+            }
+             if (step >= 6) { // Show final point on curve
+                 points.push({ x: guess3, y: y3, color: '#f97316' });
+                 infoEl.textContent = `The y-value is now ${y3.toExponential(2)}, which is extremely close to zero.`;
+             }
+
+            const options = {
+                target: '#newton-plot',
+                width: 800,
+                height: 500,
+                xAxis: { label: 'x', domain: [0, 2.5] },
+                yAxis: { label: 'y', domain: [-2.5, 4.5] },
+                grid: true,
+                data: data,
+                annotations: annotations,
+                points: points,
+                tip: {
+                    xLine: true,
+                    yLine: true
+                }
+            };
+            functionPlot(options);
+        }
+
+        // --- Event Listeners ---
+        document.addEventListener('DOMContentLoaded', () => {
+            plotLinearization();
+            updateNewtonPlot(); // Initial plot for Newton's method
+
+            const newtonNextBtn = document.getElementById('newton-next-btn');
+            const newtonResetBtn = document.getElementById('newton-reset-btn');
+
+            newtonNextBtn.addEventListener('click', () => {
+                newtonState.step = (newtonState.step + 1);
+                if (newtonState.step >= newtonState.maxSteps) {
+                   newtonState.step = 0; // Loop back
+                }
+                updateNewtonPlot();
+            });
+
+            newtonResetBtn.addEventListener('click', () => {
+                newtonState.step = 0;
+                newtonState.guess = 1;
+                updateNewtonPlot();
+            });
+        });
+
+    </script>
+</body>
+</html>
+
