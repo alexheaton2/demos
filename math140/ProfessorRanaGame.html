@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professor Rana's Game Instructions</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles to ensure a clean, academic look and use the Inter font */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f7f9fb; /* Very light, professional background */
+            line-height: 1.6;
+        }
+        /* Style for the prize banner */
+        .prize-banner {
+            background-color: #d1fae5; /* Light green/teal for success */
+            border: 2px solid #34d399; /* Medium green border */
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary-blue': '#1e40af', /* Deep blue for accents */
+                        'secondary-gray': '#4b5563',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden">
+
+        <!-- Header and Title -->
+        <header class="bg-primary-blue p-6 sm:p-8 text-center rounded-t-2xl">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-white">
+                Professor Rana's Game Instructions
+            </h1>
+            <p class="mt-2 text-white/90 text-lg">
+                The Ultimate Collaboration Challenge
+            </p>
+        </header>
+
+        <!-- Prize Banner -->
+        <div class="prize-banner p-4 text-center text-secondary-gray font-semibold text-lg border-b">
+            🏆 The winning team gets <span class="text-green-700 font-extrabold">DOUBLE</span> collaboration points for today!
+        </div>
+
+        <main class="p-6 sm:p-10 space-y-10">
+
+            <!-- Section 1: Team Roles -->
+            <section class="border-b border-gray-200 pb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-primary-blue mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20h-5v-2a3 3 0 015.356-1.857M9 20H4v-2a3 3 0 015-2.236M9 20a3 3 0 00-5.356-1.857M12 18H5a3 3 0 013-3h3"></path></svg>
+                    1. Choose Your Roles (Teams of 3-4)
+                </h2>
+                <p class="text-secondary-gray mb-4">
+                    Before the first problem, each group must assign the following three mandatory roles:
+                </p>
+                
+                <ul class="space-y-4">
+                    <!-- Leader Role -->
+                    <li class="bg-blue-50 p-4 rounded-lg shadow-sm border-l-4 border-primary-blue">
+                        <strong class="font-semibold text-primary-blue">The Leader:</strong>
+                        <p class="text-sm mt-1">
+                            Facilitates discussion. After the timer goes off, the leader asks a new person to share their progress, for instance, <em class="text-gray-600">“Alex, can you share your thoughts and progress first?”</em>
+                        </p>
+                    </li>
+                    <!-- Writer Role -->
+                    <li class="bg-blue-50 p-4 rounded-lg shadow-sm border-l-4 border-primary-blue">
+                        <strong class="font-semibold text-primary-blue">The Writer:</strong>
+                        <p class="text-sm mt-1">
+                            Records the final, group-agreed answer on a notecard to be submitted.
+                        </p>
+                    </li>
+                    <!-- Checker Role -->
+                    <li class="bg-blue-50 p-4 rounded-lg shadow-sm border-l-4 border-primary-blue">
+                        <strong class="font-semibold text-primary-blue">The Checker:</strong>
+                        <p class="text-sm mt-1">
+                            Decides the group’s confidence by choosing how many points to risk: **1, 2, or 3 points** (1 = least confident, 3 = most confident).
+                        </p>
+                    </li>
+                </ul>
+            </section>
+
+            <!-- Section 2: Game Flow -->
+            <section class="border-b border-gray-200 pb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-primary-blue mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    2. The Problem Solving Cycle
+                </h2>
+                <ol class="list-decimal list-inside space-y-3 pl-4 text-secondary-gray">
+                    <li class="pl-2">
+                        <strong class="font-semibold text-gray-700">Teacher Presents:</strong> The teacher describes a calculus problem on the board and sets a timer.
+                    </li>
+                    <li class="pl-2">
+                        <strong class="font-semibold text-gray-700">Individual Work:</strong> Everyone works quietly and individually on the problem while the timer runs.
+                    </li>
+                    <li class="pl-2">
+                        <strong class="font-semibold text-gray-700">Discussion Phase:</strong> When the timer goes off, the Leader of each group begins the discussion to synthesize solutions.
+                    </li>
+                    <li class="pl-2">
+                        <strong class="font-semibold text-gray-700">Submission:</strong>
+                        <ul class="list-disc list-inside ml-6 mt-1 text-sm">
+                            <li>The Writer records the final answer on a notecard.</li>
+                            <li>The Checker decides on the risk points (1, 2, or 3) and records them.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </section>
+
+            <!-- Section 3: The Magic Star -->
+            <section class="border-b border-gray-200 pb-8">
+                <h2 class="text-2xl sm:text-3xl font-bold text-primary-blue mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.227a1 1 0 00-.817 0l-7.234 3.424a1 1 0 00-.67 1.353l1.1 7.425a1 1 0 00.94.887l6.88 1.058a1 1 0 00.418 0l6.88-1.058a1 1 0 00.94-.887l1.1-7.425a1 1 0 00-.67-1.353l-7.234-3.424a1 1 0 00-.817 0z"></path></svg>
+                    3. Special Item: The Magic Star
+                </h2>
+                <div class="bg-yellow-50 p-4 rounded-lg shadow-md">
+                    <p class="text-secondary-gray">
+                        Occasionally, the teacher will pass out the **Magic Star** to one lucky team.
+                    </p>
+                    <p class="mt-2 text-secondary-gray font-medium">
+                        If you possess the Magic Star, you can decide (before you see the next problem) to risk a much larger range of points:
+                        <strong class="text-red-600 block sm:inline mt-2 sm:mt-0">1, 2, 3, ..., up to 10 points!</strong>
+                    </p>
+                    <p class="text-sm italic mt-2 text-gray-600">
+                        Use this power wisely—it can help teams catch up quickly!
+                    </p>
+                </div>
+            </section>
+
+            <!-- Section 4: Scoring and Review -->
+            <section>
+                <h2 class="text-2xl sm:text-3xl font-bold text-primary-blue mb-4 flex items-center">
+                    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.008 12.008 0 002.04 15.345c.42.548.868 1.05 1.35 1.485A11.921 11.921 0 0012 21c3.12 0 6.007-.927 8.36-2.525.482-.435.93-1.028 1.35-1.485a12.008 12.008 0 00-2.382-9.697z"></path></svg>
+                    4. Review and Results
+                </h2>
+                <ul class="list-disc list-inside space-y-3 pl-4 text-secondary-gray">
+                    <li class="pl-2">
+                        <strong class="font-semibold text-gray-700">Immediate Feedback:</strong> After all groups submit their answers, the teacher will go over the solution on the board, slowly and clearly.
+                    </li>
+                    <li class="pl-2">
+                        <strong class="font-semibold text-gray-700">Points Awarded/Lost:</strong>
+                        <p class="text-sm mt-1">If your group's answer is <strong class="text-green-700">correct</strong>, you <strong class="font-extrabold text-green-700">EARN</strong> the points you risked. If your answer is <strong class="text-red-600">incorrect</strong>, you <strong class="font-extrabold text-red-600">LOSE</strong> the points you risked (1, 2, or 3, or up to 10 with the Magic Star).</p>
+                    </li>
+                    <li class="pl-2">
+                        <strong class="font-extrabold text-red-600">BONUS RULE (Teacher Mistake):</strong> If the teacher makes a mistake and gets the answer wrong:
+                        <ul class="list-disc list-inside ml-6 mt-1 text-sm space-y-1">
+                            <li><strong class="text-green-700">Teams with Correct Answers:</strong> Double the points they risked! (e.g., risk 3, earn 6).</li>
+                            <li><strong class="text-red-600">Teams with Incorrect Answers:</strong> Do NOT lose any points. (e.g., risk 3, lose 0).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-gray-100 p-6 sm:p-8 text-center rounded-b-2xl text-sm text-gray-500">
+            Good luck, and may the derivatives be ever in your favor!
+        </footer>
+    </div>
+
+</body>
+</html>
