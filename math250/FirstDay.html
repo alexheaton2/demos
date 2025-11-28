@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Math 250: Linear Algebra - Prof. Alex Heaton</title>
+
+    <!-- Reveal.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/white.min.css" id="theme">
+
+    <style>
+        /* Custom tweaks for academic slides */
+        .reveal h1, .reveal h2, .reveal h3, .reveal h4, .reveal h5, .reveal h6 {
+            text-transform: none; /* Keep original casing */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            color: #333;
+        }
+        .reveal p, .reveal li {
+            font-size: 0.8em;
+            line-height: 1.4em;
+        }
+        /* Fix for iframe interaction */
+        .reveal iframe {
+            max-width: 100%;
+            max-height: 100%;
+            pointer-events: auto !important; /* Force interaction */
+        }
+        .sage-container {
+            width: 100%;
+            height: 450px; /* Adjusted height to fit slide */
+            margin: 20px auto;
+            border: 1px solid #ddd;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .quote-box {
+            background-color: #f0f4f8;
+            border-left: 5px solid #2a76dd;
+            padding: 20px;
+            font-style: italic;
+            margin-top: 20px;
+            font-size: 0.7em !important;
+        }
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+<div class="reveal">
+    <div class="slides">
+
+        <!-- SLIDE 1: Title -->
+        <section>
+            <h1>Math 250: Linear Algebra</h1>
+            <h3>Professor Alex Heaton</h3>
+            <p><strong>Focus:</strong> Developing proof-writing ability</p>
+            <p style="margin-top: 2em; font-size: 0.6em; color: #666;">Use Arrow Keys to Navigate</p>
+        </section>
+
+        <!-- SLIDE 2: Why Proofs? -->
+        <section>
+            <h2>Why should we learn proofs?</h2>
+            
+            <!-- Video Container -->
+            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+                <iframe width="800" height="450" 
+                    src="https://www.youtube.com/embed/OHIoN7OcMTM?start=375&autoplay=0&rel=0&playsinline=1" 
+                    title="Nobel Prize Winner 't Hooft" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+                <p style="font-size: 0.5em; margin-top: 10px;">
+                    <a href="https://youtu.be/OHIoN7OcMTM?t=375" target="_blank">Click here if video doesn't play directly</a>
+                </p>
+            </div>
+
+            <p class="quote-box">
+                "We might only have a few more years until interstellar aliens come to take over the Earth, or climate change starts ramping up, so we need to level up our science quickly."
+            </p>
+        </section>
+
+        <!-- SLIDE 3: Diff Eq Application -->
+        <section>
+            <h3>Application 1: Differential Equations</h3>
+            <ul style="font-size: 0.7em; margin-bottom: 10px;">
+                <li>Solves systems by <strong>decoupling</strong> them into eigenvectors.</li>
+                <li>Nonlinear systems are <strong>linearized</strong> near equilibria (the most important solutions).</li>
+            </ul>
+            
+            <iframe class="sage-container" src="https://sagecell.sagemath.org/?z=eJytkcFuozAQhu-R8g4jerG7Lovd3UslDnmHClWNIuSEKfHKYDo4LXn7HXBWSrSXrrQH0Hjmm___DS9QwgceYiCx_bAksimTCpbqnMmdXK82THQ2kpuEUUbB9vU1J9s3oavRY4d9FA-6ULqQ8BYIanA98LxF8WPZR9eOLLHJucA-eY01ufYYBY_vBnIsMVPbYua97bSCip_u5KMbvDu4eNYscWEWhINU5hYxfxDNSDUvVJpx-A7jO0WxHPJD6H-dWhtRyPulw47VvFmZa9b8xZrEXuJWmuv1ajyGT7FRsLl_4XMaZc9HhHRX6084giWETEE2v-bL5b1oXOviWD7Kuc3fMs0vgLkGWDY0yPm8G6NIPusVcUPnP9nSRy7HSGg773qsBx-i4A0FYlIPpIgtxDlVMvHfSo5EHDxa54fAmcttoYqdgiPaJjUWt0rndhj8ue7sIDjYvrEwPU05m3khJSsfgg9UZoRN9r_EXWfbG_GWEPt_lzdfzL7nfzSrL7-SLeRvT8PxOw==&lang=sage&interacts=eJyLjgUAARUAuQ=="></iframe>
+            
+            <p style="font-size: 0.5em;"><a href="https://sagecell.sagemath.org/?z=eJytkcFuozAQhu-R8g4jerG7Lovd3UslDnmHClWNIuSEKfHKYDo4LXn7HXBWSrSXrrQH0Hjmm___DS9QwgceYiCx_bAksimTCpbqnMmdXK82THQ2kpuEUUbB9vU1J9s3oavRY4d9FA-6ULqQ8BYIanA98LxF8WPZR9eOLLHJucA-eY01ufYYBY_vBnIsMVPbYua97bSCip_u5KMbvDu4eNYscWEWhINU5hYxfxDNSDUvVJpx-A7jO0WxHPJD6H-dWhtRyPulw47VvFmZa9b8xZrEXuJWmuv1ajyGT7FRsLl_4XMaZc9HhHRX6084giWETEE2v-bL5b1oXOviWD7Kuc3fMs0vgLkGWDY0yPm8G6NIPusVcUPnP9nSRy7HSGg773qsBx-i4A0FYlIPpIgtxDlVMvHfSo5EHDxa54fAmcttoYqdgiPaJjUWt0rndhj8ue7sIDjYvrEwPU05m3khJSsfgg9UZoRN9r_EXWfbG_GWEPt_lzdfzL7nfzSrL7-SLeRvT8PxOw==&lang=sage&interacts=eJyLjgUAARUAuQ==" target="_blank">Open simulation in new tab</a></p>
+        </section>
+
+        <!-- SLIDE 4: Fourier Decomposition -->
+        <section>
+            <h3>Application 2: Fourier Decomposition</h3>
+            <ul style="font-size: 0.7em; margin-bottom: 10px;">
+                <li>Linear algebra teaches us <strong>orthogonal bases</strong> and <strong>projection operators</strong>.</li>
+                <li>Used to remove noise from signals and decompose complicated situations.</li>
+            </ul>
+
+            <iframe class="sage-container" src="https://sagecell.sagemath.org/?z=eJydU9ty2jAUfGfG_3BqXmQwBCbkJRl-IT_AMB1hH1kisuToAvTve2Qb0jYp0ykPIKTds6v1-gJbOHHH8kteZBNB_xYbmIOPLds5bmrbsuLBv7vATDHzyjAzuxQgrAMDysBuvVw-rvb74q-cyvo7nE3SnG9hvVzBDBL2kbDZpNOBrHTaBiZKYJdy0amyUwUdeWnPjM5pmU0aQiXWekW0F0i0-chrfuWVhNLWbXOHdU7A25CXQetGmokvaY1DNL8Rs8lUmYCN4wGZmH2owWCTG0_eTGzRqYrr7yNYD9grcLfaA0wpkj006oQe0DnK6WCjqcmZIxajSSXkoDxwaJH76BCsADICbazkeH9KmBDKeFXTcXQgoqlUsGaZ90nVKKDu42yK52wC9HEYojP_4jENmBK-tScEqRq5EA7fI5rqBxirPIJwtgXByEWwUDmkVMDgOe1c73Fb5K9k_YCavs8IZ6X1dTSnZZCDBPwpEal-DWhlkDvonD1iFdR4vzt9SS7oTFDTKNlj38CnvoFjDNcOHfvmpZ2R0v8sbqk91H2rmoKa2tBDCzIF7nvDH3ZSz9uo-ZCIHzfXy80wWtLc9BrdF5ODmKQFicn_ERt7PWSShn_Z64Pm1VtepvHVm0Hvt0_FVS0xB0Gi93Xqp59VkLeH9KkHw4Osv_0EMrBXkQ==&lang=sage&interacts=eJyLjgUAARUAuQ=="></iframe>
+            
+            <p style="font-size: 0.5em;"><a href="https://sagecell.sagemath.org/?z=eJydU9ty2jAUfGfG_3BqXmQwBCbkJRl-IT_AMB1hH1kisuToAvTve2Qb0jYp0ykPIKTds6v1-gJbOHHH8kteZBNB_xYbmIOPLds5bmrbsuLBv7vATDHzyjAzuxQgrAMDysBuvVw-rvb74q-cyvo7nE3SnG9hvVzBDBL2kbDZpNOBrHTaBiZKYJdy0amyUwUdeWnPjM5pmU0aQiXWekW0F0i0-chrfuWVhNLWbXOHdU7A25CXQetGmokvaY1DNL8Rs8lUmYCN4wGZmH2owWCTG0_eTGzRqYrr7yNYD9grcLfaA0wpkj006oQe0DnK6WCjqcmZIxajSSXkoDxwaJH76BCsADICbazkeH9KmBDKeFXTcXQgoqlUsGaZ90nVKKDu42yK52wC9HEYojP_4jENmBK-tScEqRq5EA7fI5rqBxirPIJwtgXByEWwUDmkVMDgOe1c73Fb5K9k_YCavs8IZ6X1dTSnZZCDBPwpEal-DWhlkDvonD1iFdR4vzt9SS7oTFDTKNlj38CnvoFjDNcOHfvmpZ2R0v8sbqk91H2rmoKa2tBDCzIF7nvDH3ZSz9uo-ZCIHzfXy80wWtLc9BrdF5ODmKQFicn_ERt7PWSShn_Z64Pm1VtepvHVm0Hvt0_FVS0xB0Gi93Xqp59VkLeH9KkHw4Osv_0EMrBXkQ==&lang=sage&interacts=eJyLjgUAARUAuQ==" target="_blank">Open simulation in new tab</a></p>
+        </section>
+
+        <!-- SLIDE 5 (NEW): Physics & Wave Equation -->
+        <section>
+            <h3>Application 3: Physics & The Wave Equation</h3>
+            <ul style="font-size: 0.7em; margin-bottom: 10px;">
+                <li>White light is a <strong>linear combination</strong> of pure colors.</li>
+                <li>Operators like differentiation commute in these bases (Eigenfunctions).</li>
+                <li>The Wave Equation is solved using linear algebra (Nullspaces).</li>
+            </ul>
+            
+            <div style="display: flex; flex-direction: column; align-items: center; margin-bottom: 20px;">
+                <iframe width="800" height="450" 
+                    src="https://www.youtube.com/embed/uucYGK_Ymp0?rel=0" 
+                    title="Newton's Prism Experiment" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    allowfullscreen>
+                </iframe>
+                <p style="font-size: 0.5em; margin-top: 10px;">
+                    <a href="https://youtu.be/uucYGK_Ymp0" target="_blank">Click here if video doesn't play directly</a>
+                </p>
+            </div>
+        </section>
+
+        <!-- SLIDE 6 (Renumbered): Regression / Least Squares -->
+        <section>
+            <h3>Application 4: Regression / Least Squares</h3>
+            <div style="font-size: 0.7em; text-align: left; margin: 0 auto; width: 90%;">
+                <ul style="margin-bottom: 10px;">
+                    <li>Used to fit data from experiments.</li>
+                    <li><strong>Key Concepts:</strong> Subspace and Orthogonal Projection.</li>
+                    <li>It is not just "Line of best fit" — it is a flexible framework.</li>
+                    <li><em>Geometric understanding reveals options others would never suspect.</em></li>
+                </ul>
+            </div>
+
+            <iframe class="sage-container" src="https://sagecell.sagemath.org/?z=eJyFU8tu2zAQvBvwPyzgC6nShqQmAVqgB59z7U1QAkkmYzoSKZBUrPx9d0k5dooG1YkjzuzOPqgKNnP4BcV6pcp0nPH4fTk-lQjuEvDa4AHxfcLyiZgPCXTWx0v84xFWqhCqFOpBqLt6vRooQ57DBsw0tNKBVXBoQgOj1Sb49cogoZeGKc8_kdrGaw9qMl3Q1niK72XnZEhZy2yGLdxnF2uuEK6kXOIHhnGNeZGXVOtVTIjW0I-yDjRokyhs4D_XK8AP4WFGDnPl1hU8I2wHxuEbuCJFRAzzW9NPEloZzlIaaAB_Q3sNYaz2EsN8yD-U6QYTv28P2slYVdKNgbxFAwKWGiOKyS9B60SmUnbNOEpzYGPAwsc-5KhP7WR0TbIIGctFzpGz8Ud7ZsSMc9ojf2iC0zMbhBFVvsuB-vJ805fM8BrJ7S21-Dc1Er_qKzUMY5CvStdVXmNHxqnvwU4B5m1qJw4qHJtwsxhJ3KLkRlx8Er__R0yOTldH5uKIPpyKPYMWuLz9NBg4Xa_2lRYnyqp8daoZ-acpSkrWBAmncPxrNwGTE41a-4jC_e43ZLDH5rUfCFekQ_C487Z_k89OvxwDa1tsXBxNF-dykArOPb2mxSoGTU_KV6817T3V9HqtaXk3fNmNzeho6qTiy0rKMDkDfhpY1WEM7H9G13j8Mla0grtCS0W7hcvU28DQmMDXQc-MX2zjPf8DKN4-JA==&lang=sage&interacts=eJyLjgUAARUAuQ=="></iframe>
+            
+            <p style="font-size: 0.5em;"><a href="https://sagecell.sagemath.org/?z=eJyFU8tu2zAQvBvwPyzgC6nShqQmAVqgB59z7U1QAkkmYzoSKZBUrPx9d0k5dooG1YkjzuzOPqgKNnP4BcV6pcp0nPH4fTk-lQjuEvDa4AHxfcLyiZgPCXTWx0v84xFWqhCqFOpBqLt6vRooQ57DBsw0tNKBVXBoQgOj1Sb49cogoZeGKc8_kdrGaw9qMl3Q1niK72XnZEhZy2yGLdxnF2uuEK6kXOIHhnGNeZGXVOtVTIjW0I-yDjRokyhs4D_XK8AP4WFGDnPl1hU8I2wHxuEbuCJFRAzzW9NPEloZzlIaaAB_Q3sNYaz2EsN8yD-U6QYTv28P2slYVdKNgbxFAwKWGiOKyS9B60SmUnbNOEpzYGPAwsc-5KhP7WR0TbIIGctFzpGz8Ud7ZsSMc9ojf2iC0zMbhBFVvsuB-vJ805fM8BrJ7S21-Dc1Er_qKzUMY5CvStdVXmNHxqnvwU4B5m1qJw4qHJtwsxhJ3KLkRlx8Er__R0yOTldH5uKIPpyKPYMWuLz9NBg4Xa_2lRYnyqp8daoZ-acpSkrWBAmncPxrNwGTE41a-4jC_e43ZLDH5rUfCFekQ_C487Z_k89OvxwDa1tsXBxNF-dykArOPb2mxSoGTU_KV6817T3V9HqtaXk3fNmNzeho6qTiy0rKMDkDfhpY1WEM7H9G13j8Mla0grtCS0W7hcvU28DQmMDXQc-MX2zjPf8DKN4-JA==&lang=sage&interacts=eJyLjgUAARUAuQ==" target="_blank">Open simulation in new tab</a></p>
+        </section>
+
+        <!-- SLIDE 7: Higher Dimensions -->
+        <section>
+            <h3>Least Squares in Higher Dimensions</h3>
+            <div style="font-size: 0.7em; text-align: left; margin: 0 auto; width: 90%;">
+                <p>The same logic applies to higher-dimensional data, such as fitting a surface to 3D points.</p>
+            </div>
+
+            <iframe class="sage-container" src="https://sagecell.sagemath.org/?z=eJyFVEtvozAQvkfKfxi1hzXUiYC0PayUQ8699obYCIhpnIKNbNNAf_3OmJDHaqsQRfI8vm-edhWzng8BrCGez6pkEnoUVpMwoPB8tvxJUHw5iyFZX8-uZEWFxXNaxbxKeLXi1TOvXnj1ms1nDUWKIngE1TWFMKAr2OUuh1ZL5ex8ptChFopVNrhxKnIrLVSdKp3UylIUK0oj3BQ6CXtYwCr0GZmYmwSVi2j5wvGPVCZXH2IKN5_5oJgk5lRpAxKkGl1YE_yezwA_FHc9-jCTLEwchCTrhgXwBCYeGVGG_iuvOwGFcEchFJlQDya5kAz3SYa7JEpLK5AoWq4uJGf8aMUavhc7aYRv0ohtHZXpa-FjNhxOnRuVXufzmaJkI5JatMzbVqgda11ALW9rFyHdOCxGDqh-9NonnJu0btvW2q123sZHxy3p1--mExwzdMK0us4pwa0bWrH-Vda6-9j_wmqeRgBjEcdfQNx2r4-MAvj4Gwze5M7InjVc8TRaRkDj216NL1RBhs7FtWv8f1fv-NP4aa7IQYWkMkujDLvddnUNunPQL8aB4T65fe6udngED7fg-AY83AEXCLkCJzfg7ztgKudwKUdN5dCH66KPIDmUuu4aBYeLaZNKfqColU0PGaPiORVBOyYoYu4EHNz-n4sImAH50nDeEL1ZvkMIG2x_cZaK-axE4W1pdf0ltkZ-7B0rCmy9H27pJ7sTFRxr62_zKWOkHd8Rm35m4zWn4j4vxZ0eiuC0sI-toe0hXHC6OMJ1RoHtGpaWyIJTDMmMxx-5pkWPadH9ZsNppzE_jheZ3pbg6oDN1Gb9oD3PAwfd5qV0wxpv6lQj0QV_AQRumgs=&lang=sage&interacts=eJyLjgUAARUAuQ=="></iframe>
+            
+            <p style="font-size: 0.5em;"><a href="https://sagecell.sagemath.org/?z=eJyFVEtvozAQvkfKfxi1hzXUiYC0PayUQ8699obYCIhpnIKNbNNAf_3OmJDHaqsQRfI8vm-edhWzng8BrCGez6pkEnoUVpMwoPB8tvxJUHw5iyFZX8-uZEWFxXNaxbxKeLXi1TOvXnj1ms1nDUWKIngE1TWFMKAr2OUuh1ZL5ex8ptChFopVNrhxKnIrLVSdKp3UylIUK0oj3BQ6CXtYwCr0GZmYmwSVi2j5wvGPVCZXH2IKN5_5oJgk5lRpAxKkGl1YE_yezwA_FHc9-jCTLEwchCTrhgXwBCYeGVGG_iuvOwGFcEchFJlQDya5kAz3SYa7JEpLK5AoWq4uJGf8aMUavhc7aYRv0ohtHZXpa-FjNhxOnRuVXufzmaJkI5JatMzbVqgda11ALW9rFyHdOCxGDqh-9NonnJu0btvW2q123sZHxy3p1--mExwzdMK0us4pwa0bWrH-Vda6-9j_wmqeRgBjEcdfQNx2r4-MAvj4Gwze5M7InjVc8TRaRkDj216NL1RBhs7FtWv8f1fv-NP4aa7IQYWkMkujDLvddnUNunPQL8aB4T65fe6udngED7fg-AY83AEXCLkCJzfg7ztgKudwKUdN5dCH66KPIDmUuu4aBYeLaZNKfqColU0PGaPiORVBOyYoYu4EHNz-n4sImAH50nDeEL1ZvkMIG2x_cZaK-axE4W1pdf0ltkZ-7B0rCmy9H27pJ7sTFRxr62_zKWOkHd8Rm35m4zWn4j4vxZ0eiuC0sI-toe0hXHC6OMJ1RoHtGpaWyIJTDMmMxx-5pkWPadH9ZsNppzE_jheZ3pbg6oDN1Gb9oD3PAwfd5qV0wxpv6lQj0QV_AQRumgs=&lang=sage&interacts=eJyLjgUAARUAuQ==" target="_blank">Open simulation in new tab</a></p>
+        </section>
+
+        <!-- SLIDE 8 (NEW): General Relativity -->
+        <section>
+            <h3>Application 5: General Relativity</h3>
+            <ul style="font-size: 0.7em; margin-bottom: 10px;">
+                <li><strong>Parallel Transport</strong> is a linear operator between tangent spaces.</li>
+                <li>Curvature (Gravity) is described by a <strong>Tensor</strong> (family of linear maps).</li>
+                <li>Linear algebra is crucial even in nonlinear theories like Einstein's GR.</li>
+            </ul>
+
+            <iframe class="sage-container" src="https://sagecell.sagemath.org/?z=eJytVE1v2zgQvRvwfxi4F8phtCKzLRYufCqCvfdQGBGEgGsrNh3JMiRKabXof983pKI4tvewxQqQNHzz9ThDjpOt7GhJnanFzFFL3SyaTu6VvNfy_o4V-dpVtUiVTGSSRXIEEqnOAUAZvL_KGo4fpUag2mysKbBcV41oo_m9ohtq7MHLMFhB9ZXm9Gp4QzVWwpt3MBlh9mHgjpDhWDj4HU1tytzVdv14LCp3txErSaIFDT0_WjAT3ZtsiuPOLJP4Du4fml31IhAE8nTiFyuIK4Wgm7y2nXG2yzlaG32moFdsoC8MutFAw2Cr2AJx5rTSn-lY24MTAH2eHXPW8cfp5EvT_tVj8Xe7cAix2Lmf08k3BtRCxYkkvUji5Cd9oMK4vCZLL7YoaG3w6VKVwSfVGZnDBoLNyB7IUNOWVHVsHYOpeYLjFyYTI1kjfMqhcjdXSxc8UDTOH2q2roqqXs5-5EVRvcwuCzfuIonHbTwkgLAJLoEKuX1qtHBA9Qk6EjJ1zUU8UUlavXd_SEZGLzvr8ktC35kNOHxHjSC2LGmWOrRm0G1xkr02dEkFRL8hmhE92OjRRg82-tWmNCgfZwyCgIGkNISXFILyXw9rDsC3Y2sP3eg7RImB5XWTi0E_cH2quPforg-2mE4ID4P7c5Afdkyt3DPNtySpvVVyf6uy6eRPU5bml0Kz4vmagh8flhPLZ06tfuMS4TSK1DN6lmU2F9t0j398cnnALOO2buF6rtlDc-s1-zNNmUWRp1OOdDLf-17JXr8Osl5Rr_l89OFSQYk71Wts3F27e73aVHw7bz3tkx2pLJxB7xXNv4HzvAc9el-_s8oxo17_S0j9yyHDOPFcw_2rCj-P8O_yx-ZH4_LysX7-XaTeRnoKOHuprw0Eu26WKSaLVOFlCPVaOvm-o--e_LB5PFbIPPh-ivUfcESyI8ZpwnPRwUb2yn81vmAFTqk_dIH0rMgPW7ej6ok1ZBuaSQImsIrGrfk4FAKRj-T3ORamNodtLj4l0XACnUVWvNoOGVUyt1nQnbTZjn1mxQMbw-3KgOJAFwOKff7DkLKXQ-p0UoYtns5Kv92rZAb8_5yX47j8B8gWRD0=&lang=sage&interacts=eJyLjgUAARUAuQ=="></iframe>
+            
+            <p style="font-size: 0.5em;"><a href="https://sagecell.sagemath.org/?z=eJytVE1v2zgQvRvwfxi4F8phtCKzLRYufCqCvfdQGBGEgGsrNh3JMiRKabXof983pKI4tvewxQqQNHzz9ThDjpOt7GhJnanFzFFL3SyaTu6VvNfy_o4V-dpVtUiVTGSSRXIEEqnOAUAZvL_KGo4fpUag2mysKbBcV41oo_m9ohtq7MHLMFhB9ZXm9Gp4QzVWwpt3MBlh9mHgjpDhWDj4HU1tytzVdv14LCp3txErSaIFDT0_WjAT3ZtsiuPOLJP4Du4fml31IhAE8nTiFyuIK4Wgm7y2nXG2yzlaG32moFdsoC8MutFAw2Cr2AJx5rTSn-lY24MTAH2eHXPW8cfp5EvT_tVj8Xe7cAix2Lmf08k3BtRCxYkkvUji5Cd9oMK4vCZLL7YoaG3w6VKVwSfVGZnDBoLNyB7IUNOWVHVsHYOpeYLjFyYTI1kjfMqhcjdXSxc8UDTOH2q2roqqXs5-5EVRvcwuCzfuIonHbTwkgLAJLoEKuX1qtHBA9Qk6EjJ1zUU8UUlavXd_SEZGLzvr8ktC35kNOHxHjSC2LGmWOrRm0G1xkr02dEkFRL8hmhE92OjRRg82-tWmNCgfZwyCgIGkNISXFILyXw9rDsC3Y2sP3eg7RImB5XWTi0E_cH2quPforg-2mE4ID4P7c5Afdkyt3DPNtySpvVVyf6uy6eRPU5bml0Kz4vmagh8flhPLZ06tfuMS4TSK1DN6lmU2F9t0j398cnnALOO2buF6rtlDc-s1-zNNmUWRp1OOdDLf-17JXr8Osl5Rr_l89OFSQYk71Wts3F27e73aVHw7bz3tkx2pLJxB7xXNv4HzvAc9el-_s8oxo17_S0j9yyHDOPFcw_2rCj-P8O_yx-ZH4_LysX7-XaTeRnoKOHuprw0Eu26WKSaLVOFlCPVaOvm-o--e_LB5PFbIPPh-ivUfcESyI8ZpwnPRwUb2yn81vmAFTqk_dIH0rMgPW7ej6ok1ZBuaSQImsIrGrfk4FAKRj-T3ORamNodtLj4l0XACnUVWvNoOGVUyt1nQnbTZjn1mxQMbw-3KgOJAFwOKff7DkLKXQ-p0UoYtns5Kv92rZAb8_5yX47j8B8gWRD0=&lang=sage&interacts=eJyLjgUAARUAuQ==" target="_blank">Open simulation in new tab</a></p>
+        </section>
+
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+<script>
+    Reveal.initialize({
+        controls: true,
+        progress: true,
+        center: true,
+        hash: true,
+        transition: 'slide'
+    });
+</script>
+
+</body>
+</html>
